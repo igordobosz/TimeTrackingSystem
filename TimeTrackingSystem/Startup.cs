@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NSwag.AspNetCore;
+
 
 namespace TimeTrackingSystem
 {
@@ -27,6 +29,7 @@ namespace TimeTrackingSystem
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+            services.AddSwaggerDocument();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,12 +49,23 @@ namespace TimeTrackingSystem
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
             });
+
+//            app.MapWhen(r => !r.Request.Path.Value.StartsWith("/swagger"), builder =>
+//                builder.UseMvc(routes =>
+//                {
+//                    routes.MapSpaFallbackRoute(
+//                        name: "spa-fallback",
+//                        defaults: new {controller = "Home", action = "Index"});
+//                }));
 
             app.UseSpa(spa =>
             {
@@ -62,10 +76,11 @@ namespace TimeTrackingSystem
 
                 if (env.IsDevelopment())
                 {
-                    //                    spa.UseAngularCliServer(npmScript: "start");
+//                    spa.UseAngularCliServer(npmScript: "start");
                     spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                 }
             });
+            app.UseMvc();
         }
     }
 }
