@@ -1,10 +1,39 @@
-<div class='container-fluid'>
-  <div class='row'>
-    <div class='col-sm-3'>
-      <app-nav-menu></app-nav-menu>
-    </div>
-    <div class='col-sm-9 body-content'>
+<div class="fullscreen">
+<app-header></app-header>
+<mat-sidenav-container style="height: 100%">
+    <mat-sidenav opened mode="side" class="side-nav">
+        <mat-nav-list>
+            <h3 mat-subheader>Navigation</h3>
+            <mat-list-item>
+              <mat-icon mat-list-icon>dashboard</mat-icon>
+              <h4 mat-line>
+                <a href="#">Dashboard</a>
+              </h4>
+            </mat-list-item>
+            <mat-list-item>
+              <mat-icon mat-list-icon>featured_play_list</mat-icon>
+              <h4 mat-line>
+                <a href="#">Moja lista produktów</a>
+              </h4>
+            </mat-list-item>
+            <mat-list-item>
+              <mat-icon mat-list-icon>wb_sunnyt</mat-icon>
+              <h4 mat-line>
+                <a href="#">Produkty sezonowe</a>
+              </h4>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <h3 mat-subheader>Notes</h3>
+            <mat-list-item>
+              <mat-icon mat-list-icon>note</mat-icon>
+              <h4 mat-line>
+                <a href="#">Notatki</a>
+              </h4>
+            </mat-list-item>
+          </mat-nav-list>
+      </mat-sidenav>
+  <mat-sidenav-content>
       <router-outlet></router-outlet>
-    </div>
-  </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
 </div>

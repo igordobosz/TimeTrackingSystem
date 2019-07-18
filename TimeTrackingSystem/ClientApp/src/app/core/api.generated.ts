@@ -78,11 +78,126 @@ export class SampleDataService {
     }
 }
 
+@Injectable()
+export class UsersService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "https://localhost:44380";
+    }
+
+    get(): Observable<User[]> {
+        let url_ = this.baseUrl + "/api/Users";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(<any>response_);
+                } catch (e) {
+                    return <Observable<User[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<User[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<User[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(User.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<User[]>(<any>null);
+    }
+
+    post(user: User): Observable<User> {
+        let url_ = this.baseUrl + "/api/Users";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(user);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processPost(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processPost(<any>response_);
+                } catch (e) {
+                    return <Observable<User>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<User>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processPost(response: HttpResponseBase): Observable<User> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = User.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<User>(<any>null);
+    }
+}
+
 export class WeatherForecast implements IWeatherForecast {
     dateFormatted?: string | null;
     temperatureC!: number;
     summary?: string | null;
-    mojStaryPijaczyna?: string | null;
     temperatureF!: number;
 
     constructor(data?: IWeatherForecast) {
@@ -99,7 +214,6 @@ export class WeatherForecast implements IWeatherForecast {
             this.dateFormatted = data["dateFormatted"] !== undefined ? data["dateFormatted"] : <any>null;
             this.temperatureC = data["temperatureC"] !== undefined ? data["temperatureC"] : <any>null;
             this.summary = data["summary"] !== undefined ? data["summary"] : <any>null;
-            this.mojStaryPijaczyna = data["mojStaryPijaczyna"] !== undefined ? data["mojStaryPijaczyna"] : <any>null;
             this.temperatureF = data["temperatureF"] !== undefined ? data["temperatureF"] : <any>null;
         }
     }
@@ -116,7 +230,6 @@ export class WeatherForecast implements IWeatherForecast {
         data["dateFormatted"] = this.dateFormatted !== undefined ? this.dateFormatted : <any>null;
         data["temperatureC"] = this.temperatureC !== undefined ? this.temperatureC : <any>null;
         data["summary"] = this.summary !== undefined ? this.summary : <any>null;
-        data["mojStaryPijaczyna"] = this.mojStaryPijaczyna !== undefined ? this.mojStaryPijaczyna : <any>null;
         data["temperatureF"] = this.temperatureF !== undefined ? this.temperatureF : <any>null;
         return data; 
     }
@@ -126,8 +239,59 @@ export interface IWeatherForecast {
     dateFormatted?: string | null;
     temperatureC: number;
     summary?: string | null;
-    mojStaryPijaczyna?: string | null;
     temperatureF: number;
+}
+
+export class User implements IUser {
+    id!: number;
+    userName?: string | null;
+    email?: string | null;
+    password?: string | null;
+    token?: string | null;
+
+    constructor(data?: IUser) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"] !== undefined ? data["id"] : <any>null;
+            this.userName = data["userName"] !== undefined ? data["userName"] : <any>null;
+            this.email = data["email"] !== undefined ? data["email"] : <any>null;
+            this.password = data["password"] !== undefined ? data["password"] : <any>null;
+            this.token = data["token"] !== undefined ? data["token"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): User {
+        data = typeof data === 'object' ? data : {};
+        let result = new User();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["userName"] = this.userName !== undefined ? this.userName : <any>null;
+        data["email"] = this.email !== undefined ? this.email : <any>null;
+        data["password"] = this.password !== undefined ? this.password : <any>null;
+        data["token"] = this.token !== undefined ? this.token : <any>null;
+        return data; 
+    }
+}
+
+export interface IUser {
+    id: number;
+    userName?: string | null;
+    email?: string | null;
+    password?: string | null;
+    token?: string | null;
 }
 
 export class ApiException extends Error {

@@ -57,7 +57,9 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="NSwag" AfterTargets="ComputeFilesToPublish" Condition="'$(GenerateCode)'=='True' ">
-    <Exec Command="$(NSwagExe_Core21) run nswag.json /variables:Configuration=$(Configuration)" />
+  <Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
+    <Copy SourceFiles="@(Reference)" DestinationFolder="$(OutDir)References" />
+    <Exec Command="$(NSwagExe_Core21) run /variables:Configuration=$(Configuration)" />
+    <RemoveDir Directories="$(OutDir)References" />
   </Target>
 </Project>
