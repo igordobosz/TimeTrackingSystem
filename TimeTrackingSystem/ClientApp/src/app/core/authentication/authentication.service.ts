@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User, UsersService } from '../api.generated';
-import { map } from 'rxjs/operators';
+import { map, first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -18,21 +18,21 @@ export class AuthenticationService {
   public get currentUserValue(): User {
     return this.currentUserSubject.value;
   }
-  login(username: string, password: string) {
+  login(email: string, password: string) {
     let user = new User();
-    user.init({ id: 0, userName :"Igor", email: "igordobosz@gmail.com", password: "IDobosz", token: "" })
-    return this.usersService.post(user)
+    user.init({ id: 0, userName : "", email: email, password: password, token: "" });
+    this.usersService.post(user).pipe(first())
         .pipe(map(user => {
             if (user && user.token) {
                 localStorage.setItem('currentUser', JSON.stringify(user));
                 this.currentUserSubject.next(user);
             }
             return user;
-        }));
+        })).subscribe();
 }
 
-logout() {
-    localStorage.removeItem('currentUser');
-    this.currentUserSubject.next(null);
-}
+  logout() {
+      localStorage.removeItem('currentUser');
+      this.currentUserSubject.next(null);
+  }
 }

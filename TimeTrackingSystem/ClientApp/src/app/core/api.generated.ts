@@ -7,7 +7,7 @@
 //----------------------
 // ReSharper disable InconsistentNaming
 
-import { mergeMap as _observableMergeMap, catchError as _observableCatch } from 'rxjs/operators';
+import { mergeMap as _observableMergeMap, catchError as _observableCatch, map, tap } from 'rxjs/operators';
 import { Observable, throwError as _observableThrow, of as _observableOf } from 'rxjs';
 import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angular/common/http';
@@ -53,8 +53,8 @@ export class SampleDataService {
 
     protected processWeatherForecasts(response: HttpResponseBase): Observable<WeatherForecast[]> {
         const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
@@ -104,6 +104,7 @@ export class UsersService {
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processGet(response_);
         })).pipe(_observableCatch((response_: any) => {
+
             if (response_ instanceof HttpResponseBase) {
                 try {
                     return this.processGet(<any>response_);
@@ -117,8 +118,8 @@ export class UsersService {
 
     protected processGet(response: HttpResponseBase): Observable<User[]> {
         const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
@@ -152,11 +153,10 @@ export class UsersService {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json", 
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             })
         };
-
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processPost(response_);
         })).pipe(_observableCatch((response_: any) => {
@@ -173,11 +173,12 @@ export class UsersService {
 
     protected processPost(response: HttpResponseBase): Observable<User> {
         const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
@@ -231,7 +232,7 @@ export class WeatherForecast implements IWeatherForecast {
         data["temperatureC"] = this.temperatureC !== undefined ? this.temperatureC : <any>null;
         data["summary"] = this.summary !== undefined ? this.summary : <any>null;
         data["temperatureF"] = this.temperatureF !== undefined ? this.temperatureF : <any>null;
-        return data; 
+        return data;
     }
 }
 
@@ -282,7 +283,7 @@ export class User implements IUser {
         data["email"] = this.email !== undefined ? this.email : <any>null;
         data["password"] = this.password !== undefined ? this.password : <any>null;
         data["token"] = this.token !== undefined ? this.token : <any>null;
-        return data; 
+        return data;
     }
 }
 
@@ -296,10 +297,10 @@ export interface IUser {
 
 export class ApiException extends Error {
     message: string;
-    status: number; 
-    response: string; 
+    status: number;
+    response: string;
     headers: { [key: string]: any; };
-    result: any; 
+    result: any;
 
     constructor(message: string, status: number, response: string, headers: { [key: string]: any; }, result: any) {
         super();
@@ -331,12 +332,12 @@ function blobToText(blob: any): Observable<string> {
             observer.next("");
             observer.complete();
         } else {
-            let reader = new FileReader(); 
-            reader.onload = event => { 
+            let reader = new FileReader();
+            reader.onload = event => {
                 observer.next((<any>event.target).result);
                 observer.complete();
             };
-            reader.readAsText(blob); 
+            reader.readAsText(blob);
         }
     });
 }

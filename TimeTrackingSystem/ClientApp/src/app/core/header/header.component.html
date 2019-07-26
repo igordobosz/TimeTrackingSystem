@@ -2,8 +2,8 @@
     <mat-toolbar-row>
         <span>Time Tracking System</span>
       <span class="spacer"></span>
-
-
-          <a [onclick="login()"]><mat-icon>input</mat-icon><span>Logout</span></a>
+      <div *ngIf="logged; then logoutblock else loginblock"></div>
+          <ng-template #loginblock><button (click)="login()"><mat-icon>input</mat-icon><span>Login</span></button></ng-template>
+          <ng-template #logoutblock><button (click)="logout()"><mat-icon>input</mat-icon><span>Logout</span></button></ng-template>
     </mat-toolbar-row>
   </mat-toolbar>
