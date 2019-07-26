@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { Router } from '@angular/router';
+import { Router, Route, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -9,18 +9,32 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
   logged = false;
-  constructor(private authentication: AuthenticationService, private router: Router) { }
+  returnUrl: string;
+  constructor(private authenticationService: AuthenticationService, private router: Router, private route: ActivatedRoute) {
+    if (this.authenticationService.currentUserValue) {
+      this.router.navigate(['/']);
+   }
+  }
 
   ngOnInit() {
-    this.authentication.currentUser.subscribe(s => this.logged = s != null)
+    this.authenticationService.currentUser.subscribe(s => this.logged = s != null)
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   login(){
-    this.authentication.login("igordobosz@gmail.com", "IDobosz");
+    this.authenticationService.login("igordobosz@gmail.com", "IDobosz").subscribe(user => {
+      if (user.token)
+      {
+        this.router.navigate([this.returnUrl]);
+      }
+      else
+      {
+        alert('errror');
+      }})
   }
 
   logout(){
-    this.authentication.logout();
+    this.authenticationService.logout();
     this.router.navigate(['/login']);
   }
 

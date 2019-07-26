@@ -21,14 +21,14 @@ export class AuthenticationService {
   login(email: string, password: string) {
     let user = new User();
     user.init({ id: 0, userName : "", email: email, password: password, token: "" });
-    this.usersService.post(user).pipe(first())
+    return this.usersService.post(user).pipe(first())
         .pipe(map(user => {
             if (user && user.token) {
                 localStorage.setItem('currentUser', JSON.stringify(user));
                 this.currentUserSubject.next(user);
             }
             return user;
-        })).subscribe();
+        }));
 }
 
   logout() {
