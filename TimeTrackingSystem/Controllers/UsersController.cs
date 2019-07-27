@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace TimeTrackingSystem.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class UsersController : Controller
     {
         private static User[] _users = new[]

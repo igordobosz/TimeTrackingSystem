@@ -5,8 +5,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TimeTrackingSystem.Data;
 
 namespace TimeTrackingSystem
 {
@@ -14,7 +18,23 @@ namespace TimeTrackingSystem
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            var host = CreateWebHostBuilder(args).Build();
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var context = services.GetService<AppDbContext>();
+                var roleManager = services.GetService<RoleManager<IdentityRole>>();
+                try
+                {
+                    context.Database.Migrate();
+                    context.SeedData();
+                }
+                catch (Exception ex)
+                {
+                    // Error handling
+                }
+            }
+            host.Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

@@ -1,1 +1,5 @@
 /.vs/
+/TimeTrackingSystem.Common/bin/
+/TimeTrackingSystem.Common/obj/
+/TimeTrackingSystem.Data/bin/
+/TimeTrackingSystem.Data/obj/
