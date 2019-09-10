@@ -4,7 +4,9 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
-import { SampleDataService, UsersService, User } from './api.generated';
+import { AuthorizationService} from './api.generated';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { JwtInterceptor } from './helpers/jwt.interceptor';
 
 @NgModule({
   imports: [
@@ -15,8 +17,8 @@ import { SampleDataService, UsersService, User } from './api.generated';
   declarations: [HeaderComponent, FooterComponent],
   exports: [HeaderComponent, FooterComponent],
   providers: [
-    SampleDataService,
-    UsersService
+    AuthorizationService,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ]
 })
 export class CoreModule { }

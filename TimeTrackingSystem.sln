@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTrackingSystem", "TimeTrackingSystem\TimeTrackingSystem.csproj", "{44C41F39-7BF5-41CD-9699-C50B281A4A97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeTrackingSystem", "TimeTrackingSystem\TimeTrackingSystem.csproj", "{44C41F39-7BF5-41CD-9699-C50B281A4A97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTrackingSystem.Common", "TimeTrackingSystem.Common\TimeTrackingSystem.Common.csproj", "{BECA6EAF-4C2C-4163-A2AB-CCBF243A4761}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTrackingSystem.Data", "TimeTrackingSystem.Data\TimeTrackingSystem.Data.csproj", "{B9E21274-AF9A-4C50-AABB-8927313ACDB5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{44C41F39-7BF5-41CD-9699-C50B281A4A97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44C41F39-7BF5-41CD-9699-C50B281A4A97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44C41F39-7BF5-41CD-9699-C50B281A4A97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BECA6EAF-4C2C-4163-A2AB-CCBF243A4761}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BECA6EAF-4C2C-4163-A2AB-CCBF243A4761}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BECA6EAF-4C2C-4163-A2AB-CCBF243A4761}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BECA6EAF-4C2C-4163-A2AB-CCBF243A4761}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9E21274-AF9A-4C50-AABB-8927313ACDB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9E21274-AF9A-4C50-AABB-8927313ACDB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9E21274-AF9A-4C50-AABB-8927313ACDB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9E21274-AF9A-4C50-AABB-8927313ACDB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,27 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from '../authentication/authentication.service';
-import { Router } from '@angular/router';
+import { Component, OnInit } from "@angular/core";
+import { AuthenticationService } from "../authentication/authentication.service";
+import { Router} from "@angular/router";
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  selector: "app-header",
+  templateUrl: "./header.component.html",
+  styleUrls: ["./header.component.css"]
 })
 export class HeaderComponent implements OnInit {
-  logged = false;
-  constructor(private authentication: AuthenticationService, private router: Router) { }
+  logged: Boolean;
+  constructor(
+    private authenticationService: AuthenticationService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    this.authentication.currentUser.subscribe(s => this.logged = s != null)
+    this.authenticationService.token.subscribe(token => this.logged = token ? true : false);
   }
 
-  login(){
-    this.authentication.login("igordobosz@gmail.com", "IDobosz");
+  logout() {
+    this.authenticationService.logout();
+    this.router.navigate(["/login"]);
   }
-
-  logout(){
-    this.authentication.logout();
-    this.router.navigate(['/login']);
-  }
-
 }

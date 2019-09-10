@@ -1,38 +1,42 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { User, UsersService } from '../api.generated';
+import { LoginDTO, AuthorizationService } from '../api.generated';
 import { map, first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private currentUserSubject: BehaviorSubject<User>;
-  public currentUser: Observable<User>;
+  private tokenSubject: BehaviorSubject<string>;
+  public token: Observable<string>;
 
-  constructor(private usersService: UsersService) {
-    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
-    this.currentUser = this.currentUserSubject.asObservable();
+  constructor(private authorizationService: AuthorizationService) {
+    this.tokenSubject = new BehaviorSubject<string>(JSON.parse(localStorage.getItem('token')));
+    this.token = this.tokenSubject.asObservable();
   }
 
-  public get currentUserValue(): User {
-    return this.currentUserSubject.value;
+  public get IsAutenthicated() {
+    return this.tokenSubject.value ? true : false;
   }
-  login(email: string, password: string) {
-    let user = new User();
-    user.init({ id: 0, userName : "", email: email, password: password, token: "" });
-    this.usersService.post(user).pipe(first())
-        .pipe(map(user => {
-            if (user && user.token) {
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                this.currentUserSubject.next(user);
+
+  public get Token(){
+    return this.tokenSubject.value;
+  }
+
+  login(username: string, password: string) {
+    let user = new LoginDTO({password: password, username: username});
+    return this.authorizationService.login(user).pipe(first())
+        .pipe(map(loginResponse => {
+            if (loginResponse.success) {
+                localStorage.setItem('token', JSON.stringify(loginResponse.token));
+                this.tokenSubject.next(JSON.stringify(loginResponse.token));
             }
-            return user;
-        })).subscribe();
+            return loginResponse.success;
+        }));
 }
 
   logout() {
-      localStorage.removeItem('currentUser');
-      this.currentUserSubject.next(null);
+      localStorage.removeItem('token');
+      this.tokenSubject.next(null);
   }
 }
