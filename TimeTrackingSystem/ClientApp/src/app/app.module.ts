@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { Routes, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
-import { SampleDataService } from './core/api.generated';
 import { HomeComponent } from './modules/main/home/home.component';
 import { MainModule } from './modules/main/main.module';
 import { CoreModule } from './core/core.module';
@@ -38,7 +37,7 @@ const routes: Routes = [
     SharedModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [SampleDataService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -4,7 +4,9 @@ using System.Text;
 
 namespace TimeTrackingSystem.Common.DTO
 {
-    class LoginUserDTO
+    public class LoginResponse
     {
+        public bool Success;
+        public string Token;
     }
 }

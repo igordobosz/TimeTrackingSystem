@@ -27,7 +27,6 @@ namespace TimeTrackingSystem
                 try
                 {
                     context.Database.Migrate();
-                    context.SeedData();
                 }
                 catch (Exception ex)
                 {

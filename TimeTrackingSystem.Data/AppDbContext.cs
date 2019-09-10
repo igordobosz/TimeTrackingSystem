@@ -19,19 +19,5 @@ namespace TimeTrackingSystem.Data
         {
             base.OnModelCreating(builder);
         }
-
-        public void SeedData()
-        {
-            if (!Users.Any())
-            {
-                Users.AddRange(
-                    new AppUser() { Id = "1", Email = "user1@gmail.com" },
-                    new AppUser() { Id = "2", Email = "user2@gmail.com" },
-                    new AppUser() { Id = "3", Email = "user3@gmail.com" },
-                    new AppUser() { Id = "4", Email = "user4@gmail.com" });
-                SaveChanges();
-            }
-        }
-
     }
 }

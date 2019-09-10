@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthenticationService } from "../authentication/authentication.service";
-import { Router, Route, ActivatedRoute } from "@angular/router";
+import { Router} from "@angular/router";
 
 @Component({
   selector: "app-header",
@@ -8,35 +8,14 @@ import { Router, Route, ActivatedRoute } from "@angular/router";
   styleUrls: ["./header.component.css"]
 })
 export class HeaderComponent implements OnInit {
-  logged = false;
-  returnUrl: string;
+  logged: Boolean;
   constructor(
     private authenticationService: AuthenticationService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {
-    if (this.authenticationService.currentUserValue) {
-      this.router.navigate(["/"]);
-    }
-  }
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    this.authenticationService.currentUser.subscribe(
-      s => (this.logged = s != null)
-    );
-    this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
-  }
-
-  login() {
-    this.authenticationService
-      .login("igordobosz@gmail.com", "IDobosz")
-      .subscribe(user => {
-        if (user.token) {
-          this.router.navigate([this.returnUrl]);
-        } else {
-          alert("errror");
-        }
-      });
+    this.authenticationService.token.subscribe(token => this.logged = token ? true : false);
   }
 
   logout() {
