@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Router, Route, ActivatedRoute } from "@angular/router";
 import { AuthenticationService } from '../../../core/authentication/authentication.service';
 import { FormGroup, Validators, FormBuilder, Form } from '@angular/forms';
+import { SnackbarService, SnackbarItem, SnackbarType } from '../../../core/services/snackbar.service';
 
 
 
@@ -18,7 +19,8 @@ export class LoginComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private router: Router,
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private snackbarService: SnackbarService
   ) {
     if (this.authenticationService.IsAutenthicated) {
       this.router.navigate(["/"]);
@@ -46,8 +48,9 @@ export class LoginComponent implements OnInit {
         if (response) {
           this.router.navigate([this.returnUrl]);
         }else{
-          alert('ERRORs');
-          //TODO SnackBar
+          var item: SnackbarItem = {message: 'Blad logowania', type: SnackbarType.Success};
+          this.snackbarService.show(item);
+          this.f.usernane.markAsDirty();
         }
       });
   }
