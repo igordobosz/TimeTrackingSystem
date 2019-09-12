@@ -160,8 +160,9 @@ A400 : #000000,
 A700 : #000000,
 )
 );
-$my-app-primary: mat-palette($foodCalc-primary, 500);
-$my-app-accent: mat-palette($foodCalc-secondary, 500, 900, A100);
-$my-app-warn: mat-palette($foodCalc-warning);
-$my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
-@include angular-material-theme($my-app-theme);
+$primary: mat-palette($foodCalc-primary, 500);
+$accent: mat-palette($foodCalc-secondary, 500, 900, A100);
+$warn: mat-palette($foodCalc-warning, 900);
+$error: mat-palette($foodCalc-error, 500);
+$theme: mat-light-theme($primary, $accent, $warn);
+@include angular-material-theme($theme);

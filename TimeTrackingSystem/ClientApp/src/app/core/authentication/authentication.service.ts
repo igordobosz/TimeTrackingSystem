@@ -11,7 +11,7 @@ export class AuthenticationService {
   public token: Observable<string>;
 
   constructor(private authorizationService: AuthorizationService) {
-    this.tokenSubject = new BehaviorSubject<string>(JSON.parse(localStorage.getItem('token')));
+    this.tokenSubject = new BehaviorSubject<string>(localStorage.getItem('token'));
     this.token = this.tokenSubject.asObservable();
   }
 
@@ -28,8 +28,8 @@ export class AuthenticationService {
     return this.authorizationService.login(user).pipe(first())
         .pipe(map(loginResponse => {
             if (loginResponse.success) {
-                localStorage.setItem('token', JSON.stringify(loginResponse.token));
-                this.tokenSubject.next(JSON.stringify(loginResponse.token));
+                localStorage.setItem('token', loginResponse.token);
+                this.tokenSubject.next(loginResponse.token);
             }
             return loginResponse.success;
         }));
