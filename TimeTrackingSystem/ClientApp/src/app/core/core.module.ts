@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { AuthorizationService} from './api.generated';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
+import { ErrorInterceptor } from './helpers/error.interceptor';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
   exports: [HeaderComponent, FooterComponent],
   providers: [
     AuthorizationService,
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ]
 })
 export class CoreModule { }

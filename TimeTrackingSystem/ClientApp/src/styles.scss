@@ -2,6 +2,7 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import '~@angular/material/theming';
 @import 'theme';
+@import "variables";
 
 body{
   margin: 0px;
@@ -25,4 +26,15 @@ body{
 }
 :host /deep/ .mat-list-item .mat-list-item-content {
   padding: 0px;
+}
+
+.snackbar{
+  color:white;
+}
+.snackbar-success{
+  background: mat-color($primary);
+}
+
+.snackbar-error{
+  background: mat-color($error);
 }

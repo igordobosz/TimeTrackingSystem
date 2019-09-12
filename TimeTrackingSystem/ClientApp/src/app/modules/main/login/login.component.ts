@@ -46,11 +46,10 @@ export class LoginComponent implements OnInit {
       .login(this.f.username.value, this.f.password.value)
       .subscribe(response => {
         if (response) {
+          this.snackbarService.success('Zalogowano');
           this.router.navigate([this.returnUrl]);
-        }else{
-          var item: SnackbarItem = {message: 'Blad logowania', type: SnackbarType.Success};
-          this.snackbarService.show(item);
-          this.f.usernane.markAsDirty();
+        } else {
+          this.snackbarService.error('Błędne dane logowania');
         }
       });
   }
