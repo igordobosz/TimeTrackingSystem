@@ -21,8 +21,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss",
-              "src/variables.scss"
+              "src/styles.scss"
             ]
           },
           "configurations": {
