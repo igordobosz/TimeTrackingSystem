@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TimeTrackingSystem.Data;
 
 namespace TimeTrackingSystem.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190912204140_Employees")]
+    partial class Employees
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -181,20 +183,21 @@ namespace TimeTrackingSystem.Data.Migrations
 
                     b.Property<int>("EmployeeGroupID");
 
-                    b.Property<string>("IdentityCode")
-                        .HasMaxLength(128);
+                    b.Property<int?>("EmployeeGroupID1");
+
+                    b.Property<string>("IdentityCode");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(128);
+                        .IsRequired();
 
                     b.Property<string>("Surename")
-                        .IsRequired()
-                        .HasMaxLength(128);
+                        .IsRequired();
 
                     b.HasKey("ID");
 
                     b.HasIndex("EmployeeGroupID");
+
+                    b.HasIndex("EmployeeGroupID1");
 
                     b.ToTable("Employees");
                 });
@@ -204,8 +207,7 @@ namespace TimeTrackingSystem.Data.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("Name")
-                        .HasMaxLength(128);
+                    b.Property<int>("Name");
 
                     b.Property<int>("WorkingHoursPerWeek");
 
@@ -221,6 +223,8 @@ namespace TimeTrackingSystem.Data.Migrations
 
                     b.Property<int>("EmployeeID");
 
+                    b.Property<int?>("EmployeeID1");
+
                     b.Property<DateTime>("dateGoIn");
 
                     b.Property<DateTime>("dateGoOut");
@@ -228,6 +232,8 @@ namespace TimeTrackingSystem.Data.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("EmployeeID");
+
+                    b.HasIndex("EmployeeID1");
 
                     b.ToTable("WorkRegisterEvents");
                 });
@@ -279,17 +285,26 @@ namespace TimeTrackingSystem.Data.Migrations
 
             modelBuilder.Entity("TimeTrackingSystem.Data.Models.Employee", b =>
                 {
-                    b.HasOne("TimeTrackingSystem.Data.Models.EmployeeGroup", "EmployeeGroup")
+                    b.HasOne("TimeTrackingSystem.Data.Models.EmployeeGroup")
                         .WithMany("Employees")
-                        .HasForeignKey("EmployeeGroupID");
+                        .HasForeignKey("EmployeeGroupID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TimeTrackingSystem.Data.Models.EmployeeGroup", "EmployeeGroup")
+                        .WithMany()
+                        .HasForeignKey("EmployeeGroupID1");
                 });
 
             modelBuilder.Entity("TimeTrackingSystem.Data.Models.WorkRegisterEvent", b =>
                 {
                     b.HasOne("TimeTrackingSystem.Data.Models.Employee", "Employee")
-                        .WithMany("WorkRegisterEvents")
+                        .WithMany()
                         .HasForeignKey("EmployeeID")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TimeTrackingSystem.Data.Models.Employee")
+                        .WithMany("WorkRegisterEvents")
+                        .HasForeignKey("EmployeeID1");
                 });
 #pragma warning restore 612, 618
         }
