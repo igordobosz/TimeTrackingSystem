@@ -12,15 +12,10 @@ namespace TimeTrackingSystem.Common.Services
 {
     public class EmployeeService : ServiceBase<Employee>, IEmployeeService
     {
-        private IRepositoryWrapper _repositoryWrapper;
+        private IRepository<Employee> _employeeRepository;
         public EmployeeService(IRepositoryWrapper repositoryWrapper) : base(repositoryWrapper)
         {
-            _repositoryWrapper = repositoryWrapper;
-        }
-
-        public List<Employee> GetAll()
-        {
-            return _repositoryWrapper.EmployeeRepository.FindAll().ToList();
+            _employeeRepository = repositoryWrapper.GetRepository<Employee>();
         }
     }
 }

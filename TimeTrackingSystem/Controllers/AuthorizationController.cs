@@ -36,9 +36,9 @@ namespace TimeTrackingSystem.Controllers
         [HttpGet]
         [Authorize]
         [Route("Users")]
-        public User[] Get()
+        public async Task<User[]> Get()
         {
-            var x = _employeeService.GetAll();
+            var x = await _employeeService.FindAll();
             return AuthorizationService._users;
         }
 

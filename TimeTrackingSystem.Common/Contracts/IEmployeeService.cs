@@ -8,6 +8,5 @@ namespace TimeTrackingSystem.Common.Contracts
 {
     public interface IEmployeeService : IServiceBase<Employee>
     {
-        List<Employee> GetAll();
     }
 }

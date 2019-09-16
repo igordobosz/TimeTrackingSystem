@@ -23,10 +23,10 @@ namespace TimeTrackingSystem.Data.Misc
                 IdentityResult result = userManager.CreateAsync(user, "IDobosz").Result;
             }
 
-            if (!repositoryWrapper.EmployeeRepository.FindAll().Any())
+            if (!repositoryWrapper.GetRepository<Employee>().FindAll().Any())
             {
-                repositoryWrapper.EmployeeRepository.Insert(new Employee() { IdentityCode = "100", Name = "Igor", Surename = "Dobosz" });
-                repositoryWrapper.Save();
+                repositoryWrapper.GetRepository<Employee>().Insert(new Employee() { IdentityCode = "100", Name = "Igor", Surename = "Dobosz" });
+                repositoryWrapper.SaveChanges();
             }
         }
     }

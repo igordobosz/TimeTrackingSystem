@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 
 namespace TimeTrackingSystem.Data.Repositories
 {
-    public interface IRepositoryBase<T>
+    public interface IRepository<T>
     {
         IQueryable<T> FindAll();
         IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression);
         void Insert(T item);
         void Update(T item);
-        void Delete(T id);
+        void Delete(T item);
+        void Delete(int id);
     }
 }
