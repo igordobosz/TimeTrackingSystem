@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
@@ -14,10 +15,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using NSwag.AspNetCore;
+using TimeTrackingSystem.Common.Contracts;
 using TimeTrackingSystem.Common.Services;
 using TimeTrackingSystem.Data;
 using TimeTrackingSystem.Data.Misc;
 using TimeTrackingSystem.Data.Models;
+using TimeTrackingSystem.Data.Repositories;
 using TimeTrackingSystem.Extensions;
 
 
@@ -38,6 +41,10 @@ namespace TimeTrackingSystem
             //DI
             services.AddScoped<AuthorizationService>();
             services.AddScoped<UserManager<IdentityUser>>();
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
+            //Może być na DI jeżeli zmieni się działanie RepositoryWrappera, teraz jest dobrze wydajnościowo ale kiepsko wzorcowo
+//            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -91,7 +98,7 @@ namespace TimeTrackingSystem
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<IdentityUser> userManager)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<IdentityUser> userManager, IRepositoryWrapper repositoryWrapper)
         {
             if (env.IsDevelopment())
             {
@@ -140,7 +147,7 @@ namespace TimeTrackingSystem
             });
 
 
-            ApplicationDbInitializer.SeedUsers(userManager);
+            ApplicationDbInitializer.SeedUsers(userManager, repositoryWrapper);
         }
     }
 }

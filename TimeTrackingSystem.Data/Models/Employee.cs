@@ -9,7 +9,7 @@ namespace TimeTrackingSystem.Data.Models
     {
         [Required]
         public int ID { get; set; }
-        public int EmployeeGroupID { get; set; }
+        public int? EmployeeGroupID { get; set; }
         [Required(AllowEmptyStrings = false)]
         [StringLength(128)]
         public string Name { get; set; }

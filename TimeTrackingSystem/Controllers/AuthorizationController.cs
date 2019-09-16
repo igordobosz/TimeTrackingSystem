@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using TimeTrackingSystem.Common.Contracts;
 using TimeTrackingSystem.Common.DTO;
 using TimeTrackingSystem.Common.Services;
 using TimeTrackingSystem.Data.Models;
@@ -23,10 +24,12 @@ namespace TimeTrackingSystem.Controllers
     {
 
         private readonly AuthorizationService _authorizationService;
+        private readonly IEmployeeService _employeeService;
 
-        public AuthorizationController(AuthorizationService authorizationService)
+        public AuthorizationController(AuthorizationService authorizationService, IEmployeeService employeeService)
         {
             _authorizationService = authorizationService;
+            _employeeService = employeeService;
         }
 
         //GET api/<controller>/5
@@ -35,6 +38,7 @@ namespace TimeTrackingSystem.Controllers
         [Route("Users")]
         public User[] Get()
         {
+            var x = _employeeService.GetAll();
             return AuthorizationService._users;
         }
 

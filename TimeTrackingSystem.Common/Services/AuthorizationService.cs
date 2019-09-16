@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using TimeTrackingSystem.Common.Contracts;
 using TimeTrackingSystem.Common.DTO;
 using TimeTrackingSystem.Data.Models;
 
