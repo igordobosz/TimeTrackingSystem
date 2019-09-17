@@ -10,19 +10,9 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { AuthGuard } from './core/guards/auth.guard';
 import { LoginComponent } from './modules/main/login/login.component';
+import { AppRootRoutes } from './app.routes';
 
-const routes: Routes = [
-  {
-      path: '',
-      component: HomeComponent,
-      pathMatch: 'full',
-      canActivate: [AuthGuard]
-  },
-  {
-    path: 'login',
-    component: LoginComponent
-  }
-];
+
 
 @NgModule({
   declarations: [
@@ -35,7 +25,7 @@ const routes: Routes = [
     CoreModule,
     MainModule,
     SharedModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(AppRootRoutes)
   ],
   providers: [],
   bootstrap: [AppComponent]

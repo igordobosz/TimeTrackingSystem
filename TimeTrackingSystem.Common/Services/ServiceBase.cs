@@ -5,46 +5,78 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TimeTrackingSystem.Common.Contracts;
+using TimeTrackingSystem.Common.ViewModels;
 using TimeTrackingSystem.Data;
+using TimeTrackingSystem.Data.Contracts;
 
 namespace TimeTrackingSystem.Common.Services
 {
-    public abstract class ServiceBase<T> : IServiceBase<T> where T : class
+    public abstract class ServiceBase<T, VM> : IServiceBase<VM> where T : Entity where VM : IViewModel
     {
-        protected IRepositoryWrapper _repositoryWrapper;
-        public ServiceBase(IRepositoryWrapper repositoryWrapper)
+        //TODO: zamiast class zrobic IEntity
+        protected readonly IRepositoryWrapper _repositoryWrapper;
+        protected readonly IMapper _mapper;
+        public ServiceBase(IRepositoryWrapper repositoryWrapper, IMapper mapper)
         {
             this._repositoryWrapper = repositoryWrapper;
+            this._mapper = mapper;
         }
 
-        public Task<List<T>> FindAll()
+        public List<VM> FindAll()
         {
-            return _repositoryWrapper.GetRepository<T>().FindAll().ToListAsync();
+            List<VM> res = new List<VM>();
+            _repositoryWrapper.GetRepository<T>().FindAll().ToList().ForEach(e => res.Add(EntityToViewModel(e)));
+            return res;
         }
 
-        public Task<List<T>> FindByCondition(Expression<Func<T, bool>> expression)
+        public List<VM> FindByCondition(Expression<Func<VM, bool>> expression)
         {
-            return _repositoryWrapper.GetRepository<T>().FindByCondition(expression).ToListAsync();
+            //            return _repositoryWrapper.GetRepository<T>().FindByCondition(expression).ToListAsync();
+            return FindAll();
         }
 
-        public Task<bool> Insert(T item)
+        public VM GetByID(int id)
         {
-            _repositoryWrapper.GetRepository<T>().Insert(item);
-            return _repositoryWrapper.SaveChanges();
+            return EntityToViewModel(_repositoryWrapper.GetRepository<T>().FindAll().FirstOrDefault(e => e.ID == id));
         }
 
-        public Task<bool> Update(T item)
+        public int Insert(VM item)
         {
-            _repositoryWrapper.GetRepository<T>().Update(item);
-            return _repositoryWrapper.SaveChanges();
+            var entity = ViewModelToEntity(item);
+            _repositoryWrapper.GetRepository<T>().Insert(entity);
+            return _repositoryWrapper.SaveChanges() ? entity.ID : -1;
         }
 
-        public Task<bool> Delete(int id)
+        public int Update(VM item)
         {
-            _repositoryWrapper.GetRepository<T>().Delete(id);
-            return _repositoryWrapper.SaveChanges();
+            var entity = ViewModelToEntity(item);
+            _repositoryWrapper.GetRepository<T>().Update(ViewModelToEntity(item));
+            return _repositoryWrapper.SaveChanges() ? entity.ID : -1;
+        }
+
+        public int Delete(int id)
+        {
+            return Delete(GetByID(id));
+        }
+
+        public int Delete(VM item)
+        {
+            var entity = ViewModelToEntity(item);
+            _repositoryWrapper.GetRepository<T>().Delete(ViewModelToEntity(item));
+            return _repositoryWrapper.SaveChanges() ? entity.ID : -1;
+        }
+
+        private VM EntityToViewModel(T entity)
+        {
+            return _mapper.Map<VM>(entity);
+        }
+
+        private T ViewModelToEntity(VM viewModel)
+        {
+            return _mapper.Map<T>(viewModel);
         }
     }
 }

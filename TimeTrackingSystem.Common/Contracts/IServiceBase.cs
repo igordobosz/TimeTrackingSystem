@@ -4,15 +4,17 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using TimeTrackingSystem.Common.DTO;
 
 namespace TimeTrackingSystem.Common.Services
 {
-    public interface IServiceBase<T>
+    public interface IServiceBase<VM>
     {
-        Task<List<T>> FindAll();
-        Task<List<T>> FindByCondition(Expression<Func<T, bool>> expression);
-        Task<bool> Insert(T item);
-        Task<bool> Update(T item);
-        Task<bool> Delete(int id);
+        List<VM> FindAll();
+        List<VM> FindByCondition(Expression<Func<VM, bool>> expression);
+        VM GetByID(int id);
+        int Insert(VM item);
+        int Update(VM item);
+        int Delete(int id);
     }
 }

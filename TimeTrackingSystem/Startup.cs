@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using NSwag.AspNetCore;
+using TimeTrackingSystem.Common;
 using TimeTrackingSystem.Common.Contracts;
 using TimeTrackingSystem.Common.Services;
 using TimeTrackingSystem.Data;
@@ -43,8 +45,7 @@ namespace TimeTrackingSystem
             services.AddScoped<UserManager<IdentityUser>>();
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<IEmployeeService, EmployeeService>();
-            //Może być na DI jeżeli zmieni się działanie RepositoryWrappera, teraz jest dobrze wydajnościowo ale kiepsko wzorcowo
-//            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddAutoMapper(typeof(AutoMapperProfile));
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

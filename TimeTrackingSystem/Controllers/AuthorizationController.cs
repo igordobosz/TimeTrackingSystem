@@ -18,18 +18,13 @@ using TimeTrackingSystem.Extensions;
 namespace TimeTrackingSystem.Controllers
 {
     [Route("api/Login")]
-    [ApiController]
-    public class AuthorizationController : ControllerBase
-
+    public class AuthorizationController : Controller
     {
-
         private readonly AuthorizationService _authorizationService;
-        private readonly IEmployeeService _employeeService;
 
-        public AuthorizationController(AuthorizationService authorizationService, IEmployeeService employeeService)
+        public AuthorizationController(AuthorizationService authorizationService)
         {
             _authorizationService = authorizationService;
-            _employeeService = employeeService;
         }
 
         //GET api/<controller>/5
@@ -38,7 +33,6 @@ namespace TimeTrackingSystem.Controllers
         [Route("Users")]
         public async Task<User[]> Get()
         {
-            var x = await _employeeService.FindAll();
             return AuthorizationService._users;
         }
 

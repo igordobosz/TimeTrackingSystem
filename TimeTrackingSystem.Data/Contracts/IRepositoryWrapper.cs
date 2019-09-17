@@ -9,6 +9,6 @@ namespace TimeTrackingSystem.Common.Contracts
     public interface IRepositoryWrapper
     {
         IRepository<TEntity> GetRepository<TEntity>() where TEntity : class;
-        Task<bool> SaveChanges();
+        bool SaveChanges();
     }
 }

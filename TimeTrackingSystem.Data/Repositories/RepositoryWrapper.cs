@@ -28,9 +28,9 @@ namespace TimeTrackingSystem.Data.Repositories
             return (IRepository<TEntity>)_repositories[type];
         }
 
-        public async Task<bool> SaveChanges()
+        public bool SaveChanges()
         {
-            return await _appDbContext.SaveChangesAsync() > 0;
+            return _appDbContext.SaveChanges() > 0;
         }
     }
 }
