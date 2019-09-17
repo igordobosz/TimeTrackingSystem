@@ -11,6 +11,8 @@ import { SharedModule } from './shared/shared.module';
 import { AuthGuard } from './core/guards/auth.guard';
 import { LoginComponent } from './modules/main/login/login.component';
 import { AppRootRoutes } from './app.routes';
+import { EmployeeModule } from './modules/employee/employee.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 
@@ -19,12 +21,14 @@ import { AppRootRoutes } from './app.routes';
     AppComponent,
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
     CoreModule,
     MainModule,
     SharedModule,
+    EmployeeModule,
     RouterModule.forRoot(AppRootRoutes)
   ],
   providers: [],

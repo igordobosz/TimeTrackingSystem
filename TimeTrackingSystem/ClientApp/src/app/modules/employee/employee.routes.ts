@@ -5,18 +5,18 @@ import { EmployeDetailsComponent } from './employe-details/employe-details.compo
 
 export const EmployeeRoutes: Routes = [
   {
-    path: "",
+    path: '',
     component: EmployeIndexComponent,
-    pathMatch: "full"
+    pathMatch: 'full'
   },
   {
-    path: "edit",
+    path: 'edit',
     component: EmployeEditComponent,
-    pathMatch: "full"
+    pathMatch: 'full'
   },
   {
-    path: "details",
+    path: 'details',
     component: EmployeDetailsComponent,
-    pathMatch: "full"
+    pathMatch: 'full'
   }
 ];

@@ -1,6 +1,6 @@
 <mat-toolbar color="primary">
     <mat-toolbar-row>
-        <span>Time Tracking System</span>
+        <span><a routerLink=''>Time Tracking System</a></span>
       <span class="spacer"></span>
       <div *ngIf="logged; then logoutblock else loginblock"></div>
           <ng-template #loginblock><button (click)="login()"><mat-icon>input</mat-icon><span>Login</span></button></ng-template>

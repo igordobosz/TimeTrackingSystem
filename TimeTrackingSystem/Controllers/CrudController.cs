@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TimeTrackingSystem.Common.DTO;
 using TimeTrackingSystem.Common.Services;
@@ -10,6 +11,7 @@ using TimeTrackingSystem.Common.ViewModels;
 namespace TimeTrackingSystem.Controllers
 {
     [ApiController]
+    [Authorize]
     public abstract class CrudController<T, VM> : ControllerBase where T : IServiceBase<VM> where VM : IViewModel
     {
         private readonly T _baseService;

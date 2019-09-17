@@ -4,7 +4,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
-import { AuthorizationService} from './api.generated';
+import { AuthorizationService, EmployeeService} from './api.generated';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
@@ -19,6 +19,7 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
   exports: [HeaderComponent, FooterComponent],
   providers: [
     AuthorizationService,
+    EmployeeService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ]
