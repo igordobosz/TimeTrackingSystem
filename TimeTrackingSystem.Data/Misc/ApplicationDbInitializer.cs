@@ -23,9 +23,17 @@ namespace TimeTrackingSystem.Data.Misc
                 IdentityResult result = userManager.CreateAsync(user, "IDobosz").Result;
             }
 
-            if (!repositoryWrapper.GetRepository<Employee>().FindAll().Any())
+            if (repositoryWrapper.GetRepository<Employee>().FindAll().Count() < 10)
             {
-                repositoryWrapper.GetRepository<Employee>().Insert(new Employee() { IdentityCode = "100", Name = "Igor", Surename = "Dobosz" });
+                var repo = repositoryWrapper.GetRepository<Employee>();
+                repo.Insert(new Employee() { IdentityCode = "100", Name = "Igor", Surename = "Dobosz" });
+                repo.Insert(new Employee() { IdentityCode = "100", Name = "Szymon", Surename = "Pruszi" });
+                repo.Insert(new Employee() { IdentityCode = "100", Name = "Kuba", Surename = "Dick" });
+                repo.Insert(new Employee() { IdentityCode = "100", Name = "Karolina", Surename = "Dupa" });
+                repo.Insert(new Employee() { IdentityCode = "100", Name = "Kuba", Surename = "Pindel" });
+                repo.Insert(new Employee() { IdentityCode = "100", Name = "Blazej", Surename = "Strzoda" });
+                repo.Insert(new Employee() { IdentityCode = "100", Name = "Kuba", Surename = "Kowalski" });
+                repo.Insert(new Employee() { IdentityCode = "100", Name = "Dominik", Surename = "Dobosz" });
                 repositoryWrapper.SaveChanges();
             }
         }

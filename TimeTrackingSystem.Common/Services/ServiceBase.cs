@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TimeTrackingSystem.Common.Contracts;
+using TimeTrackingSystem.Common.DTO;
+using TimeTrackingSystem.Common.Extensions;
 using TimeTrackingSystem.Common.ViewModels;
 using TimeTrackingSystem.Data;
 using TimeTrackingSystem.Data.Contracts;
@@ -32,10 +34,12 @@ namespace TimeTrackingSystem.Common.Services
             return res;
         }
 
-        public List<VM> FindByCondition(Expression<Func<VM, bool>> expression)
+        public FindByConditionResponse<VM> FindByConditions(int pageIndex, int pageSize, string searchExpression, string sortColumn, string sortOrder)
         {
-            //            return _repositoryWrapper.GetRepository<T>().FindByCondition(expression).ToListAsync();
-            return FindAll();
+            List<VM> res = new List<VM>();
+            _repositoryWrapper.GetRepository<T>().FindAll().Paged(pageIndex, pageSize).ToList().ForEach(e => res.Add(EntityToViewModel(e)));
+            int listSize = _repositoryWrapper.GetRepository<T>().FindAll().Count();
+            return new FindByConditionResponse<VM>() {ItemList = res, CollectionSize = listSize};
         }
 
         public VM GetByID(int id)

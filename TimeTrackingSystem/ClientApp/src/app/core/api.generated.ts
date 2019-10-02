@@ -141,12 +141,8 @@ export class EmployeeService {
         this.baseUrl = baseUrl ? baseUrl : "https://localhost:44380";
     }
 
-    list(pageLenght: number | undefined, pageIndex: number | undefined, pageSize: number | undefined, pagePreviousIndex: number | undefined, searchExpression: string | null | undefined, orderProperty: string | null | undefined, orderType: string | null | undefined): Observable<EmployeeViewModel[]> {
+    list(pageIndex: number | undefined, pageSize: number | undefined, searchExpression: string | null | undefined, sortColumn: string | null | undefined, sortOrder: string | null | undefined): Observable<FindByConditionResponseOfEmployeeViewModel> {
         let url_ = this.baseUrl + "/api/Employee/List?";
-        if (pageLenght === null)
-            throw new Error("The parameter 'pageLenght' cannot be null.");
-        else if (pageLenght !== undefined)
-            url_ += "pageLenght=" + encodeURIComponent("" + pageLenght) + "&"; 
         if (pageIndex === null)
             throw new Error("The parameter 'pageIndex' cannot be null.");
         else if (pageIndex !== undefined)
@@ -155,16 +151,12 @@ export class EmployeeService {
             throw new Error("The parameter 'pageSize' cannot be null.");
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&"; 
-        if (pagePreviousIndex === null)
-            throw new Error("The parameter 'pagePreviousIndex' cannot be null.");
-        else if (pagePreviousIndex !== undefined)
-            url_ += "pagePreviousIndex=" + encodeURIComponent("" + pagePreviousIndex) + "&"; 
         if (searchExpression !== undefined)
             url_ += "searchExpression=" + encodeURIComponent("" + searchExpression) + "&"; 
-        if (orderProperty !== undefined)
-            url_ += "orderProperty=" + encodeURIComponent("" + orderProperty) + "&"; 
-        if (orderType !== undefined)
-            url_ += "orderType=" + encodeURIComponent("" + orderType) + "&"; 
+        if (sortColumn !== undefined)
+            url_ += "sortColumn=" + encodeURIComponent("" + sortColumn) + "&"; 
+        if (sortOrder !== undefined)
+            url_ += "sortOrder=" + encodeURIComponent("" + sortOrder) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -182,14 +174,14 @@ export class EmployeeService {
                 try {
                     return this.processList(<any>response_);
                 } catch (e) {
-                    return <Observable<EmployeeViewModel[]>><any>_observableThrow(e);
+                    return <Observable<FindByConditionResponseOfEmployeeViewModel>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<EmployeeViewModel[]>><any>_observableThrow(response_);
+                return <Observable<FindByConditionResponseOfEmployeeViewModel>><any>_observableThrow(response_);
         }));
     }
 
-    protected processList(response: HttpResponseBase): Observable<EmployeeViewModel[]> {
+    protected processList(response: HttpResponseBase): Observable<FindByConditionResponseOfEmployeeViewModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -200,11 +192,7 @@ export class EmployeeService {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(EmployeeViewModel.fromJS(item));
-            }
+            result200 = FindByConditionResponseOfEmployeeViewModel.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -212,7 +200,7 @@ export class EmployeeService {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<EmployeeViewModel[]>(<any>null);
+        return _observableOf<FindByConditionResponseOfEmployeeViewModel>(<any>null);
     }
 
     insert(item: EmployeeViewModel): Observable<CrudResponse> {
@@ -502,6 +490,54 @@ export class LoginDTO implements ILoginDTO {
 export interface ILoginDTO {
     username: string;
     password: string;
+}
+
+export class FindByConditionResponseOfEmployeeViewModel implements IFindByConditionResponseOfEmployeeViewModel {
+    itemList?: EmployeeViewModel[] | null;
+    collectionSize!: number;
+
+    constructor(data?: IFindByConditionResponseOfEmployeeViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (Array.isArray(data["itemList"])) {
+                this.itemList = [] as any;
+                for (let item of data["itemList"])
+                    this.itemList!.push(EmployeeViewModel.fromJS(item));
+            }
+            this.collectionSize = data["collectionSize"] !== undefined ? data["collectionSize"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): FindByConditionResponseOfEmployeeViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FindByConditionResponseOfEmployeeViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.itemList)) {
+            data["itemList"] = [];
+            for (let item of this.itemList)
+                data["itemList"].push(item.toJSON());
+        }
+        data["collectionSize"] = this.collectionSize !== undefined ? this.collectionSize : <any>null;
+        return data; 
+    }
+}
+
+export interface IFindByConditionResponseOfEmployeeViewModel {
+    itemList?: EmployeeViewModel[] | null;
+    collectionSize: number;
 }
 
 export class EmployeeViewModel implements IEmployeeViewModel {

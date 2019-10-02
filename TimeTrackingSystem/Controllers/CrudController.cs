@@ -23,10 +23,9 @@ namespace TimeTrackingSystem.Controllers
 
         [HttpGet]
         [Route("List")]
-        public List<VM> List(int pageLenght, int pageIndex, int pageSize, int pagePreviousIndex, string searchExpression, string orderProperty, string orderType)
+        public FindByConditionResponse<VM> List(int pageIndex, int pageSize, string searchExpression, string sortColumn, string sortOrder)
         {
-            //TODO: SEARCHTERM IMPLEMENTATION AND ORDER
-            return _baseService.FindAll();
+            return _baseService.FindByConditions(pageIndex, pageSize, searchExpression, sortColumn, sortOrder);
         }
 
         [HttpPost]

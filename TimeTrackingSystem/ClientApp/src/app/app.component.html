@@ -1,41 +1,41 @@
 <div class="fullscreen">
-<app-header></app-header>
-<mat-sidenav-container style="height: 100%">
+  <app-header></app-header>
+  <mat-sidenav-container style="height: 100%">
     <mat-sidenav opened mode="side" class="side-nav" style="z-index:1">
-        <mat-nav-list>
-            <h3 mat-subheader>Navigation</h3>
-            <a href="#" routerLink="/employee">
-              <mat-list-item>
-              <mat-icon mat-list-icon>people</mat-icon>
-              <h4 mat-line>
-                Employee
-              </h4>
-            </mat-list-item>
-          </a>
-            <mat-list-item>
-              <mat-icon mat-list-icon>featured_play_list</mat-icon>
-              <h4 mat-line>
-                <a href="#">Moja lista produktów</a>
-              </h4>
-            </mat-list-item>
-            <mat-list-item>
-              <mat-icon mat-list-icon>wb_sunnyt</mat-icon>
-              <h4 mat-line>
-                <a href="#">Produkty sezonowe</a>
-              </h4>
-            </mat-list-item>
-            <mat-divider></mat-divider>
-            <h3 mat-subheader>Notes</h3>
-            <mat-list-item>
-              <mat-icon mat-list-icon>note</mat-icon>
-              <h4 mat-line>
-                <a href="#">Notatki</a>
-              </h4>
-            </mat-list-item>
-          </mat-nav-list>
-      </mat-sidenav>
-  <mat-sidenav-content style="padding: 5px;">
+      <mat-nav-list>
+        <h3 mat-subheader>Navigation</h3>
+        <a href="#" routerLink="/employee">
+          <mat-list-item>
+            <mat-icon mat-list-icon>people</mat-icon>
+            <h4 mat-line>
+              Employees
+            </h4>
+          </mat-list-item>
+        </a>
+        <mat-list-item>
+          <mat-icon mat-list-icon>featured_play_list</mat-icon>
+          <h4 mat-line>
+            <a href="#">Moja lista produktów</a>
+          </h4>
+        </mat-list-item>
+        <mat-list-item>
+          <mat-icon mat-list-icon>wb_sunnyt</mat-icon>
+          <h4 mat-line>
+            <a href="#">Produkty sezonowe</a>
+          </h4>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <h3 mat-subheader>Notes</h3>
+        <mat-list-item>
+          <mat-icon mat-list-icon>note</mat-icon>
+          <h4 mat-line>
+            <a href="#">Notatki</a>
+          </h4>
+        </mat-list-item>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content style="padding: 5px;">
       <router-outlet></router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>

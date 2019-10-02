@@ -11,7 +11,9 @@ namespace TimeTrackingSystem.Common.Services
     public interface IServiceBase<VM>
     {
         List<VM> FindAll();
-        List<VM> FindByCondition(Expression<Func<VM, bool>> expression);
+
+        FindByConditionResponse<VM> FindByConditions(int pageIndex, int pageSize, string searchExpression,
+            string sortColumn, string sortOrder);
         VM GetByID(int id);
         int Insert(VM item);
         int Update(VM item);
