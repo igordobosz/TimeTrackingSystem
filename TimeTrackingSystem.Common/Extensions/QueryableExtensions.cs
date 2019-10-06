@@ -14,5 +14,26 @@ namespace TimeTrackingSystem.Common.Extensions
                 .Skip(pageIndex * pageSize)
                 .Take(pageSize);
         }
+
+        public static IQueryable<T> SortByProperty<T>(this IQueryable<T> source, string sortColumn, string sortOrder)
+        {
+            if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortOrder))
+            {
+                sortColumn = char.ToUpper(sortColumn[0]) + sortColumn.Substring(1);
+                if (sortOrder.Equals("asc"))
+                {
+                    return source.OrderBy(x => x.GetType().GetProperty(sortColumn).GetValue(x, null));
+                }
+                else
+                {
+                    return source.OrderByDescending(x => x.GetType().GetProperty(sortColumn).GetValue(x, null));
+                }
+            }
+            else
+            {
+                return source;
+            }
+        }
+
     }
 }

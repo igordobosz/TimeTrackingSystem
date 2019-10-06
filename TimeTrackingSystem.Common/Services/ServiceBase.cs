@@ -37,7 +37,7 @@ namespace TimeTrackingSystem.Common.Services
         public FindByConditionResponse<VM> FindByConditions(int pageIndex, int pageSize, string searchExpression, string sortColumn, string sortOrder)
         {
             List<VM> res = new List<VM>();
-            _repositoryWrapper.GetRepository<T>().FindAll().Paged(pageIndex, pageSize).ToList().ForEach(e => res.Add(EntityToViewModel(e)));
+            _repositoryWrapper.GetRepository<T>().FindAll().SortByProperty(sortColumn, sortOrder).Paged(pageIndex, pageSize).ToList().ForEach(e => res.Add(EntityToViewModel(e)));
             int listSize = _repositoryWrapper.GetRepository<T>().FindAll().Count();
             return new FindByConditionResponse<VM>() {ItemList = res, CollectionSize = listSize};
         }

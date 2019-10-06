@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
 })
 export class EmployeIndexComponent implements OnInit {
   public employees : EmployeeViewModel[];
-  public displayedColumns: string[]= ['name', 'surename', 'identity-code', 'actions'];
+  public displayedColumns: string[]= ['name', 'surename', 'identityCode', 'actions'];
   sortColumn: string;
   sortOrder: string;
   pageSize: number  = 5;
