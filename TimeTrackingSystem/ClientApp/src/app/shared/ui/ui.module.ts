@@ -1,4 +1,3 @@
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgModule} from '@angular/core';
 import {A11yModule} from '@angular/cdk/a11y';
 import {DragDropModule} from '@angular/cdk/drag-drop';
@@ -47,7 +46,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   exports: [
-    BrowserAnimationsModule,
     A11yModule,
     CdkStepperModule,
     CdkTableModule,

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using TimeTrackingSystem.Common.Contracts;
 using TimeTrackingSystem.Common.DTO;
 using TimeTrackingSystem.Common.Services;
 using TimeTrackingSystem.Data.Models;
@@ -17,11 +18,8 @@ using TimeTrackingSystem.Extensions;
 namespace TimeTrackingSystem.Controllers
 {
     [Route("api/Login")]
-    [ApiController]
-    public class AuthorizationController : ControllerBase
-
+    public class AuthorizationController : Controller
     {
-
         private readonly AuthorizationService _authorizationService;
 
         public AuthorizationController(AuthorizationService authorizationService)
@@ -33,7 +31,7 @@ namespace TimeTrackingSystem.Controllers
         [HttpGet]
         [Authorize]
         [Route("Users")]
-        public User[] Get()
+        public async Task<User[]> Get()
         {
             return AuthorizationService._users;
         }

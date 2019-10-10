@@ -10,32 +10,26 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { AuthGuard } from './core/guards/auth.guard';
 import { LoginComponent } from './modules/main/login/login.component';
+import { AppRootRoutes } from './app.routes';
+import { EmployeeModule } from './modules/employee/employee.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-const routes: Routes = [
-  {
-      path: '',
-      component: HomeComponent,
-      pathMatch: 'full',
-      canActivate: [AuthGuard]
-  },
-  {
-    path: 'login',
-    component: LoginComponent
-  }
-];
+
 
 @NgModule({
   declarations: [
     AppComponent,
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
     CoreModule,
     MainModule,
     SharedModule,
-    RouterModule.forRoot(routes)
+    EmployeeModule,
+    RouterModule.forRoot(AppRootRoutes)
   ],
   providers: [],
   bootstrap: [AppComponent]

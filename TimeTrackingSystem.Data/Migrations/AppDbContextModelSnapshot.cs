@@ -174,6 +174,64 @@ namespace TimeTrackingSystem.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("TimeTrackingSystem.Data.Models.Employee", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("EmployeeGroupID");
+
+                    b.Property<string>("IdentityCode")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128);
+
+                    b.Property<string>("Surename")
+                        .IsRequired()
+                        .HasMaxLength(128);
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("EmployeeGroupID");
+
+                    b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("TimeTrackingSystem.Data.Models.EmployeeGroup", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Name")
+                        .HasMaxLength(128);
+
+                    b.Property<int>("WorkingHoursPerWeek");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("EmployeeGroups");
+                });
+
+            modelBuilder.Entity("TimeTrackingSystem.Data.Models.WorkRegisterEvent", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("EmployeeID");
+
+                    b.Property<DateTime>("dateGoIn");
+
+                    b.Property<DateTime>("dateGoOut");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("EmployeeID");
+
+                    b.ToTable("WorkRegisterEvents");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
@@ -216,6 +274,21 @@ namespace TimeTrackingSystem.Data.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TimeTrackingSystem.Data.Models.Employee", b =>
+                {
+                    b.HasOne("TimeTrackingSystem.Data.Models.EmployeeGroup", "EmployeeGroup")
+                        .WithMany("Employees")
+                        .HasForeignKey("EmployeeGroupID");
+                });
+
+            modelBuilder.Entity("TimeTrackingSystem.Data.Models.WorkRegisterEvent", b =>
+                {
+                    b.HasOne("TimeTrackingSystem.Data.Models.Employee", "Employee")
+                        .WithMany("WorkRegisterEvents")
+                        .HasForeignKey("EmployeeID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

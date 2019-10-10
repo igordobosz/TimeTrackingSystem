@@ -130,6 +130,288 @@ export class AuthorizationService {
     }
 }
 
+@Injectable()
+export class EmployeeService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "https://localhost:44380";
+    }
+
+    list(pageIndex: number | undefined, pageSize: number | undefined, searchExpression: string | null | undefined, sortColumn: string | null | undefined, sortOrder: string | null | undefined): Observable<FindByConditionResponseOfEmployeeViewModel> {
+        let url_ = this.baseUrl + "/api/Employee/List?";
+        if (pageIndex === null)
+            throw new Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "pageIndex=" + encodeURIComponent("" + pageIndex) + "&"; 
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&"; 
+        if (searchExpression !== undefined)
+            url_ += "searchExpression=" + encodeURIComponent("" + searchExpression) + "&"; 
+        if (sortColumn !== undefined)
+            url_ += "sortColumn=" + encodeURIComponent("" + sortColumn) + "&"; 
+        if (sortOrder !== undefined)
+            url_ += "sortOrder=" + encodeURIComponent("" + sortOrder) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processList(<any>response_);
+                } catch (e) {
+                    return <Observable<FindByConditionResponseOfEmployeeViewModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FindByConditionResponseOfEmployeeViewModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processList(response: HttpResponseBase): Observable<FindByConditionResponseOfEmployeeViewModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FindByConditionResponseOfEmployeeViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FindByConditionResponseOfEmployeeViewModel>(<any>null);
+    }
+
+    getByID(id: number | undefined): Observable<EmployeeViewModel> {
+        let url_ = this.baseUrl + "/api/Employee/GetByID?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetByID(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetByID(<any>response_);
+                } catch (e) {
+                    return <Observable<EmployeeViewModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<EmployeeViewModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetByID(response: HttpResponseBase): Observable<EmployeeViewModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = EmployeeViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<EmployeeViewModel>(<any>null);
+    }
+
+    insert(item: EmployeeViewModel): Observable<CrudResponse> {
+        let url_ = this.baseUrl + "/api/Employee/Insert";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(item);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processInsert(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processInsert(<any>response_);
+                } catch (e) {
+                    return <Observable<CrudResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CrudResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processInsert(response: HttpResponseBase): Observable<CrudResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CrudResponse>(<any>null);
+    }
+
+    update(item: EmployeeViewModel): Observable<CrudResponse> {
+        let url_ = this.baseUrl + "/api/Employee/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(item);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(<any>response_);
+                } catch (e) {
+                    return <Observable<CrudResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CrudResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<CrudResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CrudResponse>(<any>null);
+    }
+
+    delete(id: number | undefined): Observable<CrudResponse> {
+        let url_ = this.baseUrl + "/api/Employee/Delete?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(<any>response_);
+                } catch (e) {
+                    return <Observable<CrudResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CrudResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<CrudResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CrudResponse>(<any>null);
+    }
+}
+
 export class User implements IUser {
     id!: number;
     userName?: string | null;
@@ -260,6 +542,146 @@ export class LoginDTO implements ILoginDTO {
 export interface ILoginDTO {
     username: string;
     password: string;
+}
+
+export class FindByConditionResponseOfEmployeeViewModel implements IFindByConditionResponseOfEmployeeViewModel {
+    itemList?: EmployeeViewModel[] | null;
+    collectionSize!: number;
+
+    constructor(data?: IFindByConditionResponseOfEmployeeViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (Array.isArray(data["itemList"])) {
+                this.itemList = [] as any;
+                for (let item of data["itemList"])
+                    this.itemList!.push(EmployeeViewModel.fromJS(item));
+            }
+            this.collectionSize = data["collectionSize"] !== undefined ? data["collectionSize"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): FindByConditionResponseOfEmployeeViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FindByConditionResponseOfEmployeeViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.itemList)) {
+            data["itemList"] = [];
+            for (let item of this.itemList)
+                data["itemList"].push(item.toJSON());
+        }
+        data["collectionSize"] = this.collectionSize !== undefined ? this.collectionSize : <any>null;
+        return data; 
+    }
+}
+
+export interface IFindByConditionResponseOfEmployeeViewModel {
+    itemList?: EmployeeViewModel[] | null;
+    collectionSize: number;
+}
+
+export class EmployeeViewModel implements IEmployeeViewModel {
+    id!: number;
+    employeeGroupID?: number | null;
+    name!: string;
+    surename!: string;
+    identityCode?: string | null;
+
+    constructor(data?: IEmployeeViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"] !== undefined ? data["id"] : <any>null;
+            this.employeeGroupID = data["employeeGroupID"] !== undefined ? data["employeeGroupID"] : <any>null;
+            this.name = data["name"] !== undefined ? data["name"] : <any>null;
+            this.surename = data["surename"] !== undefined ? data["surename"] : <any>null;
+            this.identityCode = data["identityCode"] !== undefined ? data["identityCode"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): EmployeeViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new EmployeeViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["employeeGroupID"] = this.employeeGroupID !== undefined ? this.employeeGroupID : <any>null;
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        data["surename"] = this.surename !== undefined ? this.surename : <any>null;
+        data["identityCode"] = this.identityCode !== undefined ? this.identityCode : <any>null;
+        return data; 
+    }
+}
+
+export interface IEmployeeViewModel {
+    id: number;
+    employeeGroupID?: number | null;
+    name: string;
+    surename: string;
+    identityCode?: string | null;
+}
+
+export class CrudResponse implements ICrudResponse {
+    success!: boolean;
+    id!: number;
+
+    constructor(data?: ICrudResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.success = data["success"] !== undefined ? data["success"] : <any>null;
+            this.id = data["id"] !== undefined ? data["id"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): CrudResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new CrudResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["success"] = this.success !== undefined ? this.success : <any>null;
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        return data; 
+    }
+}
+
+export interface ICrudResponse {
+    success: boolean;
+    id: number;
 }
 
 export class ApiException extends Error {

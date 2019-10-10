@@ -161,7 +161,7 @@ A700 : #000000,
 )
 );
 $primary: mat-palette($foodCalc-primary, 500);
-$accent: mat-palette($foodCalc-secondary, 500, 900, A100);
+$accent: mat-palette($foodCalc-secondary, 400, 900, A100);
 $warn: mat-palette($foodCalc-warning, 900);
 $error: mat-palette($foodCalc-error, 500);
 $theme: mat-light-theme($primary, $accent, $warn);

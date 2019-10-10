@@ -27,6 +27,8 @@ export class ErrorInterceptor implements HttpInterceptor {
           this.snackbarService.error("Brak dostępu.");
         } else if (error.status === 404) {
           this.snackbarService.error("Zasób niedostępny.");
+        } else if (error.status === 500) {
+          this.snackbarService.error("Serwer nieodpowiada.");
         } else {
           return throwError(error);
         }
