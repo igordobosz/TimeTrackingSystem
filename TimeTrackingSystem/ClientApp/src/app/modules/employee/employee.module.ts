@@ -7,6 +7,7 @@ import { CoreModule } from '../../core/core.module';
 import { SharedModule } from '../../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { EmployeeRoutes } from './employee.routes';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -16,7 +17,8 @@ import { EmployeeRoutes } from './employee.routes';
     RouterModule.forChild(EmployeeRoutes),
     CommonModule,
     CoreModule,
-    SharedModule
+    SharedModule,
+    FormsModule
   ]
 })
 export class EmployeeModule { }

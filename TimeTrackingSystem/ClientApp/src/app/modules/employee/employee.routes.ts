@@ -10,12 +10,17 @@ export const EmployeeRoutes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'edit',
+    path: 'edit/:id',
     component: EmployeEditComponent,
     pathMatch: 'full'
   },
   {
-    path: 'details',
+    path: 'insert',
+    component: EmployeEditComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'details/:id',
     component: EmployeDetailsComponent,
     pathMatch: 'full'
   }

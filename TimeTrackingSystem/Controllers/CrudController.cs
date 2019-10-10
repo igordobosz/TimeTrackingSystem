@@ -28,6 +28,16 @@ namespace TimeTrackingSystem.Controllers
             return _baseService.FindByConditions(pageIndex, pageSize, searchExpression, sortColumn, sortOrder);
         }
 
+        [HttpGet]
+        [Route("GetByID")]
+        public ActionResult<VM> GetByID(int id)
+        {
+            var result = _baseService.GetByID(id);
+            if (result == null)
+                return NotFound();
+            return result;
+        }
+
         [HttpPost]
         [Route("Insert")]
         public CrudResponse Insert(VM item)
