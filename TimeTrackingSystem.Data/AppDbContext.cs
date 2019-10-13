@@ -25,6 +25,12 @@ namespace TimeTrackingSystem.Data
 
             builder.Entity<Employee>().HasOne(m => m.EmployeeGroup).WithMany(m=>m.Employees).HasForeignKey(m => m.EmployeeGroupID).OnDelete(DeleteBehavior.ClientSetNull);
             builder.Entity<WorkRegisterEvent>().HasOne(m => m.Employee).WithMany(m=>m.WorkRegisterEvents).HasForeignKey(m => m.EmployeeID).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<WorkRegisterEvent>().HasOne(m => m.EndpointIn).WithMany(m => m.WorkerRegisterEventsIn)
+                .HasForeignKey(m => m.EndpointInID).OnDelete(DeleteBehavior.ClientSetNull);
+            builder.Entity<WorkRegisterEvent>().HasOne(m => m.EndpointOut).WithMany(m => m.WorkerRegisterEventsOut)
+                .HasForeignKey(m => m.EndpointOutID).OnDelete(DeleteBehavior.ClientSetNull);
+            builder.Entity<RegisterTimeEndpoint>().HasIndex(p => new { p.Name })
+                .IsUnique(true);
         }
     }
 }

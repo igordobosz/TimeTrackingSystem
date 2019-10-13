@@ -10,5 +10,10 @@ export const AppRootRoutes: Routes = [
     path: 'employee',
     canActivate: [AuthGuard],
     loadChildren: './modules/employee/employee.module#EmployeeModule'
+  },
+  {
+    path: 'registerTimeEndpoint',
+    canActivate: [AuthGuard],
+    loadChildren: './modules/register-time-endpoint/register-time-endpoint.module#RegisterTimeEndpointModule'
   }
 ];
