@@ -53,8 +53,8 @@ export class AuthorizationService {
 
     protected processGet(response: HttpResponseBase): Observable<User[]> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
@@ -88,7 +88,7 @@ export class AuthorizationService {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
+                "Content-Type": "application/json", 
                 "Accept": "application/json"
             })
         };
@@ -109,8 +109,8 @@ export class AuthorizationService {
 
     protected processLogin(response: HttpResponseBase): Observable<LoginResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
@@ -146,17 +146,17 @@ export class EmployeeService {
         if (pageIndex === null)
             throw new Error("The parameter 'pageIndex' cannot be null.");
         else if (pageIndex !== undefined)
-            url_ += "pageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+            url_ += "pageIndex=" + encodeURIComponent("" + pageIndex) + "&"; 
         if (pageSize === null)
             throw new Error("The parameter 'pageSize' cannot be null.");
         else if (pageSize !== undefined)
-            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&"; 
         if (searchExpression !== undefined)
-            url_ += "searchExpression=" + encodeURIComponent("" + searchExpression) + "&";
+            url_ += "searchExpression=" + encodeURIComponent("" + searchExpression) + "&"; 
         if (sortColumn !== undefined)
-            url_ += "sortColumn=" + encodeURIComponent("" + sortColumn) + "&";
+            url_ += "sortColumn=" + encodeURIComponent("" + sortColumn) + "&"; 
         if (sortOrder !== undefined)
-            url_ += "sortOrder=" + encodeURIComponent("" + sortOrder) + "&";
+            url_ += "sortOrder=" + encodeURIComponent("" + sortOrder) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -183,8 +183,8 @@ export class EmployeeService {
 
     protected processList(response: HttpResponseBase): Observable<FindByConditionResponseOfEmployeeViewModel> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
@@ -208,7 +208,7 @@ export class EmployeeService {
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -235,8 +235,8 @@ export class EmployeeService {
 
     protected processGetByID(response: HttpResponseBase): Observable<EmployeeViewModel> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
@@ -266,7 +266,7 @@ export class EmployeeService {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
+                "Content-Type": "application/json", 
                 "Accept": "application/json"
             })
         };
@@ -287,8 +287,8 @@ export class EmployeeService {
 
     protected processInsert(response: HttpResponseBase): Observable<CrudResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
@@ -318,7 +318,7 @@ export class EmployeeService {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
+                "Content-Type": "application/json", 
                 "Accept": "application/json"
             })
         };
@@ -339,8 +339,8 @@ export class EmployeeService {
 
     protected processUpdate(response: HttpResponseBase): Observable<CrudResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
@@ -364,7 +364,7 @@ export class EmployeeService {
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -391,8 +391,8 @@ export class EmployeeService {
 
     protected processDelete(response: HttpResponseBase): Observable<CrudResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
@@ -428,17 +428,17 @@ export class RegisterTimeEndpointService {
         if (pageIndex === null)
             throw new Error("The parameter 'pageIndex' cannot be null.");
         else if (pageIndex !== undefined)
-            url_ += "pageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+            url_ += "pageIndex=" + encodeURIComponent("" + pageIndex) + "&"; 
         if (pageSize === null)
             throw new Error("The parameter 'pageSize' cannot be null.");
         else if (pageSize !== undefined)
-            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&"; 
         if (searchExpression !== undefined)
-            url_ += "searchExpression=" + encodeURIComponent("" + searchExpression) + "&";
+            url_ += "searchExpression=" + encodeURIComponent("" + searchExpression) + "&"; 
         if (sortColumn !== undefined)
-            url_ += "sortColumn=" + encodeURIComponent("" + sortColumn) + "&";
+            url_ += "sortColumn=" + encodeURIComponent("" + sortColumn) + "&"; 
         if (sortOrder !== undefined)
-            url_ += "sortOrder=" + encodeURIComponent("" + sortOrder) + "&";
+            url_ += "sortOrder=" + encodeURIComponent("" + sortOrder) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -465,8 +465,8 @@ export class RegisterTimeEndpointService {
 
     protected processList(response: HttpResponseBase): Observable<FindByConditionResponseOfRegisterTimeEndpointViewModel> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
@@ -490,7 +490,7 @@ export class RegisterTimeEndpointService {
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -517,8 +517,8 @@ export class RegisterTimeEndpointService {
 
     protected processGetByID(response: HttpResponseBase): Observable<RegisterTimeEndpointViewModel> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
@@ -548,7 +548,7 @@ export class RegisterTimeEndpointService {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
+                "Content-Type": "application/json", 
                 "Accept": "application/json"
             })
         };
@@ -569,8 +569,8 @@ export class RegisterTimeEndpointService {
 
     protected processInsert(response: HttpResponseBase): Observable<CrudResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
@@ -600,7 +600,7 @@ export class RegisterTimeEndpointService {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
+                "Content-Type": "application/json", 
                 "Accept": "application/json"
             })
         };
@@ -621,8 +621,8 @@ export class RegisterTimeEndpointService {
 
     protected processUpdate(response: HttpResponseBase): Observable<CrudResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
@@ -646,7 +646,7 @@ export class RegisterTimeEndpointService {
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -673,8 +673,8 @@ export class RegisterTimeEndpointService {
 
     protected processDelete(response: HttpResponseBase): Observable<CrudResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
@@ -734,7 +734,7 @@ export class User implements IUser {
         data["email"] = this.email !== undefined ? this.email : <any>null;
         data["password"] = this.password !== undefined ? this.password : <any>null;
         data["token"] = this.token !== undefined ? this.token : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -777,7 +777,7 @@ export class LoginResponse implements ILoginResponse {
         data = typeof data === 'object' ? data : {};
         data["success"] = this.success !== undefined ? this.success : <any>null;
         data["token"] = this.token !== undefined ? this.token : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -817,7 +817,7 @@ export class LoginDTO implements ILoginDTO {
         data = typeof data === 'object' ? data : {};
         data["username"] = this.username !== undefined ? this.username : <any>null;
         data["password"] = this.password !== undefined ? this.password : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -865,7 +865,7 @@ export class FindByConditionResponseOfEmployeeViewModel implements IFindByCondit
                 data["itemList"].push(item.toJSON());
         }
         data["collectionSize"] = this.collectionSize !== undefined ? this.collectionSize : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -914,7 +914,7 @@ export class EmployeeViewModel implements IEmployeeViewModel {
         data["name"] = this.name !== undefined ? this.name : <any>null;
         data["surename"] = this.surename !== undefined ? this.surename : <any>null;
         data["identityCode"] = this.identityCode !== undefined ? this.identityCode : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -957,7 +957,7 @@ export class CrudResponse implements ICrudResponse {
         data = typeof data === 'object' ? data : {};
         data["success"] = this.success !== undefined ? this.success : <any>null;
         data["id"] = this.id !== undefined ? this.id : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -1005,7 +1005,7 @@ export class FindByConditionResponseOfRegisterTimeEndpointViewModel implements I
                 data["itemList"].push(item.toJSON());
         }
         data["collectionSize"] = this.collectionSize !== undefined ? this.collectionSize : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -1048,7 +1048,7 @@ export class RegisterTimeEndpointViewModel implements IRegisterTimeEndpointViewM
         data["id"] = this.id !== undefined ? this.id : <any>null;
         data["name"] = this.name !== undefined ? this.name : <any>null;
         data["endpointType"] = this.endpointType !== undefined ? this.endpointType : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -1060,10 +1060,10 @@ export interface IRegisterTimeEndpointViewModel {
 
 export class ApiException extends Error {
     message: string;
-    status: number;
-    response: string;
+    status: number; 
+    response: string; 
     headers: { [key: string]: any; };
-    result: any;
+    result: any; 
 
     constructor(message: string, status: number, response: string, headers: { [key: string]: any; }, result: any) {
         super();
@@ -1095,12 +1095,12 @@ function blobToText(blob: any): Observable<string> {
             observer.next("");
             observer.complete();
         } else {
-            let reader = new FileReader();
-            reader.onload = event => {
+            let reader = new FileReader(); 
+            reader.onload = event => { 
                 observer.next((<any>event.target).result);
                 observer.complete();
             };
-            reader.readAsText(blob);
+            reader.readAsText(blob); 
         }
     });
 }

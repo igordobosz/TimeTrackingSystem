@@ -25,7 +25,7 @@ export class EmployeIndexComponent implements OnInit {
         'name',
         'surename',
         'identityCode',
-        'actions'
+        'actions',
     ];
     sortColumn: string;
     sortOrder: string;

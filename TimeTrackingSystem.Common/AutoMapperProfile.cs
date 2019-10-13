@@ -13,6 +13,8 @@ namespace TimeTrackingSystem.Common
         {
             CreateMap<Employee, EmployeeViewModel>();
             CreateMap<EmployeeViewModel, Employee>();
+            CreateMap<RegisterTimeEndpoint, RegisterTimeEndpointViewModel>();
+            CreateMap<RegisterTimeEndpointViewModel, RegisterTimeEndpoint>();
             // Use CreateMap... Etc.. here (Profile methods are the same as configuration methods)
         }
     }

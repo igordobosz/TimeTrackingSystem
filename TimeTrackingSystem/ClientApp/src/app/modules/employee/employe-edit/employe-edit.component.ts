@@ -1,8 +1,6 @@
-import { Location } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
     EmployeeService,
     EmployeeViewModel,
@@ -21,9 +19,7 @@ export class EmployeEditComponent implements OnInit {
     form: FormGroup;
     constructor(
         public dialogRef: MatDialogRef<EmployeEditComponent>,
-        private route: ActivatedRoute,
         private employeeService: EmployeeService,
-        private location: Location,
         private formBuilder: FormBuilder,
         private snackbarHelper: SnackbarHelper,
         @Inject(MAT_DIALOG_DATA) public id: number,

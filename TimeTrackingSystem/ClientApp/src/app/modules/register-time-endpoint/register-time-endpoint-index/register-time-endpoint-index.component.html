@@ -1,1 +1,76 @@
-<p>register-time-endpoint-index works!</p>
+<mat-toolbar color="accent">
+    <mat-toolbar-row>
+        <span>Register Time Endpoint</span>
+        <span class="spacer"></span>
+        <a mat-button
+           (click)="create()">
+            <mat-icon class="example-icon"
+                      aria-hidden="false"
+                      aria-label="Example user verified icon">create</mat-icon>
+        </a>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="mat-elevation-z8">
+    <table mat-table
+           [dataSource]="dataSource"
+           class="mat-elevation-z8"
+           style="width: 100%;"
+           matSort
+           (matSortChange)="setSort($event)">
+
+        <ng-container matColumnDef="name">
+            <th mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header> Name </th>
+            <td mat-cell
+                *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="endpointType">
+            <th mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header> Endpoint Type </th>
+            <td mat-cell
+                *matCellDef="let element"> {{element.endpointType}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell
+                *matHeaderCellDef> Actions </th>
+            <td mat-cell
+                *matCellDef="let element">
+                <a mat-button
+                   (click)="create()">
+                    <mat-icon class="example-icon"
+                              aria-hidden="false"
+                              aria-label="Example user verified icon">info</mat-icon>
+                </a>
+                <a mat-button
+                   (click)="edit(element.id)">
+                    <mat-icon class="example-icon"
+                              aria-hidden="false"
+                              aria-label="Example user verified icon">edit</mat-icon>
+                </a>
+                <a mat-button
+                   (click)="delete(element.id)">
+                    <mat-icon class="example-icon"
+                              aria-hidden="false"
+                              aria-label="Example user verified icon">delete</mat-icon>
+                </a>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row
+            *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row
+            *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [length]="collectionSize"
+                   [pageSize]="pageSize"
+                   [pageIndex]="pageIndex"
+                   [pageSizeOptions]="[5, 10, 20]"
+                   showFirstLastButtons
+                   (page)="setPagination($event)"></mat-paginator>
+</div>

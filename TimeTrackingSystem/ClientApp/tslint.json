@@ -32,10 +32,6 @@
         ],
         "encoding": true,
         "forin": true,
-        "import-blacklist": [
-            true,
-            "Framework/ui5-app.module"
-        ],
         "import-spacing": true,
         "indent": [
             true,
