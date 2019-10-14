@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
-import { RegisterTimeEndpointService, RegisterTimeEndpointViewModel } from '../../../core/api.generated';
+import { EndpointType, RegisterTimeEndpointService, RegisterTimeEndpointViewModel } from '../../../core/api.generated';
 import { SnackbarHelper } from '../../../core/helpers/snackbar.helper';
 import { EmployeEditComponent } from '../../employee/employe-edit/employe-edit.component';
 
@@ -15,6 +15,7 @@ export class RegisterTimeEndpointEditComponent implements OnInit {
     editMode = false;
     viewmodel: RegisterTimeEndpointViewModel;
     form: FormGroup;
+    EndpointType = EndpointType;
     constructor(
         public dialogRef: MatDialogRef<EmployeEditComponent>,
         private endpointService: RegisterTimeEndpointService,
@@ -26,7 +27,7 @@ export class RegisterTimeEndpointEditComponent implements OnInit {
     ngOnInit() {
         this.form = this.formBuilder.group({
             name: ['', Validators.required],
-            endpointType: ['', [Validators.required, Validators.maxLength(1)]],
+            endpointType: ['', [Validators.required]],
         });
         if (this.id != null) {
             this.editMode = true;
@@ -75,5 +76,10 @@ export class RegisterTimeEndpointEditComponent implements OnInit {
             );
         }
         this.closeDialog(result);
+    }
+
+    endpointTypeKeys(): string[] {
+        const keys = Object.keys(this.EndpointType);
+        return keys.slice(keys.length / 2);
     }
 }

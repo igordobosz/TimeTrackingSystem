@@ -4,7 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 
-import { RegisterTimeEndpointService, RegisterTimeEndpointViewModel } from '../../../core/api.generated';
+import { EndpointType, RegisterTimeEndpointService, RegisterTimeEndpointViewModel } from '../../../core/api.generated';
 import { SnackbarHelper } from '../../../core/helpers/snackbar.helper';
 import { DeleteDialogComponent } from '../../../shared/components/delete-dialog/delete-dialog.component';
 import { RegisterTimeEndpointEditComponent } from '../register-time-endpoint-edit/register-time-endpoint-edit.component';
@@ -28,6 +28,7 @@ export class RegisterTimeEndpointIndexComponent implements OnInit {
     pageSize = 10;
     pageIndex = 0;
     collectionSize: number;
+    EndpointType = EndpointType;
     constructor(
         private endpointService: RegisterTimeEndpointService,
         public dialog: MatDialog,

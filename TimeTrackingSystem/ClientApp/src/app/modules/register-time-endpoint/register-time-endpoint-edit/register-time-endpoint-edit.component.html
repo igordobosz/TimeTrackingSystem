@@ -21,8 +21,12 @@
                 <td>
                     <mat-form-field>
                         <mat-label>Endpoint Type</mat-label>
-                        <input matInput
-                               formControlName="endpointType" />
+                        <mat-select formControlName="endpointType">
+                            <mat-option *ngFor="let enum of endpointTypeKeys()"
+                                        [value]="EndpointType[enum]">
+                                {{enum}}
+                            </mat-option>
+                        </mat-select>
                     </mat-form-field>
                 </td>
             </tr>

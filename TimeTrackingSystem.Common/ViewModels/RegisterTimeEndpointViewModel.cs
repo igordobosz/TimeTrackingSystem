@@ -11,8 +11,14 @@ namespace TimeTrackingSystem.Common.ViewModels
         [Required(AllowEmptyStrings = false)]
         [StringLength(128)]
         public string Name { get; set; }
-        [StringLength(1)]
-        public string EndpointType { get; set; }
+        [Required(AllowEmptyStrings = false)]
+        public EndpointType EndpointType { get; set; }
 
+    }
+
+    public enum EndpointType
+    {
+        Entrance,
+        Exit,
     }
 }

@@ -1017,7 +1017,7 @@ export interface IFindByConditionResponseOfRegisterTimeEndpointViewModel {
 export class RegisterTimeEndpointViewModel implements IRegisterTimeEndpointViewModel {
     id!: number;
     name!: string;
-    endpointType?: string | null;
+    endpointType!: EndpointType;
 
     constructor(data?: IRegisterTimeEndpointViewModel) {
         if (data) {
@@ -1055,7 +1055,12 @@ export class RegisterTimeEndpointViewModel implements IRegisterTimeEndpointViewM
 export interface IRegisterTimeEndpointViewModel {
     id: number;
     name: string;
-    endpointType?: string | null;
+    endpointType: EndpointType;
+}
+
+export enum EndpointType {
+    Entrance = 0,
+    Exit = 1,
 }
 
 export class ApiException extends Error {

@@ -13,7 +13,7 @@ namespace TimeTrackingSystem.Data.Models
         [Required(AllowEmptyStrings = false)]
         [StringLength(128)]
         public string Name { get; set; }
-        [StringLength(1)]
+        [Required(AllowEmptyStrings = false)]
         public string EndpointType { get; set; }
         public ICollection<WorkRegisterEvent> WorkerRegisterEventsIn { get; set; }
         public ICollection<WorkRegisterEvent> WorkerRegisterEventsOut { get; set; }

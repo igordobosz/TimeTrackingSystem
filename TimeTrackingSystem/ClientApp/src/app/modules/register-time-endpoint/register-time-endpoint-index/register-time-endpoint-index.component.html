@@ -32,7 +32,7 @@
                 *matHeaderCellDef
                 mat-sort-header> Endpoint Type </th>
             <td mat-cell
-                *matCellDef="let element"> {{element.endpointType}} </td>
+                *matCellDef="let element"> {{EndpointType[element.endpointType]}} </td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
