@@ -412,6 +412,446 @@ export class EmployeeService {
     }
 }
 
+@Injectable()
+export class RegisterTimeEndpointService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "https://localhost:44380";
+    }
+
+    generateToken(id: number | undefined): Observable<CrudResponse> {
+        let url_ = this.baseUrl + "/api/RegisterTimeEndpoint/GenerateToken?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGenerateToken(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGenerateToken(<any>response_);
+                } catch (e) {
+                    return <Observable<CrudResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CrudResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGenerateToken(response: HttpResponseBase): Observable<CrudResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CrudResponse>(<any>null);
+    }
+
+    validateEndpoint(name: string | null | undefined, securityToken: string | null | undefined): Observable<CrudResponse> {
+        let url_ = this.baseUrl + "/api/RegisterTimeEndpoint/ValidateEndpoint?";
+        if (name !== undefined)
+            url_ += "name=" + encodeURIComponent("" + name) + "&"; 
+        if (securityToken !== undefined)
+            url_ += "securityToken=" + encodeURIComponent("" + securityToken) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processValidateEndpoint(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processValidateEndpoint(<any>response_);
+                } catch (e) {
+                    return <Observable<CrudResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CrudResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processValidateEndpoint(response: HttpResponseBase): Observable<CrudResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CrudResponse>(<any>null);
+    }
+
+    registerTime(id: number | undefined, identityCode: string | null | undefined): Observable<RegisterTimeResponse> {
+        let url_ = this.baseUrl + "/api/RegisterTimeEndpoint/RegisterTime?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        if (identityCode !== undefined)
+            url_ += "identityCode=" + encodeURIComponent("" + identityCode) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRegisterTime(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRegisterTime(<any>response_);
+                } catch (e) {
+                    return <Observable<RegisterTimeResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<RegisterTimeResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processRegisterTime(response: HttpResponseBase): Observable<RegisterTimeResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = RegisterTimeResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<RegisterTimeResponse>(<any>null);
+    }
+
+    list(pageIndex: number | undefined, pageSize: number | undefined, searchExpression: string | null | undefined, sortColumn: string | null | undefined, sortOrder: string | null | undefined): Observable<FindByConditionResponseOfRegisterTimeEndpointViewModel> {
+        let url_ = this.baseUrl + "/api/RegisterTimeEndpoint/List?";
+        if (pageIndex === null)
+            throw new Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "pageIndex=" + encodeURIComponent("" + pageIndex) + "&"; 
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&"; 
+        if (searchExpression !== undefined)
+            url_ += "searchExpression=" + encodeURIComponent("" + searchExpression) + "&"; 
+        if (sortColumn !== undefined)
+            url_ += "sortColumn=" + encodeURIComponent("" + sortColumn) + "&"; 
+        if (sortOrder !== undefined)
+            url_ += "sortOrder=" + encodeURIComponent("" + sortOrder) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processList(<any>response_);
+                } catch (e) {
+                    return <Observable<FindByConditionResponseOfRegisterTimeEndpointViewModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FindByConditionResponseOfRegisterTimeEndpointViewModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processList(response: HttpResponseBase): Observable<FindByConditionResponseOfRegisterTimeEndpointViewModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FindByConditionResponseOfRegisterTimeEndpointViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FindByConditionResponseOfRegisterTimeEndpointViewModel>(<any>null);
+    }
+
+    getByID(id: number | undefined): Observable<RegisterTimeEndpointViewModel> {
+        let url_ = this.baseUrl + "/api/RegisterTimeEndpoint/GetByID?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetByID(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetByID(<any>response_);
+                } catch (e) {
+                    return <Observable<RegisterTimeEndpointViewModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<RegisterTimeEndpointViewModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetByID(response: HttpResponseBase): Observable<RegisterTimeEndpointViewModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = RegisterTimeEndpointViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<RegisterTimeEndpointViewModel>(<any>null);
+    }
+
+    insert(item: RegisterTimeEndpointViewModel): Observable<CrudResponse> {
+        let url_ = this.baseUrl + "/api/RegisterTimeEndpoint/Insert";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(item);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processInsert(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processInsert(<any>response_);
+                } catch (e) {
+                    return <Observable<CrudResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CrudResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processInsert(response: HttpResponseBase): Observable<CrudResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CrudResponse>(<any>null);
+    }
+
+    update(item: RegisterTimeEndpointViewModel): Observable<CrudResponse> {
+        let url_ = this.baseUrl + "/api/RegisterTimeEndpoint/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(item);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(<any>response_);
+                } catch (e) {
+                    return <Observable<CrudResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CrudResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<CrudResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CrudResponse>(<any>null);
+    }
+
+    delete(id: number | undefined): Observable<CrudResponse> {
+        let url_ = this.baseUrl + "/api/RegisterTimeEndpoint/Delete?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(<any>response_);
+                } catch (e) {
+                    return <Observable<CrudResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CrudResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<CrudResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CrudResponse>(<any>null);
+    }
+}
+
 export class User implements IUser {
     id!: number;
     userName?: string | null;
@@ -592,14 +1032,10 @@ export interface IFindByConditionResponseOfEmployeeViewModel {
     collectionSize: number;
 }
 
-export class EmployeeViewModel implements IEmployeeViewModel {
+export abstract class ViewModel implements IViewModel {
     id!: number;
-    employeeGroupID?: number | null;
-    name!: string;
-    surename!: string;
-    identityCode?: string | null;
 
-    constructor(data?: IEmployeeViewModel) {
+    constructor(data?: IViewModel) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -611,6 +1047,38 @@ export class EmployeeViewModel implements IEmployeeViewModel {
     init(data?: any) {
         if (data) {
             this.id = data["id"] !== undefined ? data["id"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): ViewModel {
+        data = typeof data === 'object' ? data : {};
+        throw new Error("The abstract class 'ViewModel' cannot be instantiated.");
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        return data; 
+    }
+}
+
+export interface IViewModel {
+    id: number;
+}
+
+export class EmployeeViewModel extends ViewModel implements IEmployeeViewModel {
+    employeeGroupID?: number | null;
+    name!: string;
+    surename!: string;
+    identityCode?: string | null;
+
+    constructor(data?: IEmployeeViewModel) {
+        super(data);
+    }
+
+    init(data?: any) {
+        super.init(data);
+        if (data) {
             this.employeeGroupID = data["employeeGroupID"] !== undefined ? data["employeeGroupID"] : <any>null;
             this.name = data["name"] !== undefined ? data["name"] : <any>null;
             this.surename = data["surename"] !== undefined ? data["surename"] : <any>null;
@@ -627,17 +1095,16 @@ export class EmployeeViewModel implements IEmployeeViewModel {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
         data["employeeGroupID"] = this.employeeGroupID !== undefined ? this.employeeGroupID : <any>null;
         data["name"] = this.name !== undefined ? this.name : <any>null;
         data["surename"] = this.surename !== undefined ? this.surename : <any>null;
         data["identityCode"] = this.identityCode !== undefined ? this.identityCode : <any>null;
+        super.toJSON(data);
         return data; 
     }
 }
 
-export interface IEmployeeViewModel {
-    id: number;
+export interface IEmployeeViewModel extends IViewModel {
     employeeGroupID?: number | null;
     name: string;
     surename: string;
@@ -682,6 +1149,147 @@ export class CrudResponse implements ICrudResponse {
 export interface ICrudResponse {
     success: boolean;
     id: number;
+}
+
+export class RegisterTimeResponse implements IRegisterTimeResponse {
+    responseType!: RegisterTimeResponseType;
+    workTime!: string;
+
+    constructor(data?: IRegisterTimeResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.responseType = data["responseType"] !== undefined ? data["responseType"] : <any>null;
+            this.workTime = data["workTime"] !== undefined ? data["workTime"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): RegisterTimeResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisterTimeResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["responseType"] = this.responseType !== undefined ? this.responseType : <any>null;
+        data["workTime"] = this.workTime !== undefined ? this.workTime : <any>null;
+        return data; 
+    }
+}
+
+export interface IRegisterTimeResponse {
+    responseType: RegisterTimeResponseType;
+    workTime: string;
+}
+
+export enum RegisterTimeResponseType {
+    Success = 0,
+    InWork = 1,
+    OutWork = 2,
+    Error = 3,
+}
+
+export class FindByConditionResponseOfRegisterTimeEndpointViewModel implements IFindByConditionResponseOfRegisterTimeEndpointViewModel {
+    itemList?: RegisterTimeEndpointViewModel[] | null;
+    collectionSize!: number;
+
+    constructor(data?: IFindByConditionResponseOfRegisterTimeEndpointViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (Array.isArray(data["itemList"])) {
+                this.itemList = [] as any;
+                for (let item of data["itemList"])
+                    this.itemList!.push(RegisterTimeEndpointViewModel.fromJS(item));
+            }
+            this.collectionSize = data["collectionSize"] !== undefined ? data["collectionSize"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): FindByConditionResponseOfRegisterTimeEndpointViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FindByConditionResponseOfRegisterTimeEndpointViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.itemList)) {
+            data["itemList"] = [];
+            for (let item of this.itemList)
+                data["itemList"].push(item.toJSON());
+        }
+        data["collectionSize"] = this.collectionSize !== undefined ? this.collectionSize : <any>null;
+        return data; 
+    }
+}
+
+export interface IFindByConditionResponseOfRegisterTimeEndpointViewModel {
+    itemList?: RegisterTimeEndpointViewModel[] | null;
+    collectionSize: number;
+}
+
+export class RegisterTimeEndpointViewModel extends ViewModel implements IRegisterTimeEndpointViewModel {
+    name!: string;
+    endpointType!: EndpointType;
+    securityToken?: string | null;
+
+    constructor(data?: IRegisterTimeEndpointViewModel) {
+        super(data);
+    }
+
+    init(data?: any) {
+        super.init(data);
+        if (data) {
+            this.name = data["name"] !== undefined ? data["name"] : <any>null;
+            this.endpointType = data["endpointType"] !== undefined ? data["endpointType"] : <any>null;
+            this.securityToken = data["securityToken"] !== undefined ? data["securityToken"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): RegisterTimeEndpointViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisterTimeEndpointViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        data["endpointType"] = this.endpointType !== undefined ? this.endpointType : <any>null;
+        data["securityToken"] = this.securityToken !== undefined ? this.securityToken : <any>null;
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface IRegisterTimeEndpointViewModel extends IViewModel {
+    name: string;
+    endpointType: EndpointType;
+    securityToken?: string | null;
+}
+
+export enum EndpointType {
+    Entrance = 0,
+    Exit = 1,
 }
 
 export class ApiException extends Error {

@@ -12,8 +12,13 @@ namespace TimeTrackingSystem.Data.Models
         [Required]
         public int EmployeeID { get; set; }
         [Required]
-        public DateTime dateGoIn { get; set; }
-        public DateTime dateGoOut { get; set; }
+        public DateTime DateGoIn { get; set; }
+        [Required]
+        public int EndpointInID { get; set; }
+        public virtual RegisterTimeEndpoint EndpointIn { get; set; }
+        public DateTime DateGoOut { get; set; }
+        public int? EndpointOutID { get; set; }
+        public virtual RegisterTimeEndpoint EndpointOut { get; set; }
 
         public virtual Employee Employee { get; set; }
         public Expression<Func<object, bool>> BuildSearchExpression(string searchTerm)

@@ -1,48 +1,51 @@
-<section fxLayout="row wrap" fxLayoutAlign="center center">
-    <mat-card fxFlex="50%" fxFlex.xs="100%">
-        <div *ngIf="editMode; then editBlock; else createblock"></div>
-        <ng-template #editBlock>
-            <mat-card-title>Edit employee</mat-card-title>
-        </ng-template>
-        <ng-template #createblock>
-            <mat-card-title>Create a new employee</mat-card-title>
-        </ng-template>
-        <mat-divider></mat-divider>
-        <form [formGroup]="form">
-            <mat-card-content>
-                <table cellspacing="0">
-                    <tr>
-                        <td>
-                            <mat-form-field>
-                                <mat-label>Name</mat-label>
-                                <input matInput formControlName="name" />
-                            </mat-form-field>
-                        </td>
-                        <td>
-                            <mat-form-field>
-                                <mat-label>Surename</mat-label>
-                                <input matInput formControlName="surename" />
-                            </mat-form-field>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <mat-form-field>
-                                <mat-label>Identity Code</mat-label>
-                                <input matInput formControlName="identityCode" />
-                            </mat-form-field>
-                        </td>
-                    </tr>
-                </table>
-            </mat-card-content>
-            <mat-divider></mat-divider>
-            <mat-card-actions align="right">
-                <a mat-button (click)="onCancel()">Cancel</a>
-                <span class="spacer"></span>
-                <button mat-raised-button disabled="{{ form.invalid }}" (click)="onSubmit(form.value)" color="primary">
-          Save
+<h1 mat-dialog-title>
+    <div *ngIf="editMode; then editBlock; else createblock"></div>
+    <ng-template #editBlock>
+        Edit employee
+    </ng-template>
+    <ng-template #createblock>
+        Create a new employee
+    </ng-template>
+</h1>
+<form [formGroup]="form">
+    <div mat-dialog-content>
+        <table cellspacing="0">
+            <tr>
+                <td>
+                    <mat-form-field>
+                        <mat-label>Name</mat-label>
+                        <input matInput
+                               formControlName="name" />
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field>
+                        <mat-label>Surename</mat-label>
+                        <input matInput
+                               formControlName="surename" />
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-form-field>
+                        <mat-label>Identity Code</mat-label>
+                        <input matInput
+                               formControlName="identityCode" />
+                    </mat-form-field>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button
+                (click)="onNoClick()">Cancel</button>
+        <span class="spacer"></span>
+        <button mat-raised-button
+                disabled="{{ form.invalid }}"
+                (click)="onSubmit(form.value)"
+                color="primary">
+            Save
         </button>
-            </mat-card-actions>
-        </form>
-    </mat-card>
-</section>
+    </div>
+</form>

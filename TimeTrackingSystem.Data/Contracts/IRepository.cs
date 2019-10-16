@@ -11,6 +11,7 @@ namespace TimeTrackingSystem.Data.Repositories
     {
         IQueryable<T> FindAll();
         IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression);
+        T GetByID(int id);
         void Insert(T item);
         void Update(T item);
         void Delete(T item);

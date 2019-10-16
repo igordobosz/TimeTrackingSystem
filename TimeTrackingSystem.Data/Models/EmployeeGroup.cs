@@ -15,7 +15,7 @@ namespace TimeTrackingSystem.Data.Models
         public int Name { get; set; }
         public int WorkingHoursPerWeek { get; set; }
 
-        public ICollection<Employee> Employees { get; set; }
+        public virtual ICollection<Employee> Employees { get; set; }
         public Expression<Func<object, bool>> BuildSearchExpression(string searchTerm)
         {
             throw new NotImplementedException();

@@ -9,6 +9,11 @@ namespace TimeTrackingSystem.Data.Models
 {
     public class Employee : Entity, IEntity
     {
+        public Employee()
+        {
+            WorkRegisterEvents = new List<WorkRegisterEvent>();
+        }
+
         public int? EmployeeGroupID { get; set; }
         [Required(AllowEmptyStrings = false)]
         [StringLength(128)]
@@ -21,7 +26,7 @@ namespace TimeTrackingSystem.Data.Models
 
         public virtual EmployeeGroup EmployeeGroup { get; set; }
 
-        public ICollection<WorkRegisterEvent> WorkRegisterEvents { get; set; }
+        public virtual ICollection<WorkRegisterEvent> WorkRegisterEvents { get; set; }
         public Expression<Func<object, bool>> BuildSearchExpression(string searchTerm)
         {
             throw new NotImplementedException();

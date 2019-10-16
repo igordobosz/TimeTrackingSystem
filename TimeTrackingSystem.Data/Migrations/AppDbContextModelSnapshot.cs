@@ -214,20 +214,50 @@ namespace TimeTrackingSystem.Data.Migrations
                     b.ToTable("EmployeeGroups");
                 });
 
+            modelBuilder.Entity("TimeTrackingSystem.Data.Models.RegisterTimeEndpoint", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("EndpointType")
+                        .IsRequired();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128);
+
+                    b.Property<string>("SecurityToken");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("RegisterTimeEndpoint");
+                });
+
             modelBuilder.Entity("TimeTrackingSystem.Data.Models.WorkRegisterEvent", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("DateGoIn");
+
+                    b.Property<DateTime>("DateGoOut");
+
                     b.Property<int>("EmployeeID");
 
-                    b.Property<DateTime>("dateGoIn");
+                    b.Property<int>("EndpointInID");
 
-                    b.Property<DateTime>("dateGoOut");
+                    b.Property<int?>("EndpointOutID");
 
                     b.HasKey("ID");
 
                     b.HasIndex("EmployeeID");
+
+                    b.HasIndex("EndpointInID");
+
+                    b.HasIndex("EndpointOutID");
 
                     b.ToTable("WorkRegisterEvents");
                 });
@@ -290,6 +320,14 @@ namespace TimeTrackingSystem.Data.Migrations
                         .WithMany("WorkRegisterEvents")
                         .HasForeignKey("EmployeeID")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TimeTrackingSystem.Data.Models.RegisterTimeEndpoint", "EndpointIn")
+                        .WithMany("WorkerRegisterEventsIn")
+                        .HasForeignKey("EndpointInID");
+
+                    b.HasOne("TimeTrackingSystem.Data.Models.RegisterTimeEndpoint", "EndpointOut")
+                        .WithMany("WorkerRegisterEventsOut")
+                        .HasForeignKey("EndpointOutID");
                 });
 #pragma warning restore 612, 618
         }

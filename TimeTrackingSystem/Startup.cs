@@ -45,6 +45,7 @@ namespace TimeTrackingSystem
             services.AddScoped<UserManager<IdentityUser>>();
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IRegisterTimeEndpointService, RegisterTimeEndpointService>();
             services.AddAutoMapper(typeof(AutoMapperProfile));
 
             // In production, the Angular files will be served from this directory
@@ -89,7 +90,7 @@ namespace TimeTrackingSystem
             services.AddDbContext<AppDbContext>(options =>
                 options.UseMySql(
                     Configuration.GetConnectionString("DefaultConnection"),
-                    b => b.MigrationsAssembly("TimeTrackingSystem.Data")));
+                    b => b.MigrationsAssembly("TimeTrackingSystem.Data")).UseLazyLoadingProxies());
             services.AddMvc()
                 .AddMvcOptions(opt =>
                 {

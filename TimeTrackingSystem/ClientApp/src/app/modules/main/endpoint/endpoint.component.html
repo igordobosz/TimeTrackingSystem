@@ -1,0 +1,31 @@
+<div id="panel"
+     fxLayout="row"
+     fxLayoutAlign="center center">
+    <mat-card class="login_card">
+        <mat-card-header>
+            <mat-card-title>Enter identity code</mat-card-title>
+        </mat-card-header>
+        <form [formGroup]="form"
+              (ngSubmit)="onSumbit()">
+            <mat-card-content>
+                <table cellspacing="0">
+                    <tr>
+                        <td>
+                            <mat-form-field>
+                                <input matInput
+                                       placeholder="Identity code"
+                                       formControlName="identityCode">
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                </table>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-flat-button
+                        color="primary"
+                        disabled="{{ form.invalid }}"
+                        type="submit">Enter</button>
+            </mat-card-actions>
+        </form>
+    </mat-card>
+</div>

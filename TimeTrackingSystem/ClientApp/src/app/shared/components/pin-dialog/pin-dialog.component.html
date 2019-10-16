@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>Enter pin</h1>
+<form [formGroup]="form">
+    <div mat-dialog-content>
+        <mat-form-field>
+            <mat-label>Pin</mat-label>
+            <input type="password"
+                   matInput
+                   formControlName="pin" />
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button
+                (click)="onNoClick()">Cancel</button>
+        <span class="spacer"></span>
+        <button mat-raised-button
+                disabled="{{ form.invalid }}"
+                (click)="onSubmit(form.value)"
+                color="primary">
+            Login
+        </button>
+    </div>
+</form>

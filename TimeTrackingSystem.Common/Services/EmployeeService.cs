@@ -19,5 +19,41 @@ namespace TimeTrackingSystem.Common.Services
         {
             _employeeRepository = repositoryWrapper.GetRepository<Employee>();
         }
+
+        public Employee GetEmployeeByIdentityCode(string identityCode)
+        {
+            return _employeeRepository.FindByCondition(e => e.IdentityCode.Equals(identityCode)).FirstOrDefault();
+        }
+
+        public bool IsEmployeeInWork(int id)
+        {
+            var employee = GetEntityByID(id);
+            var workRegi = _repositoryWrapper.GetRepository<WorkRegisterEvent>().FindAll();
+            if (employee == null)
+                return false;
+            return employee.WorkRegisterEvents.Any(e => e.DateGoOut == DateTime.MinValue);
+        }
+
+        public WorkRegisterEvent FindLastWorkRegister(int id)
+        {
+            return GetEntityByID(id).WorkRegisterEvents.FirstOrDefault(e => e.DateGoOut == DateTime.MinValue);
+        }
+
+        public bool RegisterEventIn(int employeeId, int endpointId)
+        {
+            var employee = GetEntityByID(employeeId);
+            var workRegisterEvent = new WorkRegisterEvent() { DateGoIn = DateTime.Now, EndpointInID = endpointId };
+            employee.WorkRegisterEvents.Add(workRegisterEvent);
+            return Update(employee) > 0;
+        }
+
+        public bool RegisterEventOut(int employeeId, int endpointId)
+        {
+            var employee = GetEntityByID(employeeId);
+            var workRegisterEvent = FindLastWorkRegister(employeeId);
+            workRegisterEvent.DateGoOut = DateTime.Now;
+            workRegisterEvent.EndpointOutID = endpointId;
+            return Update(employee) > 0;
+        }
     }
 }

@@ -1,29 +1,48 @@
-<div id="login_panel" fxLayout="row" fxLayoutAlign="center center">
+<div id="login_panel"
+     fxLayout="row"
+     fxLayoutAlign="center center">
+    <mat-card class="login_card">
+        <mat-card-header>
+            <mat-card-title>Login</mat-card-title>
+        </mat-card-header>
+        <form [formGroup]="loginForm"
+              (ngSubmit)="onSubmit()">
+            <mat-card-content>
+                <table cellspacing="0">
+                    <tr>
+                        <td>
+                            <mat-form-field>
+                                <input matInput
+                                       placeholder="Username"
+                                       formControlName="username"
+                                       name="username"
+                                       required>
+                            </mat-form-field>
+                        </td>
 
-  <mat-card class="login_card">
-    <mat-card-header>
-      <mat-card-title>Login</mat-card-title>
-    </mat-card-header>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <mat-card-content>
-        <table cellspacing="0">
-          <tr>
-            <td>
-              <mat-form-field >
-              <input matInput placeholder="Username" formControlName="username" name="username" required>
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-          <td><mat-form-field >
-            <input matInput placeholder="Password" formControlName="password" type="password" name="password" required>
-          </mat-form-field></td>
-        </tr></table>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-flat-button color="primary" type="submit">Login</button>
-    </mat-card-actions>
-    </form>
-    <button mat-flat-button color="primary" (click)="cheat()">Admin fast cheat</button>
-  </mat-card>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field>
+                                <input matInput
+                                       placeholder="Password"
+                                       formControlName="password"
+                                       type="password"
+                                       name="password"
+                                       required>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                </table>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-flat-button
+                        color="primary"
+                        type="submit">Login</button>
+            </mat-card-actions>
+        </form>
+        <button mat-flat-button
+                color="primary"
+                (click)="cheat()">Admin fast cheat</button>
+    </mat-card>
 </div>
