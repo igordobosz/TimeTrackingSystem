@@ -46,7 +46,7 @@ namespace TimeTrackingSystem.Common.Services
             var endpoint = GetEntityByID(endpointID);
             var employee = _employeeService.GetEmployeeByIdentityCode(identityCode);
             var check = false;
-            if (endpoint != null || employee != null)
+            if (endpoint != null && employee != null)
             {
                 if (endpoint.EndpointType.Equals(EndpointType.Entrance.ToString()))
                 {
