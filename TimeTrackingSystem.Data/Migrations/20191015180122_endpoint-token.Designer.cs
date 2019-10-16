@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TimeTrackingSystem.Data;
 
 namespace TimeTrackingSystem.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191015180122_endpoint-token")]
+    partial class endpointtoken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -249,7 +251,7 @@ namespace TimeTrackingSystem.Data.Migrations
 
                     b.Property<int>("EndpointInID");
 
-                    b.Property<int?>("EndpointOutID");
+                    b.Property<int>("EndpointOutID");
 
                     b.HasKey("ID");
 

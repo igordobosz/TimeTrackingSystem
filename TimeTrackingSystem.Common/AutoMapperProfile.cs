@@ -17,7 +17,8 @@ namespace TimeTrackingSystem.Common
                 .ForMember(e => e.EndpointType,
                     op => op.ConvertUsing(new StringToEndpointTypeConverter()));
             CreateMap<RegisterTimeEndpointViewModel, RegisterTimeEndpoint>().ForMember(e => e.EndpointType,
-                opt => opt.ConvertUsing(new EndpointTypeToStringConverter()));
+                    opt => opt.ConvertUsing(new EndpointTypeToStringConverter()))
+                .ForMember(e => e.SecurityToken, op => op.UseDestinationValue());
         }
 
         //TODO hanldowanie jakos blednych enumow

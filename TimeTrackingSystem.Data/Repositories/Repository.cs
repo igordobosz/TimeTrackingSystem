@@ -6,10 +6,11 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using TimeTrackingSystem.Data.Contracts;
 
 namespace TimeTrackingSystem.Data.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : Entity
     {
         protected AppDbContext _repositoryContext { get; set; }
 
@@ -20,12 +21,17 @@ namespace TimeTrackingSystem.Data.Repositories
 
         public IQueryable<T> FindAll()
         {
-            return this._repositoryContext.Set<T>().AsQueryable().AsNoTracking();
+            return this._repositoryContext.Set<T>().AsQueryable();
         }
 
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
         {
-            return this._repositoryContext.Set<T>().Where(expression).AsQueryable().AsNoTracking();
+            return this._repositoryContext.Set<T>().Where(expression).AsQueryable();
+        }
+
+        public T GetByID(int id)
+        {
+            return this._repositoryContext.Set<T>().FirstOrDefault(e => e.ID == id);
         }
 
         public void Insert(T entity)
@@ -45,20 +51,7 @@ namespace TimeTrackingSystem.Data.Repositories
 
         public void Delete(int id)
         {
-            var typeInfo = typeof(T).GetTypeInfo();
-            var key = _repositoryContext.Model.FindEntityType(typeInfo).FindPrimaryKey().Properties.FirstOrDefault();
-            var property = typeInfo.GetProperty(key?.Name);
-            if (property != null)
-            {
-                var entity = Activator.CreateInstance<T>();
-                property.SetValue(entity, id);
-                _repositoryContext.Entry(entity).State = EntityState.Deleted;
-            }
-            else
-            {
-                var entity = _repositoryContext.Set<T>().Find(id);
-                if (entity != null) Delete(entity);
-            }
+            this._repositoryContext.Set<T>().Remove(GetByID(id));
         }
     }
 }

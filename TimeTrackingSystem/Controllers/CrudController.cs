@@ -14,7 +14,7 @@ namespace TimeTrackingSystem.Controllers
 
     public abstract class CrudController<T, VM> : ControllerBase where T : IServiceBase<VM> where VM : IViewModel
     {
-        private readonly T _baseService;
+        protected readonly T _baseService;
 
         public CrudController(T baseService)
         {
@@ -59,7 +59,7 @@ namespace TimeTrackingSystem.Controllers
             return ConvertServiceResponseToCrudResponse(_baseService.Delete(id));
         }
 
-        private CrudResponse ConvertServiceResponseToCrudResponse(int id)
+        protected CrudResponse ConvertServiceResponseToCrudResponse(int id)
         {
             CrudResponse res = new CrudResponse();
             if (id > 0)

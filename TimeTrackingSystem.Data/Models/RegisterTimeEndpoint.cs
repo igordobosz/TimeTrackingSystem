@@ -10,13 +10,21 @@ namespace TimeTrackingSystem.Data.Models
 {
     public class RegisterTimeEndpoint : Entity, IEntity
     {
+        public RegisterTimeEndpoint()
+        {
+            WorkerRegisterEventsIn = new List<WorkRegisterEvent>();
+            WorkerRegisterEventsOut = new List<WorkRegisterEvent>();
+        }
+
         [Required(AllowEmptyStrings = false)]
         [StringLength(128)]
         public string Name { get; set; }
         [Required(AllowEmptyStrings = false)]
         public string EndpointType { get; set; }
-        public ICollection<WorkRegisterEvent> WorkerRegisterEventsIn { get; set; }
-        public ICollection<WorkRegisterEvent> WorkerRegisterEventsOut { get; set; }
+
+        public string SecurityToken { get; set; }
+        public virtual ICollection<WorkRegisterEvent> WorkerRegisterEventsIn { get; set; }
+        public virtual ICollection<WorkRegisterEvent> WorkerRegisterEventsOut { get; set; }
         public Expression<Func<object, bool>> BuildSearchExpression(string searchTerm)
         {
             throw new NotImplementedException();

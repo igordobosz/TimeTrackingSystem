@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TimeTrackingSystem.Common.Contracts;
+using TimeTrackingSystem.Data.Contracts;
 
 namespace TimeTrackingSystem.Data.Repositories
 {
@@ -16,7 +19,7 @@ namespace TimeTrackingSystem.Data.Repositories
             _appDbContext = appDbContext;
         }
 
-        public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class
+        public IRepository<TEntity> GetRepository<TEntity>() where TEntity : Entity
         {
             if (_repositories == null) _repositories = new Dictionary<Type, object>();
 
@@ -28,9 +31,17 @@ namespace TimeTrackingSystem.Data.Repositories
             return (IRepository<TEntity>)_repositories[type];
         }
 
+        //TODO handling unique
         public bool SaveChanges()
         {
             return _appDbContext.SaveChanges() > 0;
+        }
+
+        public bool HasChanges()
+        {
+            return _appDbContext.ChangeTracker.Entries().Any(e => e.State == EntityState.Added
+                                                         || e.State == EntityState.Modified
+                                                         || e.State == EntityState.Deleted);
         }
     }
 }

@@ -3,9 +3,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
+import { Router } from '@angular/router';
 
 import { EndpointType, RegisterTimeEndpointService, RegisterTimeEndpointViewModel } from '../../../core/api.generated';
 import { SnackbarHelper } from '../../../core/helpers/snackbar.helper';
+import { SnackbarService } from '../../../core/services/snackbar.service';
 import { DeleteDialogComponent } from '../../../shared/components/delete-dialog/delete-dialog.component';
 import { RegisterTimeEndpointEditComponent } from '../register-time-endpoint-edit/register-time-endpoint-edit.component';
 
@@ -21,6 +23,7 @@ export class RegisterTimeEndpointIndexComponent implements OnInit {
     displayedColumns: string[] = [
         'name',
         'endpointType',
+        'securityToken',
         'actions',
     ];
     sortColumn: string;
@@ -33,6 +36,8 @@ export class RegisterTimeEndpointIndexComponent implements OnInit {
         private endpointService: RegisterTimeEndpointService,
         public dialog: MatDialog,
         private snackbarHelper: SnackbarHelper,
+        private snackbarService: SnackbarService,
+        private router: Router,
     ) { }
 
     ngOnInit() {
@@ -100,6 +105,23 @@ export class RegisterTimeEndpointIndexComponent implements OnInit {
                 });
         }
         this.subscribeList();
+    }
+
+    async generateToken(id: number) {
+        const result = await this.endpointService.generateToken(id).toPromise().then(res => {
+            if (res.success) {
+                this.snackbarService.success('Pomyślnie wygenerowano token.');
+            } else {
+                this.snackbarService.success('Nie udało się wygenerować tokenu.');
+            }
+        },
+        );
+        this.subscribeList();
+    }
+
+    goToEndpoint(id: number) {
+        const vm = this.dataSource.find(x => x.id == id);
+        this.router.navigate(['/endpoint'], { queryParams: { endpointName: vm.name, securityToken: vm.securityToken } });
     }
 
 }

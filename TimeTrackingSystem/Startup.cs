@@ -90,7 +90,7 @@ namespace TimeTrackingSystem
             services.AddDbContext<AppDbContext>(options =>
                 options.UseMySql(
                     Configuration.GetConnectionString("DefaultConnection"),
-                    b => b.MigrationsAssembly("TimeTrackingSystem.Data")));
+                    b => b.MigrationsAssembly("TimeTrackingSystem.Data")).UseLazyLoadingProxies());
             services.AddMvc()
                 .AddMvcOptions(opt =>
                 {
