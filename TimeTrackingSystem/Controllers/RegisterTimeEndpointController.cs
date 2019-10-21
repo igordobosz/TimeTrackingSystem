@@ -37,6 +37,5 @@ namespace TimeTrackingSystem.Controllers
         {
             return _baseService.RegisterTime(id, identityCode);
         }
-
     }
 }

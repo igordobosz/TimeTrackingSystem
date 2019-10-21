@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TimeTrackingSystem.Common.Misc
 {
-    public static class EndpointTokenHelper
+    public static class Helper
     {
         public static string GenerateRandomToken()
         {

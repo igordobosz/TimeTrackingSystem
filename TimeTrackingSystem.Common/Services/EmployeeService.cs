@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -54,6 +55,17 @@ namespace TimeTrackingSystem.Common.Services
             workRegisterEvent.DateGoOut = DateTime.Now;
             workRegisterEvent.EndpointOutID = endpointId;
             return Update(employee) > 0;
+        }
+
+        public List<EmployeeViewModel> FilterEmployeeAutoComplete(string filter)
+        {
+            List<EmployeeViewModel> res = new List<EmployeeViewModel>();
+            if (!string.IsNullOrEmpty(filter))
+            {
+                Expression<Func<Employee, bool>> expr = e => (e.Name + " " + e.Surename).Contains(filter);
+                _employeeRepository.FindByCondition(expr).AsNoTracking().ToList().ForEach(e => res.Add(EntityToViewModel(e)));
+            }
+            return res;
         }
     }
 }

@@ -16,5 +16,12 @@ namespace TimeTrackingSystem.Controllers
         public EmployeeController(IEmployeeService baseService) : base(baseService)
         {
         }
+
+        [HttpGet]
+        [Route("FilterEmployeeAutoComplete")]
+        public List<EmployeeViewModel> FilterEmployeeAutoComplete(string filter)
+        {
+            return _baseService.FilterEmployeeAutoComplete(filter);
+        }
     }
 }
