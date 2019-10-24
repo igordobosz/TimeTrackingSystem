@@ -4,12 +4,14 @@ import { CoreModule } from '@angular/flex-layout';
 
 import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 import { PinDialogComponent } from './components/pin-dialog/pin-dialog.component';
+import { FilterWorkEventsAttended } from './pipes/FilterWorkEventsAttended.pipe';
 import { UIModule } from './ui/ui.module';
 
 @NgModule({
-    declarations: [DeleteDialogComponent, PinDialogComponent],
+    declarations: [DeleteDialogComponent, PinDialogComponent, FilterWorkEventsAttended],
     exports: [
         UIModule,
+        FilterWorkEventsAttended,
     ],
     imports: [
         CommonModule,

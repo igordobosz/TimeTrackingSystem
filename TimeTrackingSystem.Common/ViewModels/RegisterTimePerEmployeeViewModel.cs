@@ -12,4 +12,10 @@ namespace TimeTrackingSystem.Common.ViewModels
         public TimeSpan OverTimes { get; set; }
         public FindByConditionResponse<RegisterTimePerEmployeeDayWrapperViewModel> WorkEventDayList { get; set; }
     }
+
+    public class RegisterTimePerEmployeeDayWrapperViewModel : RegisterTimePerWrapper
+    {
+        public int Day { get; set; }
+        public WorkRegisterEventViewModel WorkRegisterEvent { get; set; }
+    }
 }

@@ -15,16 +15,18 @@ namespace TimeTrackingSystem.Common.Services
     public class WorkRegisterEventService : ServiceBase<WorkRegisterEvent, WorkRegisterEventViewModel>, IWorkRegisterEventService
     {
         private IRepository<WorkRegisterEvent> _workRegisterRepository;
-        public WorkRegisterEventService(IRepositoryWrapper repositoryWrapper, IMapper mapper) : base(repositoryWrapper, mapper)
+        private IEmployeeService _employeeService;
+        public WorkRegisterEventService(IRepositoryWrapper repositoryWrapper, IMapper mapper, IEmployeeService employeeService) : base(repositoryWrapper, mapper)
         {
             _workRegisterRepository = repositoryWrapper.GetRepository<WorkRegisterEvent>();
+            _employeeService = employeeService;
         }
 
         public RegisterTimePerEmployeeViewModel GetWorkEventsByEmployeeAndDate(int employeeId, DateTime date)
         {
             List<WorkRegisterEventViewModel> workEvents = new List<WorkRegisterEventViewModel>();
-            var query = _workRegisterRepository.FindAll().Where(e =>
-                e.EmployeeID == employeeId && e.DateGoIn.Year == date.Year && e.DateGoOut.Month == date.Month);
+            var query = FindAllFinished().Where(e =>
+                e.EmployeeID == employeeId && e.DateGoIn.Year == date.Year && e.DateGoIn.Month == date.Month && e.DateGoOut != DateTime.MinValue);
             query.ToList().ForEach(e => workEvents.Add(EntityToViewModel(e)));
             List<RegisterTimePerEmployeeDayWrapperViewModel> workEventDayList  = new List<RegisterTimePerEmployeeDayWrapperViewModel>();
             TimeSpan computedHoursSum = TimeSpan.Zero;
@@ -42,7 +44,6 @@ namespace TimeTrackingSystem.Common.Services
                         CalculateWorkTime(dayWrapper, workEvent);
                         computedHoursSum += dayWrapper.ComputedTime;
                         overTimeHoursSum += dayWrapper.OverTime;
-                        dayWrapper.NightWork = workEvent.DateGoIn.Day != workEvent.DateGoOut.Day;
                         workEventDayList.Add(dayWrapper);
                     }
                 }
@@ -61,7 +62,35 @@ namespace TimeTrackingSystem.Common.Services
             return ans;
         }
 
-        private void CalculateWorkTime(RegisterTimePerEmployeeDayWrapperViewModel dayWrapper, WorkRegisterEventViewModel workEvent)
+        public RegisterTimePerDayViewModel GetWorkEventsByDay(DateTime date)
+        {
+            List<WorkRegisterEventViewModel> workEvents = new List<WorkRegisterEventViewModel>();
+            var query = FindAllFinished().Where(e => e.DateGoIn.Date == date.Date);
+            query.ToList().ForEach(e => workEvents.Add(EntityToViewModel(e)));
+
+            List<RegisterTimePerDayEmployeeWrapperViewModel> workEventEmployeeList = new List<RegisterTimePerDayEmployeeWrapperViewModel>();
+            foreach (WorkRegisterEventViewModel vm in workEvents)
+            {
+                var newEmployeeWrapper = new RegisterTimePerDayEmployeeWrapperViewModel();
+                newEmployeeWrapper.WorkRegisterEvent = vm;
+                var emp = _employeeService.GetByID(vm.EmployeeID);
+                newEmployeeWrapper.EmployeeFullName = $"{emp.Name} {emp.Surename}";
+                newEmployeeWrapper.EmployeeID = vm.EmployeeID;
+                CalculateWorkTime(newEmployeeWrapper, vm);
+                workEventEmployeeList.Add(newEmployeeWrapper);
+            }
+            
+            RegisterTimePerDayViewModel ans = new RegisterTimePerDayViewModel();
+            ans.WorkEventDayList = new FindByConditionResponse<RegisterTimePerDayEmployeeWrapperViewModel>() { CollectionSize = workEventEmployeeList.Count(), ItemList = workEventEmployeeList };
+            return ans;
+        }
+
+        private IQueryable<WorkRegisterEvent> FindAllFinished()
+        {
+            return _workRegisterRepository.FindAll().Where(e => e.DateGoOut != DateTime.MinValue);
+        }
+
+        private void CalculateWorkTime(RegisterTimePerWrapper dayWrapper, WorkRegisterEventViewModel workEvent)
         {
             //TODO INSERT TOLERANCJE/EMPLOYEE GROUP USTAWIENIA
             var etatGodziny = 8;
@@ -82,12 +111,7 @@ namespace TimeTrackingSystem.Common.Services
                 dayWrapper.ComputedTime = TimeSpan.FromHours(computedHours);
                 dayWrapper.OverTime = TimeSpan.Zero;
             }
-        }
-
-        private bool IsInTollerance(TimeSpan time)
-        {
-            var tolerancja = 15;
-            return time.Minutes < tolerancja || 60 - tolerancja < time.Minutes;
+            dayWrapper.NightWork = workEvent.DateGoIn.Day != workEvent.DateGoOut.Day;
         }
     }
 }

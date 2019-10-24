@@ -24,5 +24,12 @@ namespace TimeTrackingSystem.Controllers
         {
             return _baseService.GetWorkEventsByEmployeeAndDate(employeeID, date);
         }
+
+        [HttpGet]
+        [Route("GetWorkEventsByDay")]
+        public RegisterTimePerDayViewModel GetWorkEventsByDay(DateTime date)
+        {
+            return _baseService.GetWorkEventsByDay(date);
+        }
     }
 }

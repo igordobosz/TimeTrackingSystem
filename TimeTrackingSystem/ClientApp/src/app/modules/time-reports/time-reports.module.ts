@@ -9,23 +9,10 @@ import { SharedModule } from '../../shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-
-export const MY_FORMATS = {
-    parse: {
-        dateInput: 'MM/YYYY',
-    },
-    display: {
-        dateInput: 'MM/YYYY',
-        monthYearLabel: 'MMM YYYY',
-        dateA11yLabel: 'LL',
-        monthYearA11yLabel: 'MMMM YYYY',
-    },
-};
-
-
+import { PerDayComponent } from './per-day/per-day.component';
 
 @NgModule({
-    declarations: [PerEmployeeComponent],
+    declarations: [PerEmployeeComponent, PerDayComponent],
     imports: [
         CommonModule,
         RouterModule.forChild(TimeReportsRoutes),
@@ -34,8 +21,7 @@ export const MY_FORMATS = {
         FormsModule,
     ],
     providers: [
-        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+
     ],
 })
 export class TimeReportsModule { }

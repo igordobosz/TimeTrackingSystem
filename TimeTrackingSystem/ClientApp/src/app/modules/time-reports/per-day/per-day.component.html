@@ -1,0 +1,85 @@
+<div class="mat-elevation-z8">
+    <mat-toolbar color="accent">
+        <mat-toolbar-row>
+            <span>Report</span>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="m-padding">
+        <form class="form-filter"
+              [formGroup]="form">
+            <mat-form-field>
+                <input matInput
+                       [matDatepicker]="picker"
+                       placeholder="Choose a date"
+                       formControlName="dpDate">
+                <mat-datepicker-toggle matSuffix
+                                       [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <button mat-raised-button
+                    disabled="{{ form.invalid }}"
+                    (click)="onSubmit(form.value)"
+                    color="primary">
+                Filter
+            </button>
+        </form>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="m-padding">
+        <table mat-table
+               [dataSource]="viewModel?.workEventDayList?.itemList"
+               class="mat-elevation-z8"
+               style="width: 100%;">
+
+            <ng-container matColumnDef="employeeFullName">
+                <th mat-header-cell
+                    *matHeaderCellDef> Employee </th>
+                <td mat-cell
+                    *matCellDef="let element"> {{element.employeeFullName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dateGoIn">
+                <th mat-header-cell
+                    *matHeaderCellDef> Date go in </th>
+                <td mat-cell
+                    *matCellDef="let element"> {{element.workRegisterEvent?.dateGoIn | date:'shortTime'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dateGoOut">
+                <th mat-header-cell
+                    *matHeaderCellDef> Date go out </th>
+                <td mat-cell
+                    *matCellDef="let element"> {{element.workRegisterEvent?.dateGoOut | date:'shortTime'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="nightWork">
+                <th mat-header-cell
+                    *matHeaderCellDef> Night work </th>
+                <td mat-cell
+                    *matCellDef="let element">
+                    <mat-checkbox [disabled]='true'
+                                  [checked]='element.nightWork'></mat-checkbox>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="computedTime">
+                <th mat-header-cell
+                    *matHeaderCellDef> Computed Time </th>
+                <td mat-cell
+                    *matCellDef="let element"> {{element.computedTime}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="overTime">
+                <th mat-header-cell
+                    *matHeaderCellDef> Over Time </th>
+                <td mat-cell
+                    *matCellDef="let element"> {{element.overTime}} </td>
+            </ng-container>
+
+            <tr mat-header-row
+                *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row
+                *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+</div>

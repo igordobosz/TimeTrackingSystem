@@ -2,13 +2,6 @@
     <mat-toolbar color="accent">
         <mat-toolbar-row>
             <span>Report</span>
-            <span class="spacer"></span>
-            <a mat-button
-               (click)="create()">
-                <mat-icon class="example-icon"
-                          aria-hidden="false"
-                          aria-label="Example user verified icon">create</mat-icon>
-            </a>
         </mat-toolbar-row>
     </mat-toolbar>
     <div class="m-padding">
@@ -48,6 +41,9 @@
                 Filter
             </button>
         </form>
+        <span class="spacer"></span>
+        <mat-checkbox [(ngModel)]="chkAttended">Show only attented days</mat-checkbox>
+
     </div>
     <mat-divider></mat-divider>
     <mat-grid-list cols="3"
@@ -88,7 +84,7 @@
     </mat-grid-list>
     <div class="m-padding">
         <table mat-table
-               [dataSource]="viewModel?.workEventDayList?.itemList"
+               [dataSource]="viewModel?.workEventDayList?.itemList | filterWorkEventsAttended : chkAttended"
                class="mat-elevation-z8"
                style="width: 100%;">
 
@@ -118,7 +114,8 @@
                     *matHeaderCellDef> Night work </th>
                 <td mat-cell
                     *matCellDef="let element">
-                    <mat-checkbox [checked]='element.nightWork'></mat-checkbox>
+                    <mat-checkbox [disabled]='true'
+                                  [checked]='element.nightWork'></mat-checkbox>
                 </td>
             </ng-container>
 
