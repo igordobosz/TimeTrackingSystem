@@ -11,7 +11,6 @@ using TimeTrackingSystem.Common.ViewModels;
 namespace TimeTrackingSystem.Controllers
 {
     [ApiController]
-
     public abstract class CrudController<T, VM> : ControllerBase where T : IServiceBase<VM> where VM : IViewModel
     {
         protected readonly T _baseService;

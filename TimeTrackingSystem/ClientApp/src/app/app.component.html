@@ -6,7 +6,7 @@
                      class="side-nav"
                      style="z-index:1">
             <mat-nav-list>
-                <h3 mat-subheader>Navigation</h3>
+                <h3 mat-subheader>Base</h3>
                 <a href="#"
                    routerLink="/Employee">
                     <mat-list-item>
@@ -25,20 +25,27 @@
                         </h4>
                     </mat-list-item>
                 </a>
-                <mat-list-item>
-                    <mat-icon mat-list-icon>wb_sunnyt</mat-icon>
-                    <h4 mat-line>
-                        <a href="#">Produkty sezonowe</a>
-                    </h4>
-                </mat-list-item>
                 <mat-divider></mat-divider>
-                <h3 mat-subheader>Notes</h3>
-                <mat-list-item>
-                    <mat-icon mat-list-icon>note</mat-icon>
-                    <h4 mat-line>
-                        <a href="#">Notatki</a>
-                    </h4>
-                </mat-list-item>
+                <h3 mat-subheader>Reports</h3>
+                <a href="#"
+                   routerLink="/Reports/Employee">
+                    <mat-list-item>
+                        <mat-icon mat-list-icon>desktop_windows</mat-icon>
+                        <h4 mat-line>
+                            Per Employee
+                        </h4>
+                    </mat-list-item>
+                </a>
+                <a href="#"
+                   routerLink="/Reports/Day">
+                    <mat-list-item>
+                        <mat-icon mat-list-icon>desktop_windows</mat-icon>
+                        <h4 mat-line>
+                            Per Day
+                        </h4>
+                    </mat-list-item>
+                </a>
+
             </mat-nav-list>
         </mat-sidenav>
         <mat-sidenav-content style="padding: 5px;">

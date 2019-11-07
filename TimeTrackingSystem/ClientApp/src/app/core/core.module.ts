@@ -1,29 +1,30 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from './header/header.component';
-import { FooterComponent } from './footer/footer.component';
-import { SharedModule } from '../shared/shared.module';
-import { RouterModule } from '@angular/router';
-import { AuthorizationService, EmployeeService, RegisterTimeEndpointService} from './api.generated';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { JwtInterceptor } from './interceptors/jwt.interceptor';
-import { ErrorInterceptor } from './interceptors/error.interceptor';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { SharedModule } from '../shared/shared.module';
+import { AuthorizationService, EmployeeService, RegisterTimeEndpointService, WorkRegisterEventService } from './api.generated';
+import { FooterComponent } from './footer/footer.component';
+import { HeaderComponent } from './header/header.component';
 import { SnackbarHelper } from './helpers/snackbar.helper';
+import { ErrorInterceptor } from './interceptors/error.interceptor';
+import { JwtInterceptor } from './interceptors/jwt.interceptor';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    SharedModule,
-    RouterModule
-  ],
-  declarations: [HeaderComponent, FooterComponent],
-  exports: [HeaderComponent, FooterComponent],
-  providers: [
-    AuthorizationService,
-    EmployeeService,
-    RegisterTimeEndpointService,
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
-  ]
+    imports: [
+        CommonModule,
+        SharedModule,
+        RouterModule,
+    ],
+    declarations: [HeaderComponent, FooterComponent],
+    exports: [HeaderComponent, FooterComponent],
+    providers: [
+        AuthorizationService,
+        EmployeeService,
+        RegisterTimeEndpointService,
+        WorkRegisterEventService,
+        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    ],
 })
 export class CoreModule { }

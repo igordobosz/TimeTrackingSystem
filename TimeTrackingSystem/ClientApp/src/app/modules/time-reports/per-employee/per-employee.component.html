@@ -1,0 +1,142 @@
+<div class="mat-elevation-z8">
+    <mat-toolbar color="accent">
+        <mat-toolbar-row>
+            <span>Report</span>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="m-padding">
+        <form class="form-filter"
+              [formGroup]="form">
+            <mat-form-field>
+                <input matInput
+                       [matDatepicker]="dp"
+                       placeholder="Month and Year"
+                       formControlName="dpDate">
+                <mat-datepicker-toggle matSuffix
+                                       [for]="dp"></mat-datepicker-toggle>
+                <mat-datepicker #dp
+                                startView="multi-year"
+                                (yearSelected)="chosenYearHandler($event)"
+                                (monthSelected)="chosenMonthHandler($event, dp)"
+                                panelClass="month-picker">
+                </mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+                <input matInput
+                       placeholder="Employee"
+                       [matAutocomplete]="auto"
+                       formControlName="slcEmployee">
+                <mat-autocomplete #auto="matAutocomplete"
+                                  [displayWith]="displayFn">
+                    <mat-option *ngFor="let emp of filterEmployees | async"
+                                [value]="emp">
+                        <span>{{emp.name}} {{emp.surename}}</span>
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+            <button mat-raised-button
+                    disabled="{{ form.invalid }}"
+                    (click)="onSubmit(form.value)"
+                    color="primary">
+                Filter
+            </button>
+        </form>
+        <span class="spacer"></span>
+        <mat-checkbox [(ngModel)]="chkAttended">Show only attented days</mat-checkbox>
+
+    </div>
+    <mat-divider></mat-divider>
+    <mat-grid-list cols="3"
+                   rowHeight="100px">
+        <mat-grid-tile [colspan]="1"
+                       [rowspan]="1">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>Work Time</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    {{viewModel.summaryWorkTime}}
+                </mat-card-content>
+            </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="1"
+                       [rowspan]="1">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>Work Days</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    {{viewModel.workDays}}
+                </mat-card-content>
+            </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="1"
+                       [rowspan]="1">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>Over times</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    {{viewModel.overTimes}}
+                </mat-card-content>
+            </mat-card>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <div class="m-padding">
+        <table mat-table
+               [dataSource]="viewModel?.workEventDayList?.itemList | filterWorkEventsAttended : chkAttended"
+               class="mat-elevation-z8"
+               style="width: 100%;">
+
+            <ng-container matColumnDef="day">
+                <th mat-header-cell
+                    *matHeaderCellDef> Day </th>
+                <td mat-cell
+                    *matCellDef="let element"> {{element.day}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dateGoIn">
+                <th mat-header-cell
+                    *matHeaderCellDef> Date go in </th>
+                <td mat-cell
+                    *matCellDef="let element"> {{element.workRegisterEvent?.dateGoIn | date:'shortTime'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dateGoOut">
+                <th mat-header-cell
+                    *matHeaderCellDef> Date go out </th>
+                <td mat-cell
+                    *matCellDef="let element"> {{element.workRegisterEvent?.dateGoOut | date:'shortTime'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="nightWork">
+                <th mat-header-cell
+                    *matHeaderCellDef> Night work </th>
+                <td mat-cell
+                    *matCellDef="let element">
+                    <mat-checkbox [disabled]='true'
+                                  [checked]='element.nightWork'></mat-checkbox>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="computedTime">
+                <th mat-header-cell
+                    *matHeaderCellDef> Computed Time </th>
+                <td mat-cell
+                    *matCellDef="let element"> {{element.computedTime}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="overTime">
+                <th mat-header-cell
+                    *matHeaderCellDef> Over Time </th>
+                <td mat-cell
+                    *matCellDef="let element"> {{element.overTime}} </td>
+            </ng-container>
+
+            <tr mat-header-row
+                *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row
+                *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+</div>

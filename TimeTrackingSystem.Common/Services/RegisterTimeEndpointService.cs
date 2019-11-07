@@ -27,7 +27,7 @@ namespace TimeTrackingSystem.Common.Services
         public int GenerateToken(int id)
         {
             var endpoint = GetEntityByID(id);
-            endpoint.SecurityToken = EndpointTokenHelper.GenerateRandomToken();
+            endpoint.SecurityToken = Helper.GenerateRandomToken();
             return Update(endpoint);
         }
 

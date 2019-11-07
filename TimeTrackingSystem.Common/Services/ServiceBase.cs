@@ -39,6 +39,7 @@ namespace TimeTrackingSystem.Common.Services
         {
             List<VM> res = new List<VM>();
             _repositoryWrapper.GetRepository<T>().FindAll().AsNoTracking().SortByProperty(sortColumn, sortOrder).Paged(pageIndex, pageSize).ToList().ForEach(e => res.Add(EntityToViewModel(e)));
+            //TODO POPRAWKA NA FILTROWANIE BEDZIE INACZEJ LICZBA elementów
             int listSize = _repositoryWrapper.GetRepository<T>().FindAll().Count();
             return new FindByConditionResponse<VM>() {ItemList = res, CollectionSize = listSize};
         }
