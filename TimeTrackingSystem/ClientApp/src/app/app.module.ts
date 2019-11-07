@@ -33,7 +33,7 @@ import { SharedModule } from './shared/shared.module';
         EmployeeModule,
         RouterModule.forRoot(AppRootRoutes),
     ],
-    providers: [{ provide: API_BASE_URL, useValue: '' },
+    providers: [{ provide: API_BASE_URL, useValue: ' ' },
     ],
     bootstrap: [AppComponent],
 })
