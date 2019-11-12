@@ -15,10 +15,12 @@ namespace TimeTrackingSystem.Common.Services
     public class WorkRegisterEventService : ServiceBase<WorkRegisterEvent, WorkRegisterEventViewModel>, IWorkRegisterEventService
     {
         private IRepository<WorkRegisterEvent> _workRegisterRepository;
+        private IRepository<Employee> _employeeRepository;
         private IEmployeeService _employeeService;
         public WorkRegisterEventService(IRepositoryWrapper repositoryWrapper, IMapper mapper, IEmployeeService employeeService) : base(repositoryWrapper, mapper)
         {
             _workRegisterRepository = repositoryWrapper.GetRepository<WorkRegisterEvent>();
+            _employeeRepository = repositoryWrapper.GetRepository<Employee>();
             _employeeService = employeeService;
         }
 
@@ -54,12 +56,53 @@ namespace TimeTrackingSystem.Common.Services
                     workEventDayList.Add(dayWrapper);
                 }
             }
+
+            var empGroup = _employeeRepository.GetByID(employeeId).EmployeeGroup;
             RegisterTimePerEmployeeViewModel ans = new RegisterTimePerEmployeeViewModel();
             ans.WorkEventDayList = new FindByConditionResponse<RegisterTimePerEmployeeDayWrapperViewModel>(){CollectionSize = workEventDayList.Count(), ItemList = workEventDayList };
-            ans.SummaryWorkTime = computedHoursSum;
-            ans.OverTimes = overTimeHoursSum;
-            ans.WorkDays = workEventDayList.Where(e=>e.WorkRegisterEvent!=null).GroupBy(e => e.Day).Count();
+            ans.DataMonthWorkDays = GetWorkingDaysOfMonth(date);
+            ans.DataMonthWorkHours = TimeSpan.FromHours(ans.DataMonthWorkDays * 8);
+            if (empGroup != null)
+            {
+                ans.StatNeededHours = TimeSpan.FromHours(empGroup.WorkingHoursPerWeek / 100 * ans.DataMonthWorkHours.TotalHours);
+            }
+            else
+            {
+                ans.StatNeededHours = TimeSpan.FromHours(ans.DataMonthWorkHours.TotalHours);
+            }
+            
+            ans.StatWorkHours = computedHoursSum;
+            ans.StatOverTimes = overTimeHoursSum;
+            ans.SumWorkHours = ans.StatWorkHours;
+            ans.SumOverTimes = ans.StatOverTimes;
+            var diff = ans.StatNeededHours - ans.StatWorkHours;
+            if (diff > TimeSpan.Zero)
+            {
+                if (ans.SumOverTimes >= diff)
+                {
+                    ans.SumWorkHours = ans.StatNeededHours;
+                    ans.SumOverTimes -= diff;
+                }
+                else
+                {
+                    ans.SumWorkHours += ans.StatOverTimes;
+                    ans.SumOverTimes = TimeSpan.Zero;
+                }
+            }
+            else
+            {
+                ans.SumOverTimes += (ans.StatNeededHours - ans.StatWorkHours);
+                ans.SumWorkHours = ans.StatNeededHours;
+            }
             return ans;
+        }
+
+        private int GetWorkingDaysOfMonth(DateTime date)
+        {
+            DayOfWeek[] weekends = { DayOfWeek.Saturday, DayOfWeek.Sunday };
+            var remainingDates = Enumerable.Range(1, DateTime.DaysInMonth(date.Year, date.Month))
+                .Select(day => new DateTime(date.Year, date.Month, day));
+            return remainingDates.Count(e => !weekends.Contains(e.DayOfWeek));
         }
 
         public RegisterTimePerDayViewModel GetWorkEventsByDay(DateTime date)

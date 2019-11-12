@@ -63,7 +63,7 @@ namespace TimeTrackingSystem.Common.Services
             if (!string.IsNullOrEmpty(filter))
             {
                 Expression<Func<Employee, bool>> expr = e => (e.Name + " " + e.Surename).Contains(filter);
-                _employeeRepository.FindByCondition(expr).AsNoTracking().ToList().ForEach(e => res.Add(EntityToViewModel(e)));
+                _employeeRepository.FindByCondition(expr).ToList().ForEach(e => res.Add(EntityToViewModel(e)));
             }
             return res;
         }

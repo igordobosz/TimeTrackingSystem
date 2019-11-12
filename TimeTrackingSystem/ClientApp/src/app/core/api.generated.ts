@@ -2193,9 +2193,13 @@ export enum EndpointType {
 }
 
 export class RegisterTimePerEmployeeViewModel implements IRegisterTimePerEmployeeViewModel {
-    summaryWorkTime!: string;
-    workDays!: number;
-    overTimes!: string;
+    dataMonthWorkDays!: number;
+    dataMonthWorkHours!: string;
+    statWorkHours!: string;
+    statOverTimes!: string;
+    statNeededHours!: string;
+    sumWorkHours!: string;
+    sumOverTimes!: string;
     workEventDayList?: FindByConditionResponseOfRegisterTimePerEmployeeDayWrapperViewModel | null;
 
     constructor(data?: IRegisterTimePerEmployeeViewModel) {
@@ -2209,9 +2213,13 @@ export class RegisterTimePerEmployeeViewModel implements IRegisterTimePerEmploye
 
     init(data?: any) {
         if (data) {
-            this.summaryWorkTime = data["summaryWorkTime"] !== undefined ? data["summaryWorkTime"] : <any>null;
-            this.workDays = data["workDays"] !== undefined ? data["workDays"] : <any>null;
-            this.overTimes = data["overTimes"] !== undefined ? data["overTimes"] : <any>null;
+            this.dataMonthWorkDays = data["dataMonthWorkDays"] !== undefined ? data["dataMonthWorkDays"] : <any>null;
+            this.dataMonthWorkHours = data["dataMonthWorkHours"] !== undefined ? data["dataMonthWorkHours"] : <any>null;
+            this.statWorkHours = data["statWorkHours"] !== undefined ? data["statWorkHours"] : <any>null;
+            this.statOverTimes = data["statOverTimes"] !== undefined ? data["statOverTimes"] : <any>null;
+            this.statNeededHours = data["statNeededHours"] !== undefined ? data["statNeededHours"] : <any>null;
+            this.sumWorkHours = data["sumWorkHours"] !== undefined ? data["sumWorkHours"] : <any>null;
+            this.sumOverTimes = data["sumOverTimes"] !== undefined ? data["sumOverTimes"] : <any>null;
             this.workEventDayList = data["workEventDayList"] ? FindByConditionResponseOfRegisterTimePerEmployeeDayWrapperViewModel.fromJS(data["workEventDayList"]) : <any>null;
         }
     }
@@ -2225,18 +2233,26 @@ export class RegisterTimePerEmployeeViewModel implements IRegisterTimePerEmploye
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["summaryWorkTime"] = this.summaryWorkTime !== undefined ? this.summaryWorkTime : <any>null;
-        data["workDays"] = this.workDays !== undefined ? this.workDays : <any>null;
-        data["overTimes"] = this.overTimes !== undefined ? this.overTimes : <any>null;
+        data["dataMonthWorkDays"] = this.dataMonthWorkDays !== undefined ? this.dataMonthWorkDays : <any>null;
+        data["dataMonthWorkHours"] = this.dataMonthWorkHours !== undefined ? this.dataMonthWorkHours : <any>null;
+        data["statWorkHours"] = this.statWorkHours !== undefined ? this.statWorkHours : <any>null;
+        data["statOverTimes"] = this.statOverTimes !== undefined ? this.statOverTimes : <any>null;
+        data["statNeededHours"] = this.statNeededHours !== undefined ? this.statNeededHours : <any>null;
+        data["sumWorkHours"] = this.sumWorkHours !== undefined ? this.sumWorkHours : <any>null;
+        data["sumOverTimes"] = this.sumOverTimes !== undefined ? this.sumOverTimes : <any>null;
         data["workEventDayList"] = this.workEventDayList ? this.workEventDayList.toJSON() : <any>null;
         return data; 
     }
 }
 
 export interface IRegisterTimePerEmployeeViewModel {
-    summaryWorkTime: string;
-    workDays: number;
-    overTimes: string;
+    dataMonthWorkDays: number;
+    dataMonthWorkHours: string;
+    statWorkHours: string;
+    statOverTimes: string;
+    statNeededHours: string;
+    sumWorkHours: string;
+    sumOverTimes: string;
     workEventDayList?: FindByConditionResponseOfRegisterTimePerEmployeeDayWrapperViewModel | null;
 }
 

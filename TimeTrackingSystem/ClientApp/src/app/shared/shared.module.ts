@@ -1,3 +1,4 @@
+import { CdkColumnDef } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { CoreModule } from '@angular/flex-layout';
@@ -18,6 +19,7 @@ import { UIModule } from './ui/ui.module';
         UIModule,
     ],
     entryComponents: [DeleteDialogComponent, PinDialogComponent],
+    providers: [CdkColumnDef],
 })
 
 export class SharedModule { }
