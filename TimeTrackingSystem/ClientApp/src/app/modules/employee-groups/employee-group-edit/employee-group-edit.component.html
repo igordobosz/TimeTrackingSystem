@@ -1,10 +1,10 @@
 <h1 mat-dialog-title>
     <div *ngIf="editMode; then editBlock; else createblock"></div>
     <ng-template #editBlock>
-        Edit employee
+        Edit employee group
     </ng-template>
     <ng-template #createblock>
-        Create a new employee
+        Create a new employee group
     </ng-template>
 </h1>
 <form [formGroup]="form">
@@ -18,31 +18,13 @@
                                formControlName="name" />
                     </mat-form-field>
                 </td>
-                <td>
-                    <mat-form-field>
-                        <mat-label>Surename</mat-label>
-                        <input matInput
-                               formControlName="surename" />
-                    </mat-form-field>
-                </td>
             </tr>
             <tr>
                 <td>
                     <mat-form-field>
-                        <mat-label>Identity Code</mat-label>
+                        <mat-label>Working hours per week</mat-label>
                         <input matInput
-                               formControlName="identityCode" />
-                    </mat-form-field>
-                </td>
-                <td>
-                    <mat-form-field>
-                        <mat-label>Group</mat-label>
-                        <mat-select formControlName="employeeGroupID">
-                            <mat-option *ngFor="let group of employeeGroupsCbxList"
-                                        [value]="group.id">
-                                {{group.name}}
-                            </mat-option>
-                        </mat-select>
+                               formControlName="workingHoursPerWeek" />
                     </mat-form-field>
                 </td>
             </tr>

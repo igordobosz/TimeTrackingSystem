@@ -20,5 +20,10 @@ export const AppRootRoutes: Routes = [
         path: 'Reports',
         canActivate: [AuthGuard],
         loadChildren: './modules/time-reports/time-reports.module#TimeReportsModule',
+    },
+    {
+        path: 'EmployeeGroup',
+        canActivate: [AuthGuard],
+        loadChildren: './modules/employee-groups/employee-groups.module#EmployeeGroupsModule',
     }
 ];

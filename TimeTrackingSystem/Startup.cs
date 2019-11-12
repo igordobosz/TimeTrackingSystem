@@ -47,6 +47,7 @@ namespace TimeTrackingSystem
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IRegisterTimeEndpointService, RegisterTimeEndpointService>();
             services.AddScoped<IWorkRegisterEventService, WorkRegisterEventService>();
+            services.AddScoped<IEmployeeGroupService, EmployeeGroupService>();
             services.AddAutoMapper(typeof(AutoMapperProfile));
 
             // In production, the Angular files will be served from this directory

@@ -1,33 +1,28 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import { PageEvent } from "@angular/material/paginator";
-import { Sort } from "@angular/material/sort";
-import { MatTable } from "@angular/material/table";
-import { Subscription } from "rxjs";
-import { map, take } from 'rxjs/operators';
-import {
-    EmployeeGroupService,
-    EmployeeService,
-    EmployeeViewModel
-} from "../../../core/api.generated";
-import { SnackbarHelper } from "../../../core/helpers/snackbar.helper";
-import { SnackbarService } from "../../../core/services/snackbar.service";
-import { DeleteDialogComponent } from "../../../shared/components/delete-dialog/delete-dialog.component";
-import { EmployeEditComponent } from '../employe-edit/employe-edit.component';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
+import { Sort } from '@angular/material/sort';
+import { MatTable } from '@angular/material/table';
+import { Router } from '@angular/router';
+
+import { EmployeeGroupService, EmployeeGroupViewModel } from '../../../core/api.generated';
+import { SnackbarHelper } from '../../../core/helpers/snackbar.helper';
+import { SnackbarService } from '../../../core/services/snackbar.service';
+import { DeleteDialogComponent } from '../../../shared/components/delete-dialog/delete-dialog.component';
+import { EmployeeGroupEditComponent } from '../employee-group-edit/employee-group-edit.component';
 
 @Component({
-    selector: 'app-employe-index',
-    templateUrl: './employe-index.component.html',
-    styleUrls: ['./employe-index.component.scss'],
+    selector: 'app-employee-group-index',
+    templateUrl: './employee-group-index.component.html',
+    styleUrls: ['./employee-group-index.component.scss'],
 })
-export class EmployeIndexComponent implements OnInit {
+export class EmployeeGroupIndexComponent implements OnInit {
+
     @ViewChild(MatTable, { static: false }) table: MatTable<any>;
-    employees: EmployeeViewModel[];
+    dataSource: EmployeeGroupViewModel[];
     displayedColumns: string[] = [
         'name',
-        'surename',
-        'identityCode',
-        'employeeGroupName',
+        'workingHoursPerWeek',
         'actions',
     ];
     sortColumn: string;
@@ -36,10 +31,11 @@ export class EmployeIndexComponent implements OnInit {
     pageIndex = 0;
     collectionSize: number;
     constructor(
-        private employeeService: EmployeeService,
-        public employeeGroupService: EmployeeGroupService,
+        private baseService: EmployeeGroupService,
         public dialog: MatDialog,
         private snackbarHelper: SnackbarHelper,
+        private snackbarService: SnackbarService,
+        private router: Router,
     ) { }
 
     ngOnInit() {
@@ -47,11 +43,11 @@ export class EmployeIndexComponent implements OnInit {
     }
 
     subscribeList() {
-        this.employeeService
+        this.baseService
             .list(this.pageIndex, this.pageSize, '', this.sortColumn, this.sortOrder)
             .subscribe(e => {
                 this.collectionSize = e.collectionSize;
-                this.employees = e.itemList;
+                this.dataSource = e.itemList;
             });
     }
 
@@ -68,7 +64,7 @@ export class EmployeIndexComponent implements OnInit {
     }
 
     async create() {
-        const dialogRef = this.dialog.open(EmployeEditComponent);
+        const dialogRef = this.dialog.open(EmployeeGroupEditComponent);
 
         const result = await dialogRef.afterClosed().toPromise();
         if (result) {
@@ -77,7 +73,7 @@ export class EmployeIndexComponent implements OnInit {
     }
 
     async edit(id: number) {
-        const dialogRef = this.dialog.open(EmployeEditComponent, {
+        const dialogRef = this.dialog.open(EmployeeGroupEditComponent, {
             data: id,
         });
 
@@ -88,14 +84,14 @@ export class EmployeIndexComponent implements OnInit {
     }
 
     async delete(id: number) {
-        const emp = this.employees.find(x => x.id == id);
+        const vm = this.dataSource.find(x => x.id === id);
         const dialogRef = this.dialog.open(DeleteDialogComponent, {
-            data: emp.name + ' ' + emp.surename,
+            data: vm.name,
         });
 
         const result = await dialogRef.afterClosed().toPromise();
         if (result) {
-            await this.employeeService
+            await this.baseService
                 .delete(id)
                 .toPromise()
                 .then(e => {
@@ -107,13 +103,5 @@ export class EmployeIndexComponent implements OnInit {
                 });
         }
         this.subscribeList();
-    }
-
-    getEmployeeGroupName(id?: number): string {
-        let result = '';
-        if (id != null) {
-            this.employeeGroupService.getByID(id).subscribe(e => result = e.name);
-        }
-        return result;
     }
 }

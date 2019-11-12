@@ -29,7 +29,7 @@ export class AuthorizationService {
         let url_ = this.baseUrl + "/api/Login/Users";
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: any = {
+        let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
@@ -37,7 +37,7 @@ export class AuthorizationService {
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processGet(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -53,25 +53,25 @@ export class AuthorizationService {
 
     protected processGet(response: HttpResponseBase): Observable<User[]> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                if (Array.isArray(resultData200)) {
-                    result200 = [] as any;
-                    for (let item of resultData200)
-                        result200!.push(User.fromJS(item));
-                }
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(User.fromJS(item));
+            }
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<User[]>(<any>null);
@@ -83,17 +83,17 @@ export class AuthorizationService {
 
         const content_ = JSON.stringify(loginDto);
 
-        let options_: any = {
+        let options_ : any = {
             body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
+                "Content-Type": "application/json", 
                 "Accept": "application/json"
             })
         };
 
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processLogin(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -109,21 +109,21 @@ export class AuthorizationService {
 
     protected processLogin(response: HttpResponseBase): Observable<LoginResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = LoginResponse.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = LoginResponse.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<LoginResponse>(<any>null);
@@ -144,10 +144,10 @@ export class EmployeeService {
     filterEmployeeAutoComplete(filter: string | null | undefined): Observable<EmployeeViewModel[]> {
         let url_ = this.baseUrl + "/api/Employee/FilterEmployeeAutoComplete?";
         if (filter !== undefined)
-            url_ += "filter=" + encodeURIComponent("" + filter) + "&";
+            url_ += "filter=" + encodeURIComponent("" + filter) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: any = {
+        let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
@@ -155,7 +155,7 @@ export class EmployeeService {
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processFilterEmployeeAutoComplete(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -171,25 +171,25 @@ export class EmployeeService {
 
     protected processFilterEmployeeAutoComplete(response: HttpResponseBase): Observable<EmployeeViewModel[]> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                if (Array.isArray(resultData200)) {
-                    result200 = [] as any;
-                    for (let item of resultData200)
-                        result200!.push(EmployeeViewModel.fromJS(item));
-                }
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(EmployeeViewModel.fromJS(item));
+            }
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<EmployeeViewModel[]>(<any>null);
@@ -200,20 +200,20 @@ export class EmployeeService {
         if (pageIndex === null)
             throw new Error("The parameter 'pageIndex' cannot be null.");
         else if (pageIndex !== undefined)
-            url_ += "pageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+            url_ += "pageIndex=" + encodeURIComponent("" + pageIndex) + "&"; 
         if (pageSize === null)
             throw new Error("The parameter 'pageSize' cannot be null.");
         else if (pageSize !== undefined)
-            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&"; 
         if (searchExpression !== undefined)
-            url_ += "searchExpression=" + encodeURIComponent("" + searchExpression) + "&";
+            url_ += "searchExpression=" + encodeURIComponent("" + searchExpression) + "&"; 
         if (sortColumn !== undefined)
-            url_ += "sortColumn=" + encodeURIComponent("" + sortColumn) + "&";
+            url_ += "sortColumn=" + encodeURIComponent("" + sortColumn) + "&"; 
         if (sortOrder !== undefined)
-            url_ += "sortOrder=" + encodeURIComponent("" + sortOrder) + "&";
+            url_ += "sortOrder=" + encodeURIComponent("" + sortOrder) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: any = {
+        let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
@@ -221,7 +221,7 @@ export class EmployeeService {
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processList(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -237,21 +237,21 @@ export class EmployeeService {
 
     protected processList(response: HttpResponseBase): Observable<FindByConditionResponseOfEmployeeViewModel> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = FindByConditionResponseOfEmployeeViewModel.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FindByConditionResponseOfEmployeeViewModel.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<FindByConditionResponseOfEmployeeViewModel>(<any>null);
@@ -262,10 +262,10 @@ export class EmployeeService {
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: any = {
+        let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
@@ -273,7 +273,7 @@ export class EmployeeService {
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processGetByID(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -289,21 +289,21 @@ export class EmployeeService {
 
     protected processGetByID(response: HttpResponseBase): Observable<EmployeeViewModel> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = EmployeeViewModel.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = EmployeeViewModel.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<EmployeeViewModel>(<any>null);
@@ -315,17 +315,17 @@ export class EmployeeService {
 
         const content_ = JSON.stringify(item);
 
-        let options_: any = {
+        let options_ : any = {
             body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
+                "Content-Type": "application/json", 
                 "Accept": "application/json"
             })
         };
 
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processInsert(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -341,21 +341,21 @@ export class EmployeeService {
 
     protected processInsert(response: HttpResponseBase): Observable<CrudResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = CrudResponse.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<CrudResponse>(<any>null);
@@ -367,17 +367,17 @@ export class EmployeeService {
 
         const content_ = JSON.stringify(item);
 
-        let options_: any = {
+        let options_ : any = {
             body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
+                "Content-Type": "application/json", 
                 "Accept": "application/json"
             })
         };
 
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processUpdate(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -393,21 +393,21 @@ export class EmployeeService {
 
     protected processUpdate(response: HttpResponseBase): Observable<CrudResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = CrudResponse.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<CrudResponse>(<any>null);
@@ -418,10 +418,10 @@ export class EmployeeService {
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: any = {
+        let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
@@ -429,7 +429,7 @@ export class EmployeeService {
             })
         };
 
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processDelete(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -445,21 +445,355 @@ export class EmployeeService {
 
     protected processDelete(response: HttpResponseBase): Observable<CrudResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = CrudResponse.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CrudResponse>(<any>null);
+    }
+}
+
+@Injectable()
+export class EmployeeGroupService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "https://localhost:44380";
+    }
+
+    listCbx(): Observable<EmployeeGroupCbxViewModel[]> {
+        let url_ = this.baseUrl + "/api/EmployeeGroup";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processListCbx(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processListCbx(<any>response_);
+                } catch (e) {
+                    return <Observable<EmployeeGroupCbxViewModel[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<EmployeeGroupCbxViewModel[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processListCbx(response: HttpResponseBase): Observable<EmployeeGroupCbxViewModel[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(EmployeeGroupCbxViewModel.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<EmployeeGroupCbxViewModel[]>(<any>null);
+    }
+
+    list(pageIndex: number | undefined, pageSize: number | undefined, searchExpression: string | null | undefined, sortColumn: string | null | undefined, sortOrder: string | null | undefined): Observable<FindByConditionResponseOfEmployeeGroupViewModel> {
+        let url_ = this.baseUrl + "/api/EmployeeGroup/List?";
+        if (pageIndex === null)
+            throw new Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "pageIndex=" + encodeURIComponent("" + pageIndex) + "&"; 
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&"; 
+        if (searchExpression !== undefined)
+            url_ += "searchExpression=" + encodeURIComponent("" + searchExpression) + "&"; 
+        if (sortColumn !== undefined)
+            url_ += "sortColumn=" + encodeURIComponent("" + sortColumn) + "&"; 
+        if (sortOrder !== undefined)
+            url_ += "sortOrder=" + encodeURIComponent("" + sortOrder) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processList(<any>response_);
+                } catch (e) {
+                    return <Observable<FindByConditionResponseOfEmployeeGroupViewModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FindByConditionResponseOfEmployeeGroupViewModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processList(response: HttpResponseBase): Observable<FindByConditionResponseOfEmployeeGroupViewModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FindByConditionResponseOfEmployeeGroupViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FindByConditionResponseOfEmployeeGroupViewModel>(<any>null);
+    }
+
+    getByID(id: number | undefined): Observable<EmployeeGroupViewModel> {
+        let url_ = this.baseUrl + "/api/EmployeeGroup/GetByID?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetByID(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetByID(<any>response_);
+                } catch (e) {
+                    return <Observable<EmployeeGroupViewModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<EmployeeGroupViewModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetByID(response: HttpResponseBase): Observable<EmployeeGroupViewModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = EmployeeGroupViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<EmployeeGroupViewModel>(<any>null);
+    }
+
+    insert(item: EmployeeGroupViewModel): Observable<CrudResponse> {
+        let url_ = this.baseUrl + "/api/EmployeeGroup/Insert";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(item);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processInsert(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processInsert(<any>response_);
+                } catch (e) {
+                    return <Observable<CrudResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CrudResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processInsert(response: HttpResponseBase): Observable<CrudResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CrudResponse>(<any>null);
+    }
+
+    update(item: EmployeeGroupViewModel): Observable<CrudResponse> {
+        let url_ = this.baseUrl + "/api/EmployeeGroup/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(item);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(<any>response_);
+                } catch (e) {
+                    return <Observable<CrudResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CrudResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<CrudResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CrudResponse>(<any>null);
+    }
+
+    delete(id: number | undefined): Observable<CrudResponse> {
+        let url_ = this.baseUrl + "/api/EmployeeGroup/Delete?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(<any>response_);
+                } catch (e) {
+                    return <Observable<CrudResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CrudResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<CrudResponse> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<CrudResponse>(<any>null);
@@ -482,10 +816,10 @@ export class RegisterTimeEndpointService {
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: any = {
+        let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
@@ -493,7 +827,7 @@ export class RegisterTimeEndpointService {
             })
         };
 
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processGenerateToken(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -509,21 +843,21 @@ export class RegisterTimeEndpointService {
 
     protected processGenerateToken(response: HttpResponseBase): Observable<CrudResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = CrudResponse.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<CrudResponse>(<any>null);
@@ -532,12 +866,12 @@ export class RegisterTimeEndpointService {
     validateEndpoint(name: string | null | undefined, securityToken: string | null | undefined): Observable<CrudResponse> {
         let url_ = this.baseUrl + "/api/RegisterTimeEndpoint/ValidateEndpoint?";
         if (name !== undefined)
-            url_ += "name=" + encodeURIComponent("" + name) + "&";
+            url_ += "name=" + encodeURIComponent("" + name) + "&"; 
         if (securityToken !== undefined)
-            url_ += "securityToken=" + encodeURIComponent("" + securityToken) + "&";
+            url_ += "securityToken=" + encodeURIComponent("" + securityToken) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: any = {
+        let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
@@ -545,7 +879,7 @@ export class RegisterTimeEndpointService {
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processValidateEndpoint(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -561,21 +895,21 @@ export class RegisterTimeEndpointService {
 
     protected processValidateEndpoint(response: HttpResponseBase): Observable<CrudResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = CrudResponse.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<CrudResponse>(<any>null);
@@ -586,12 +920,12 @@ export class RegisterTimeEndpointService {
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
         if (identityCode !== undefined)
-            url_ += "identityCode=" + encodeURIComponent("" + identityCode) + "&";
+            url_ += "identityCode=" + encodeURIComponent("" + identityCode) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: any = {
+        let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
@@ -599,7 +933,7 @@ export class RegisterTimeEndpointService {
             })
         };
 
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processRegisterTime(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -615,21 +949,21 @@ export class RegisterTimeEndpointService {
 
     protected processRegisterTime(response: HttpResponseBase): Observable<RegisterTimeResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = RegisterTimeResponse.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = RegisterTimeResponse.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<RegisterTimeResponse>(<any>null);
@@ -640,20 +974,20 @@ export class RegisterTimeEndpointService {
         if (pageIndex === null)
             throw new Error("The parameter 'pageIndex' cannot be null.");
         else if (pageIndex !== undefined)
-            url_ += "pageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+            url_ += "pageIndex=" + encodeURIComponent("" + pageIndex) + "&"; 
         if (pageSize === null)
             throw new Error("The parameter 'pageSize' cannot be null.");
         else if (pageSize !== undefined)
-            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&"; 
         if (searchExpression !== undefined)
-            url_ += "searchExpression=" + encodeURIComponent("" + searchExpression) + "&";
+            url_ += "searchExpression=" + encodeURIComponent("" + searchExpression) + "&"; 
         if (sortColumn !== undefined)
-            url_ += "sortColumn=" + encodeURIComponent("" + sortColumn) + "&";
+            url_ += "sortColumn=" + encodeURIComponent("" + sortColumn) + "&"; 
         if (sortOrder !== undefined)
-            url_ += "sortOrder=" + encodeURIComponent("" + sortOrder) + "&";
+            url_ += "sortOrder=" + encodeURIComponent("" + sortOrder) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: any = {
+        let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
@@ -661,7 +995,7 @@ export class RegisterTimeEndpointService {
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processList(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -677,21 +1011,21 @@ export class RegisterTimeEndpointService {
 
     protected processList(response: HttpResponseBase): Observable<FindByConditionResponseOfRegisterTimeEndpointViewModel> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = FindByConditionResponseOfRegisterTimeEndpointViewModel.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FindByConditionResponseOfRegisterTimeEndpointViewModel.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<FindByConditionResponseOfRegisterTimeEndpointViewModel>(<any>null);
@@ -702,10 +1036,10 @@ export class RegisterTimeEndpointService {
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: any = {
+        let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
@@ -713,7 +1047,7 @@ export class RegisterTimeEndpointService {
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processGetByID(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -729,21 +1063,21 @@ export class RegisterTimeEndpointService {
 
     protected processGetByID(response: HttpResponseBase): Observable<RegisterTimeEndpointViewModel> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = RegisterTimeEndpointViewModel.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = RegisterTimeEndpointViewModel.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<RegisterTimeEndpointViewModel>(<any>null);
@@ -755,17 +1089,17 @@ export class RegisterTimeEndpointService {
 
         const content_ = JSON.stringify(item);
 
-        let options_: any = {
+        let options_ : any = {
             body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
+                "Content-Type": "application/json", 
                 "Accept": "application/json"
             })
         };
 
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processInsert(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -781,21 +1115,21 @@ export class RegisterTimeEndpointService {
 
     protected processInsert(response: HttpResponseBase): Observable<CrudResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = CrudResponse.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<CrudResponse>(<any>null);
@@ -807,17 +1141,17 @@ export class RegisterTimeEndpointService {
 
         const content_ = JSON.stringify(item);
 
-        let options_: any = {
+        let options_ : any = {
             body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
+                "Content-Type": "application/json", 
                 "Accept": "application/json"
             })
         };
 
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processUpdate(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -833,21 +1167,21 @@ export class RegisterTimeEndpointService {
 
     protected processUpdate(response: HttpResponseBase): Observable<CrudResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = CrudResponse.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<CrudResponse>(<any>null);
@@ -858,10 +1192,10 @@ export class RegisterTimeEndpointService {
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: any = {
+        let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
@@ -869,7 +1203,7 @@ export class RegisterTimeEndpointService {
             })
         };
 
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processDelete(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -885,21 +1219,21 @@ export class RegisterTimeEndpointService {
 
     protected processDelete(response: HttpResponseBase): Observable<CrudResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = CrudResponse.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<CrudResponse>(<any>null);
@@ -922,14 +1256,14 @@ export class WorkRegisterEventService {
         if (employeeID === null)
             throw new Error("The parameter 'employeeID' cannot be null.");
         else if (employeeID !== undefined)
-            url_ += "employeeID=" + encodeURIComponent("" + employeeID) + "&";
+            url_ += "employeeID=" + encodeURIComponent("" + employeeID) + "&"; 
         if (date === null)
             throw new Error("The parameter 'date' cannot be null.");
         else if (date !== undefined)
-            url_ += "date=" + encodeURIComponent(date ? "" + date.toJSON() : "") + "&";
+            url_ += "date=" + encodeURIComponent(date ? "" + date.toJSON() : "") + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: any = {
+        let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
@@ -937,7 +1271,7 @@ export class WorkRegisterEventService {
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processGetWorkEventsByEmployeeAndDate(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -953,21 +1287,21 @@ export class WorkRegisterEventService {
 
     protected processGetWorkEventsByEmployeeAndDate(response: HttpResponseBase): Observable<RegisterTimePerEmployeeViewModel> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = RegisterTimePerEmployeeViewModel.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = RegisterTimePerEmployeeViewModel.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<RegisterTimePerEmployeeViewModel>(<any>null);
@@ -978,10 +1312,10 @@ export class WorkRegisterEventService {
         if (date === null)
             throw new Error("The parameter 'date' cannot be null.");
         else if (date !== undefined)
-            url_ += "date=" + encodeURIComponent(date ? "" + date.toJSON() : "") + "&";
+            url_ += "date=" + encodeURIComponent(date ? "" + date.toJSON() : "") + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: any = {
+        let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
@@ -989,7 +1323,7 @@ export class WorkRegisterEventService {
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processGetWorkEventsByDay(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -1005,21 +1339,21 @@ export class WorkRegisterEventService {
 
     protected processGetWorkEventsByDay(response: HttpResponseBase): Observable<RegisterTimePerDayViewModel> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = RegisterTimePerDayViewModel.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = RegisterTimePerDayViewModel.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<RegisterTimePerDayViewModel>(<any>null);
@@ -1030,20 +1364,20 @@ export class WorkRegisterEventService {
         if (pageIndex === null)
             throw new Error("The parameter 'pageIndex' cannot be null.");
         else if (pageIndex !== undefined)
-            url_ += "pageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+            url_ += "pageIndex=" + encodeURIComponent("" + pageIndex) + "&"; 
         if (pageSize === null)
             throw new Error("The parameter 'pageSize' cannot be null.");
         else if (pageSize !== undefined)
-            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&"; 
         if (searchExpression !== undefined)
-            url_ += "searchExpression=" + encodeURIComponent("" + searchExpression) + "&";
+            url_ += "searchExpression=" + encodeURIComponent("" + searchExpression) + "&"; 
         if (sortColumn !== undefined)
-            url_ += "sortColumn=" + encodeURIComponent("" + sortColumn) + "&";
+            url_ += "sortColumn=" + encodeURIComponent("" + sortColumn) + "&"; 
         if (sortOrder !== undefined)
-            url_ += "sortOrder=" + encodeURIComponent("" + sortOrder) + "&";
+            url_ += "sortOrder=" + encodeURIComponent("" + sortOrder) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: any = {
+        let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
@@ -1051,7 +1385,7 @@ export class WorkRegisterEventService {
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processList(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -1067,21 +1401,21 @@ export class WorkRegisterEventService {
 
     protected processList(response: HttpResponseBase): Observable<FindByConditionResponseOfWorkRegisterEventViewModel> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = FindByConditionResponseOfWorkRegisterEventViewModel.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FindByConditionResponseOfWorkRegisterEventViewModel.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<FindByConditionResponseOfWorkRegisterEventViewModel>(<any>null);
@@ -1092,10 +1426,10 @@ export class WorkRegisterEventService {
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: any = {
+        let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
@@ -1103,7 +1437,7 @@ export class WorkRegisterEventService {
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processGetByID(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -1119,21 +1453,21 @@ export class WorkRegisterEventService {
 
     protected processGetByID(response: HttpResponseBase): Observable<WorkRegisterEventViewModel> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = WorkRegisterEventViewModel.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = WorkRegisterEventViewModel.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<WorkRegisterEventViewModel>(<any>null);
@@ -1145,17 +1479,17 @@ export class WorkRegisterEventService {
 
         const content_ = JSON.stringify(item);
 
-        let options_: any = {
+        let options_ : any = {
             body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
+                "Content-Type": "application/json", 
                 "Accept": "application/json"
             })
         };
 
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processInsert(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -1171,21 +1505,21 @@ export class WorkRegisterEventService {
 
     protected processInsert(response: HttpResponseBase): Observable<CrudResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = CrudResponse.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<CrudResponse>(<any>null);
@@ -1197,17 +1531,17 @@ export class WorkRegisterEventService {
 
         const content_ = JSON.stringify(item);
 
-        let options_: any = {
+        let options_ : any = {
             body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
+                "Content-Type": "application/json", 
                 "Accept": "application/json"
             })
         };
 
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processUpdate(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -1223,21 +1557,21 @@ export class WorkRegisterEventService {
 
     protected processUpdate(response: HttpResponseBase): Observable<CrudResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = CrudResponse.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<CrudResponse>(<any>null);
@@ -1248,10 +1582,10 @@ export class WorkRegisterEventService {
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: any = {
+        let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
@@ -1259,7 +1593,7 @@ export class WorkRegisterEventService {
             })
         };
 
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_: any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processDelete(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -1275,21 +1609,21 @@ export class WorkRegisterEventService {
 
     protected processDelete(response: HttpResponseBase): Observable<CrudResponse> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = CrudResponse.fromJS(resultData200);
-                return _observableOf(result200);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CrudResponse.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf<CrudResponse>(<any>null);
@@ -1336,7 +1670,7 @@ export class User implements IUser {
         data["email"] = this.email !== undefined ? this.email : <any>null;
         data["password"] = this.password !== undefined ? this.password : <any>null;
         data["token"] = this.token !== undefined ? this.token : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -1379,7 +1713,7 @@ export class LoginResponse implements ILoginResponse {
         data = typeof data === 'object' ? data : {};
         data["success"] = this.success !== undefined ? this.success : <any>null;
         data["token"] = this.token !== undefined ? this.token : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -1419,7 +1753,7 @@ export class LoginDTO implements ILoginDTO {
         data = typeof data === 'object' ? data : {};
         data["username"] = this.username !== undefined ? this.username : <any>null;
         data["password"] = this.password !== undefined ? this.password : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -1454,7 +1788,7 @@ export abstract class ViewModel implements IViewModel {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id !== undefined ? this.id : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -1467,6 +1801,7 @@ export class EmployeeViewModel extends ViewModel implements IEmployeeViewModel {
     name!: string;
     surename!: string;
     identityCode?: string | null;
+    employeeGroupName?: string | null;
 
     constructor(data?: IEmployeeViewModel) {
         super(data);
@@ -1479,6 +1814,7 @@ export class EmployeeViewModel extends ViewModel implements IEmployeeViewModel {
             this.name = data["name"] !== undefined ? data["name"] : <any>null;
             this.surename = data["surename"] !== undefined ? data["surename"] : <any>null;
             this.identityCode = data["identityCode"] !== undefined ? data["identityCode"] : <any>null;
+            this.employeeGroupName = data["employeeGroupName"] !== undefined ? data["employeeGroupName"] : <any>null;
         }
     }
 
@@ -1495,8 +1831,9 @@ export class EmployeeViewModel extends ViewModel implements IEmployeeViewModel {
         data["name"] = this.name !== undefined ? this.name : <any>null;
         data["surename"] = this.surename !== undefined ? this.surename : <any>null;
         data["identityCode"] = this.identityCode !== undefined ? this.identityCode : <any>null;
+        data["employeeGroupName"] = this.employeeGroupName !== undefined ? this.employeeGroupName : <any>null;
         super.toJSON(data);
-        return data;
+        return data; 
     }
 }
 
@@ -1505,6 +1842,7 @@ export interface IEmployeeViewModel extends IViewModel {
     name: string;
     surename: string;
     identityCode?: string | null;
+    employeeGroupName?: string | null;
 }
 
 export class FindByConditionResponseOfEmployeeViewModel implements IFindByConditionResponseOfEmployeeViewModel {
@@ -1546,7 +1884,7 @@ export class FindByConditionResponseOfEmployeeViewModel implements IFindByCondit
                 data["itemList"].push(item.toJSON());
         }
         data["collectionSize"] = this.collectionSize !== undefined ? this.collectionSize : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -1586,13 +1924,131 @@ export class CrudResponse implements ICrudResponse {
         data = typeof data === 'object' ? data : {};
         data["success"] = this.success !== undefined ? this.success : <any>null;
         data["id"] = this.id !== undefined ? this.id : <any>null;
-        return data;
+        return data; 
     }
 }
 
 export interface ICrudResponse {
     success: boolean;
     id: number;
+}
+
+export class EmployeeGroupCbxViewModel extends ViewModel implements IEmployeeGroupCbxViewModel {
+    name!: string;
+
+    constructor(data?: IEmployeeGroupCbxViewModel) {
+        super(data);
+    }
+
+    init(data?: any) {
+        super.init(data);
+        if (data) {
+            this.name = data["name"] !== undefined ? data["name"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): EmployeeGroupCbxViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new EmployeeGroupCbxViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface IEmployeeGroupCbxViewModel extends IViewModel {
+    name: string;
+}
+
+export class FindByConditionResponseOfEmployeeGroupViewModel implements IFindByConditionResponseOfEmployeeGroupViewModel {
+    itemList?: EmployeeGroupViewModel[] | null;
+    collectionSize!: number;
+
+    constructor(data?: IFindByConditionResponseOfEmployeeGroupViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (Array.isArray(data["itemList"])) {
+                this.itemList = [] as any;
+                for (let item of data["itemList"])
+                    this.itemList!.push(EmployeeGroupViewModel.fromJS(item));
+            }
+            this.collectionSize = data["collectionSize"] !== undefined ? data["collectionSize"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): FindByConditionResponseOfEmployeeGroupViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FindByConditionResponseOfEmployeeGroupViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.itemList)) {
+            data["itemList"] = [];
+            for (let item of this.itemList)
+                data["itemList"].push(item.toJSON());
+        }
+        data["collectionSize"] = this.collectionSize !== undefined ? this.collectionSize : <any>null;
+        return data; 
+    }
+}
+
+export interface IFindByConditionResponseOfEmployeeGroupViewModel {
+    itemList?: EmployeeGroupViewModel[] | null;
+    collectionSize: number;
+}
+
+export class EmployeeGroupViewModel extends ViewModel implements IEmployeeGroupViewModel {
+    name!: string;
+    workingHoursPerWeek!: number;
+
+    constructor(data?: IEmployeeGroupViewModel) {
+        super(data);
+    }
+
+    init(data?: any) {
+        super.init(data);
+        if (data) {
+            this.name = data["name"] !== undefined ? data["name"] : <any>null;
+            this.workingHoursPerWeek = data["workingHoursPerWeek"] !== undefined ? data["workingHoursPerWeek"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): EmployeeGroupViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new EmployeeGroupViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        data["workingHoursPerWeek"] = this.workingHoursPerWeek !== undefined ? this.workingHoursPerWeek : <any>null;
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface IEmployeeGroupViewModel extends IViewModel {
+    name: string;
+    workingHoursPerWeek: number;
 }
 
 export class RegisterTimeResponse implements IRegisterTimeResponse {
@@ -1626,7 +2082,7 @@ export class RegisterTimeResponse implements IRegisterTimeResponse {
         data = typeof data === 'object' ? data : {};
         data["responseType"] = this.responseType !== undefined ? this.responseType : <any>null;
         data["workTime"] = this.workTime !== undefined ? this.workTime : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -1681,7 +2137,7 @@ export class FindByConditionResponseOfRegisterTimeEndpointViewModel implements I
                 data["itemList"].push(item.toJSON());
         }
         data["collectionSize"] = this.collectionSize !== undefined ? this.collectionSize : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -1721,7 +2177,7 @@ export class RegisterTimeEndpointViewModel extends ViewModel implements IRegiste
         data["endpointType"] = this.endpointType !== undefined ? this.endpointType : <any>null;
         data["securityToken"] = this.securityToken !== undefined ? this.securityToken : <any>null;
         super.toJSON(data);
-        return data;
+        return data; 
     }
 }
 
@@ -1773,7 +2229,7 @@ export class RegisterTimePerEmployeeViewModel implements IRegisterTimePerEmploye
         data["workDays"] = this.workDays !== undefined ? this.workDays : <any>null;
         data["overTimes"] = this.overTimes !== undefined ? this.overTimes : <any>null;
         data["workEventDayList"] = this.workEventDayList ? this.workEventDayList.toJSON() : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -1823,7 +2279,7 @@ export class FindByConditionResponseOfRegisterTimePerEmployeeDayWrapperViewModel
                 data["itemList"].push(item.toJSON());
         }
         data["collectionSize"] = this.collectionSize !== undefined ? this.collectionSize : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -1864,7 +2320,7 @@ export abstract class RegisterTimePerWrapper implements IRegisterTimePerWrapper 
         data["computedTime"] = this.computedTime !== undefined ? this.computedTime : <any>null;
         data["overTime"] = this.overTime !== undefined ? this.overTime : <any>null;
         data["nightWork"] = this.nightWork !== undefined ? this.nightWork : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -1902,7 +2358,7 @@ export class RegisterTimePerEmployeeDayWrapperViewModel extends RegisterTimePerW
         data["day"] = this.day !== undefined ? this.day : <any>null;
         data["workRegisterEvent"] = this.workRegisterEvent ? this.workRegisterEvent.toJSON() : <any>null;
         super.toJSON(data);
-        return data;
+        return data; 
     }
 }
 
@@ -1951,7 +2407,7 @@ export class WorkRegisterEventViewModel extends ViewModel implements IWorkRegist
         data["dateGoOut"] = this.dateGoOut ? this.dateGoOut.toISOString() : <any>null;
         data["endpointOutName"] = this.endpointOutName !== undefined ? this.endpointOutName : <any>null;
         super.toJSON(data);
-        return data;
+        return data; 
     }
 }
 
@@ -1992,7 +2448,7 @@ export class RegisterTimePerDayViewModel implements IRegisterTimePerDayViewModel
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["workEventDayList"] = this.workEventDayList ? this.workEventDayList.toJSON() : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -2039,7 +2495,7 @@ export class FindByConditionResponseOfRegisterTimePerDayEmployeeWrapperViewModel
                 data["itemList"].push(item.toJSON());
         }
         data["collectionSize"] = this.collectionSize !== undefined ? this.collectionSize : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -2079,7 +2535,7 @@ export class RegisterTimePerDayEmployeeWrapperViewModel extends RegisterTimePerW
         data["employeeFullName"] = this.employeeFullName !== undefined ? this.employeeFullName : <any>null;
         data["workRegisterEvent"] = this.workRegisterEvent ? this.workRegisterEvent.toJSON() : <any>null;
         super.toJSON(data);
-        return data;
+        return data; 
     }
 }
 
@@ -2128,7 +2584,7 @@ export class FindByConditionResponseOfWorkRegisterEventViewModel implements IFin
                 data["itemList"].push(item.toJSON());
         }
         data["collectionSize"] = this.collectionSize !== undefined ? this.collectionSize : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -2139,10 +2595,10 @@ export interface IFindByConditionResponseOfWorkRegisterEventViewModel {
 
 export class ApiException extends Error {
     message: string;
-    status: number;
-    response: string;
+    status: number; 
+    response: string; 
     headers: { [key: string]: any; };
-    result: any;
+    result: any; 
 
     constructor(message: string, status: number, response: string, headers: { [key: string]: any; }, result: any) {
         super();
@@ -2162,7 +2618,7 @@ export class ApiException extends Error {
 }
 
 function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): Observable<any> {
-    if (result !== null && result !== undefined)
+    if(result !== null && result !== undefined)
         return _observableThrow(result);
     else
         return _observableThrow(new ApiException(message, status, response, headers, null));
@@ -2174,12 +2630,12 @@ function blobToText(blob: any): Observable<string> {
             observer.next("");
             observer.complete();
         } else {
-            let reader = new FileReader();
-            reader.onload = event => {
+            let reader = new FileReader(); 
+            reader.onload = event => { 
                 observer.next((<any>event.target).result);
                 observer.complete();
             };
-            reader.readAsText(blob);
+            reader.readAsText(blob); 
         }
     });
 }

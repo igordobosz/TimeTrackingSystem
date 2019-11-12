@@ -11,7 +11,8 @@ namespace TimeTrackingSystem.Common
     {
         public AutoMapperProfile()
         {
-            CreateMap<Employee, EmployeeViewModel>();
+            CreateMap<Employee, EmployeeViewModel>().ForMember(e => e.EmployeeGroupName, op => op.MapFrom(e => e.EmployeeGroup.Name));
+//            CreateMap<Employee, EmployeeViewModel>();
             CreateMap<EmployeeViewModel, Employee>();
             CreateMap<RegisterTimeEndpoint, RegisterTimeEndpointViewModel>()
                 .ForMember(e => e.EndpointType,
@@ -22,6 +23,10 @@ namespace TimeTrackingSystem.Common
             CreateMap<WorkRegisterEvent, WorkRegisterEventViewModel>()
                 .ForMember(e => e.EndpointInName, op => op.MapFrom(e => e.EndpointIn.Name))
                 .ForMember(e => e.EndpointOutName, op => op.MapFrom(e => e.EndpointOut.Name));
+
+            CreateMap<EmployeeGroup, EmployeeGroupViewModel>();
+            CreateMap<EmployeeGroup, EmployeeGroupCbxViewModel>();
+            CreateMap<EmployeeGroupViewModel, EmployeeGroup>();
         }
 
         //TODO hanldowanie jakos blednych enumow
