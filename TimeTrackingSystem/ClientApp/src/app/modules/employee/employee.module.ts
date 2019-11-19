@@ -7,13 +7,14 @@ import { CoreModule } from '../../core/core.module';
 import { SharedModule } from '../../shared/shared.module';
 import { EmployeDetailsComponent } from './employe-details/employe-details.component';
 import { EmployeEditComponent } from './employe-edit/employe-edit.component';
+import { EmployeFilterComponent } from './employe-filter/employe-filter.component';
 import { EmployeIndexComponent } from './employe-index/employe-index.component';
 import { EmployeeRoutes } from './employee.routes';
 
 
 
 @NgModule({
-    declarations: [EmployeIndexComponent, EmployeDetailsComponent, EmployeEditComponent],
+    declarations: [EmployeIndexComponent, EmployeDetailsComponent, EmployeEditComponent, EmployeFilterComponent],
     imports: [
         RouterModule.forChild(EmployeeRoutes),
         CommonModule,
@@ -21,6 +22,6 @@ import { EmployeeRoutes } from './employee.routes';
         SharedModule,
         FormsModule,
     ],
-    entryComponents: [EmployeEditComponent],
+    entryComponents: [EmployeEditComponent, EmployeFilterComponent],
 })
 export class EmployeeModule { }

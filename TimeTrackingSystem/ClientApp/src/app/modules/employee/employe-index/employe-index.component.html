@@ -3,6 +3,12 @@
         <span>Employees</span>
         <span class="spacer"></span>
         <a mat-button
+           (click)="filter()">
+            <mat-icon class="example-icon"
+                      aria-hidden="false"
+                      aria-label="Example user verified icon">filter_list</mat-icon>
+        </a>
+        <a mat-button
            (click)="create()">
             <mat-icon class="example-icon"
                       aria-hidden="false"

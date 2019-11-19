@@ -22,7 +22,7 @@ namespace TimeTrackingSystem.Controllers
 
         [HttpGet]
         [Route("List")]
-        public FindByConditionResponse<VM> List(int pageIndex, int pageSize, string searchExpression, string sortColumn, string sortOrder)
+        public virtual FindByConditionResponse<VM> List(int pageIndex, int pageSize, string searchExpression, string sortColumn, string sortOrder)
         {
             return _baseService.FindByConditions(pageIndex, pageSize, searchExpression, sortColumn, sortOrder);
         }

@@ -46,7 +46,7 @@ export class RegisterTimeEndpointIndexComponent implements OnInit {
 
     subscribeList() {
         this.endpointService
-            .list(this.pageIndex, this.pageSize, '', this.sortColumn, this.sortOrder)
+            .list(this.pageIndex, this.pageSize, null, this.sortColumn, this.sortOrder)
             .subscribe(e => {
                 this.collectionSize = e.collectionSize;
                 this.dataSource = e.itemList;

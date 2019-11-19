@@ -5,7 +5,10 @@ using System.Linq.Expressions;
 using System.Text;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using TimeTrackingSystem.Common.Contracts;
+using TimeTrackingSystem.Common.DTO;
 using TimeTrackingSystem.Common.ViewModels;
 using TimeTrackingSystem.Data;
 using TimeTrackingSystem.Data.Models;
@@ -24,6 +27,17 @@ namespace TimeTrackingSystem.Common.Services
         public Employee GetEmployeeByIdentityCode(string identityCode)
         {
             return _employeeRepository.FindByCondition(e => e.IdentityCode.Equals(identityCode)).FirstOrDefault();
+        }
+
+        protected override void ApplyFilters(ref IQueryable<Employee> query, EmployeeViewModel searchModel)
+        {
+            if (searchModel != null)
+            {
+                var entity = ViewModelToEntity(searchModel);
+                //TODO ZROBIC WLASNE EXPRESSION NA TO
+                query = query.Where(e =>
+                    (e.Name ?? "").ToLower().Contains((entity.Name ?? "").ToLower()) && (e.Surename ?? "").ToLower().Contains((entity.Surename ?? "").ToLower()) && (entity.EmployeeGroupID.Equals(null) || e.EmployeeGroupID.Equals(entity.EmployeeGroupID)));
+            }
         }
 
         public bool IsEmployeeInWork(int id)

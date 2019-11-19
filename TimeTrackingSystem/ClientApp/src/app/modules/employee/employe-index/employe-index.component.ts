@@ -14,6 +14,7 @@ import { SnackbarHelper } from "../../../core/helpers/snackbar.helper";
 import { SnackbarService } from "../../../core/services/snackbar.service";
 import { DeleteDialogComponent } from "../../../shared/components/delete-dialog/delete-dialog.component";
 import { EmployeEditComponent } from '../employe-edit/employe-edit.component';
+import { EmployeFilterComponent, FilterResult } from '../employe-filter/employe-filter.component';
 
 @Component({
     selector: 'app-employe-index',
@@ -35,6 +36,8 @@ export class EmployeIndexComponent implements OnInit {
     pageSize = 10;
     pageIndex = 0;
     collectionSize: number;
+    searchExpression: string;
+    searchModel: EmployeeViewModel = new EmployeeViewModel();
     constructor(
         private employeeService: EmployeeService,
         public employeeGroupService: EmployeeGroupService,
@@ -48,7 +51,7 @@ export class EmployeIndexComponent implements OnInit {
 
     subscribeList() {
         this.employeeService
-            .list(this.pageIndex, this.pageSize, '', this.sortColumn, this.sortOrder)
+            .list(this.pageIndex, this.pageSize, this.searchExpression, this.sortColumn, this.sortOrder)
             .subscribe(e => {
                 this.collectionSize = e.collectionSize;
                 this.employees = e.itemList;
@@ -107,6 +110,22 @@ export class EmployeIndexComponent implements OnInit {
                 });
         }
         this.subscribeList();
+    }
+
+    async filter() {
+        const dialogRef = this.dialog.open(EmployeFilterComponent, { data: this.searchModel });
+
+        const result: FilterResult = await dialogRef.afterClosed().toPromise();
+        if (!result.cancel) {
+            if (result.unfilter) {
+                this.searchModel = new EmployeeViewModel();
+                this.searchExpression = null;
+            } else {
+                this.searchModel = result.model;
+                this.searchExpression = JSON.stringify(result.model);
+            }
+            this.subscribeList();
+        }
     }
 
     getEmployeeGroupName(id?: number): string {

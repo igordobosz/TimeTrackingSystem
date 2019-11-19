@@ -1,0 +1,58 @@
+<h1 mat-dialog-title>
+    Apply Filters
+</h1>
+<form [formGroup]="form">
+    <div mat-dialog-content>
+        <table cellspacing="0">
+            <tr>
+                <td>
+                    <mat-form-field>
+                        <mat-label>Name</mat-label>
+                        <input matInput
+                               formControlName="name" />
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field>
+                        <mat-label>Surename</mat-label>
+                        <input matInput
+                               formControlName="surename" />
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-form-field>
+                        <mat-label>Identity Code</mat-label>
+                        <input matInput
+                               formControlName="identityCode" />
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field>
+                        <mat-label>Group</mat-label>
+                        <mat-select formControlName="employeeGroupID">
+                            <mat-option *ngFor="let group of employeeGroupsCbxList"
+                                        [value]="group.id">
+                                {{group.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button
+                (click)="onNoClick()">Cancel</button>
+        <span class="spacer"></span>
+        <button mat-button
+                (click)="cancelFilters()">Delete Filters</button>
+        <button mat-raised-button
+                disabled="{{ form.invalid }}"
+                (click)="onSubmit(form.value)"
+                color="primary">
+            Save
+        </button>
+    </div>
+</form>
