@@ -1,11 +1,5 @@
 <h1 mat-dialog-title>
-    <div *ngIf="editMode; then editBlock; else createblock"></div>
-    <ng-template #editBlock>
-        Edit employee
-    </ng-template>
-    <ng-template #createblock>
-        Create a new employee
-    </ng-template>
+    Apply Filters
 </h1>
 <form [formGroup]="form">
     <div mat-dialog-content>
@@ -52,6 +46,8 @@
         <button mat-button
                 (click)="onNoClick()">Cancel</button>
         <span class="spacer"></span>
+        <button mat-button
+                (click)="cancelFilters()">Delete Filters</button>
         <button mat-raised-button
                 disabled="{{ form.invalid }}"
                 (click)="onSubmit(form.value)"

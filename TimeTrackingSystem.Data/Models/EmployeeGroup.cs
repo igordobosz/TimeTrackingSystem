@@ -12,7 +12,7 @@ namespace TimeTrackingSystem.Data.Models
     {
         [Required(AllowEmptyStrings = false)]
         [StringLength(128)]
-        public int Name { get; set; }
+        public string Name { get; set; }
         public int WorkingHoursPerWeek { get; set; }
 
         public virtual ICollection<Employee> Employees { get; set; }

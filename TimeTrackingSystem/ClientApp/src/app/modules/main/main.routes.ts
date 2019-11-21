@@ -21,5 +21,5 @@ export const MainRoutes: Routes = [
     {
         path: 'endpoint',
         component: EndpointComponent,
-    },
+    }
 ];

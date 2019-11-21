@@ -46,42 +46,48 @@
 
     </div>
     <mat-divider></mat-divider>
-    <mat-grid-list cols="3"
-                   rowHeight="100px">
-        <mat-grid-tile [colspan]="1"
-                       [rowspan]="1">
-            <mat-card>
-                <mat-card-header>
-                    <mat-card-title>Work Time</mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                    {{viewModel.summaryWorkTime}}
-                </mat-card-content>
-            </mat-card>
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="1"
-                       [rowspan]="1">
-            <mat-card>
-                <mat-card-header>
-                    <mat-card-title>Work Days</mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                    {{viewModel.workDays}}
-                </mat-card-content>
-            </mat-card>
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="1"
-                       [rowspan]="1">
-            <mat-card>
-                <mat-card-header>
-                    <mat-card-title>Over times</mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                    {{viewModel.overTimes}}
-                </mat-card-content>
-            </mat-card>
-        </mat-grid-tile>
-    </mat-grid-list>
+    <div class="m-padding">
+        <mat-grid-list cols="4"
+                       rowHeight="30px">
+            <mat-grid-tile [colspan]="1"
+                           [rowspan]="2">Month data</mat-grid-tile>
+            <mat-grid-tile [colspan]="1"
+                           [rowspan]="1">Working days</mat-grid-tile>
+            <mat-grid-tile [colspan]="2"
+                           [rowspan]="1">Working hours</mat-grid-tile>
+            <mat-grid-tile [colspan]="1"
+                           [rowspan]="1">{{viewModel.dataMonthWorkDays}}</mat-grid-tile>
+            <mat-grid-tile [colspan]="2"
+                           [rowspan]="1">{{viewModel.dataMonthWorkHours}}</mat-grid-tile>
+
+            <mat-grid-tile [colspan]="1"
+                           [rowspan]="2">Month Stats</mat-grid-tile>
+            <mat-grid-tile [colspan]="1"
+                           [rowspan]="1">Working hours required</mat-grid-tile>
+            <mat-grid-tile [colspan]="1"
+                           [rowspan]="1">Working hours registered</mat-grid-tile>
+            <mat-grid-tile [colspan]="1"
+                           [rowspan]="1">Overtimes registered</mat-grid-tile>
+            <mat-grid-tile [colspan]="1"
+                           [rowspan]="1">{{viewModel.statNeededHours}}</mat-grid-tile>
+            <mat-grid-tile [colspan]="1"
+                           [rowspan]="1">{{viewModel.statWorkHours}}</mat-grid-tile>
+            <mat-grid-tile [colspan]="1"
+                           [rowspan]="1">{{viewModel.statOverTimes}}</mat-grid-tile>
+
+            <mat-grid-tile [colspan]="1"
+                           [rowspan]="2">Month Summary</mat-grid-tile>
+            <mat-grid-tile [colspan]="1"
+                           [rowspan]="1">Computed work hours</mat-grid-tile>
+            <mat-grid-tile [colspan]="2"
+                           [rowspan]="1">Computed overtimes</mat-grid-tile>
+            <mat-grid-tile [colspan]="1"
+                           [rowspan]="1">{{viewModel.sumWorkHours}}</mat-grid-tile>
+            <mat-grid-tile [colspan]="2"
+                           [rowspan]="1">{{viewModel.sumOverTimes}}</mat-grid-tile>
+        </mat-grid-list>
+    </div>
+
     <div class="m-padding">
         <table mat-table
                [dataSource]="viewModel?.workEventDayList?.itemList | filterWorkEventsAttended : chkAttended"

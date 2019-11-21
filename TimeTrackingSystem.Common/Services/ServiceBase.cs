@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using TimeTrackingSystem.Common.Contracts;
 using TimeTrackingSystem.Common.DTO;
 using TimeTrackingSystem.Common.Extensions;
@@ -37,11 +39,25 @@ namespace TimeTrackingSystem.Common.Services
 
         public FindByConditionResponse<VM> FindByConditions(int pageIndex, int pageSize, string searchExpression, string sortColumn, string sortOrder)
         {
+            VM searchVM = null;
+            if (!string.IsNullOrEmpty(searchExpression))
+            {
+                JsonSerializerSettings serSettings = new JsonSerializerSettings();
+                serSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                searchVM = JsonConvert.DeserializeObject<VM>(searchExpression);
+            }
             List<VM> res = new List<VM>();
-            _repositoryWrapper.GetRepository<T>().FindAll().AsNoTracking().SortByProperty(sortColumn, sortOrder).Paged(pageIndex, pageSize).ToList().ForEach(e => res.Add(EntityToViewModel(e)));
-            //TODO POPRAWKA NA FILTROWANIE BEDZIE INACZEJ LICZBA elementów
-            int listSize = _repositoryWrapper.GetRepository<T>().FindAll().Count();
+            var query = _repositoryWrapper.GetRepository<T>().FindAll().SortByProperty(sortColumn, sortOrder)
+                .Paged(pageIndex, pageSize);
+            ApplyFilters(ref query, searchVM);
+            query.ToList().ForEach(e => res.Add(EntityToViewModel(e)));
+            int listSize = res.Count();
             return new FindByConditionResponse<VM>() {ItemList = res, CollectionSize = listSize};
+        }
+
+        protected virtual void ApplyFilters(ref IQueryable<T> query, VM searchModel)
+        {
+
         }
 
         public VM GetByID(int id)

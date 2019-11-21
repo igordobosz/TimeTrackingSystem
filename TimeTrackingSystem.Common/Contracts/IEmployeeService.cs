@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TimeTrackingSystem.Common.DTO;
 using TimeTrackingSystem.Common.Services;
 using TimeTrackingSystem.Common.ViewModels;
 using TimeTrackingSystem.Data.Models;

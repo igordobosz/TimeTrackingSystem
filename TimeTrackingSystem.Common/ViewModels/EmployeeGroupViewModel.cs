@@ -7,17 +7,11 @@ using TimeTrackingSystem.Common.Contracts;
 
 namespace TimeTrackingSystem.Common.ViewModels
 {
-    public class EmployeeViewModel : ViewModel, IViewModel
+    public class EmployeeGroupViewModel : ViewModel, IViewModel
     {
-        public int? EmployeeGroupID { get; set; }
         [Required(AllowEmptyStrings = false)]
         [StringLength(128)]
         public string Name { get; set; }
-        [Required(AllowEmptyStrings = false)]
-        [StringLength(128)]
-        public string Surename { get; set; }
-        [StringLength(128)]
-        public string IdentityCode { get; set; }
-        public string EmployeeGroupName { get; set; }
+        public int WorkingHoursPerWeek { get; set; }
     }
 }

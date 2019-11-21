@@ -5,25 +5,24 @@ import { Sort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { Router } from '@angular/router';
 
-import { EndpointType, RegisterTimeEndpointService, RegisterTimeEndpointViewModel } from '../../../core/api.generated';
+import { EmployeeGroupService, EmployeeGroupViewModel } from '../../../core/api.generated';
 import { SnackbarHelper } from '../../../core/helpers/snackbar.helper';
 import { SnackbarService } from '../../../core/services/snackbar.service';
 import { DeleteDialogComponent } from '../../../shared/components/delete-dialog/delete-dialog.component';
-import { RegisterTimeEndpointEditComponent } from '../register-time-endpoint-edit/register-time-endpoint-edit.component';
+import { EmployeeGroupEditComponent } from '../employee-group-edit/employee-group-edit.component';
 
 @Component({
-    selector: 'app-register-time-endpoint-index',
-    templateUrl: './register-time-endpoint-index.component.html',
-    styleUrls: ['./register-time-endpoint-index.component.scss'],
+    selector: 'app-employee-group-index',
+    templateUrl: './employee-group-index.component.html',
+    styleUrls: ['./employee-group-index.component.scss'],
 })
-export class RegisterTimeEndpointIndexComponent implements OnInit {
+export class EmployeeGroupIndexComponent implements OnInit {
 
     @ViewChild(MatTable, { static: false }) table: MatTable<any>;
-    dataSource: RegisterTimeEndpointViewModel[];
+    dataSource: EmployeeGroupViewModel[];
     displayedColumns: string[] = [
         'name',
-        'endpointType',
-        'securityToken',
+        'workingHoursPerWeek',
         'actions',
     ];
     sortColumn: string;
@@ -31,9 +30,8 @@ export class RegisterTimeEndpointIndexComponent implements OnInit {
     pageSize = 10;
     pageIndex = 0;
     collectionSize: number;
-    EndpointType = EndpointType;
     constructor(
-        private endpointService: RegisterTimeEndpointService,
+        private baseService: EmployeeGroupService,
         public dialog: MatDialog,
         private snackbarHelper: SnackbarHelper,
         private snackbarService: SnackbarService,
@@ -45,7 +43,7 @@ export class RegisterTimeEndpointIndexComponent implements OnInit {
     }
 
     subscribeList() {
-        this.endpointService
+        this.baseService
             .list(this.pageIndex, this.pageSize, null, this.sortColumn, this.sortOrder)
             .subscribe(e => {
                 this.collectionSize = e.collectionSize;
@@ -66,7 +64,7 @@ export class RegisterTimeEndpointIndexComponent implements OnInit {
     }
 
     async create() {
-        const dialogRef = this.dialog.open(RegisterTimeEndpointEditComponent);
+        const dialogRef = this.dialog.open(EmployeeGroupEditComponent);
 
         const result = await dialogRef.afterClosed().toPromise();
         if (result) {
@@ -75,7 +73,7 @@ export class RegisterTimeEndpointIndexComponent implements OnInit {
     }
 
     async edit(id: number) {
-        const dialogRef = this.dialog.open(RegisterTimeEndpointEditComponent, {
+        const dialogRef = this.dialog.open(EmployeeGroupEditComponent, {
             data: id,
         });
 
@@ -86,14 +84,14 @@ export class RegisterTimeEndpointIndexComponent implements OnInit {
     }
 
     async delete(id: number) {
-        const vm = this.dataSource.find(x => x.id == id);
+        const vm = this.dataSource.find(x => x.id === id);
         const dialogRef = this.dialog.open(DeleteDialogComponent, {
             data: vm.name,
         });
 
         const result = await dialogRef.afterClosed().toPromise();
         if (result) {
-            await this.endpointService
+            await this.baseService
                 .delete(id)
                 .toPromise()
                 .then(e => {
@@ -106,22 +104,4 @@ export class RegisterTimeEndpointIndexComponent implements OnInit {
         }
         this.subscribeList();
     }
-
-    async generateToken(id: number) {
-        const result = await this.endpointService.generateToken(id).toPromise().then(res => {
-            if (res.success) {
-                this.snackbarService.success('Pomyślnie wygenerowano token.');
-            } else {
-                this.snackbarService.success('Nie udało się wygenerować tokenu.');
-            }
-        },
-        );
-        this.subscribeList();
-    }
-
-    goToEndpoint(id: number) {
-        const vm = this.dataSource.find(x => x.id == id);
-        this.router.navigate(['/endpoint'], { queryParams: { endpointName: vm.name, securityToken: vm.securityToken } });
-    }
-
 }

@@ -1,13 +1,7 @@
 <mat-toolbar color="accent">
     <mat-toolbar-row>
-        <span>Employees</span>
+        <span>Employee Groups</span>
         <span class="spacer"></span>
-        <a mat-button
-           (click)="filter()">
-            <mat-icon class="example-icon"
-                      aria-hidden="false"
-                      aria-label="Example user verified icon">filter_list</mat-icon>
-        </a>
         <a mat-button
            (click)="create()">
             <mat-icon class="example-icon"
@@ -19,7 +13,7 @@
 
 <div class="mat-elevation-z8">
     <table mat-table
-           [dataSource]="employees"
+           [dataSource]="dataSource"
            class="mat-elevation-z8"
            style="width: 100%;"
            matSort
@@ -33,28 +27,12 @@
                 *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="surename">
+        <ng-container matColumnDef="workingHoursPerWeek">
             <th mat-header-cell
                 *matHeaderCellDef
-                mat-sort-header> Surename </th>
+                mat-sort-header> Working Hours Per Week </th>
             <td mat-cell
-                *matCellDef="let element"> {{element.surename}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="identityCode">
-            <th mat-header-cell
-                *matHeaderCellDef
-                mat-sort-header> Identity Code </th>
-            <td mat-cell
-                *matCellDef="let element"> {{element.identityCode}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="employeeGroupName">
-            <th mat-header-cell
-                *matHeaderCellDef
-                mat-sort-header> Group </th>
-            <td mat-cell
-                *matCellDef="let element"> {{element.employeeGroupName}} </td>
+                *matCellDef="let element"> {{element.workingHoursPerWeek}} </td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
@@ -63,8 +41,7 @@
             <td mat-cell
                 *matCellDef="let element">
                 <a mat-button
-                   [routerLink]="['/Reports/Employee']"
-                   [queryParams]="{employeeID: element.id}">
+                   (click)="create()">
                     <mat-icon class="example-icon"
                               aria-hidden="false"
                               aria-label="Example user verified icon">info</mat-icon>
