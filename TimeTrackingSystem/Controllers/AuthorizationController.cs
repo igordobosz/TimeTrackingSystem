@@ -27,15 +27,6 @@ namespace TimeTrackingSystem.Controllers
             _authorizationService = authorizationService;
         }
 
-        //GET api/<controller>/5
-        [HttpGet]
-        [Authorize]
-        [Route("Users")]
-        public async Task<User[]> Get()
-        {
-            return AuthorizationService._users;
-        }
-
         // POST api/<controller>
         [AllowAnonymous]
         [HttpPost]

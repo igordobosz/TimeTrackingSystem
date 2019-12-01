@@ -121,10 +121,15 @@ namespace TimeTrackingSystem.Common.Services
             return remainingDates.Count(e => !weekends.Contains(e.DayOfWeek));
         }
 
-        public RegisterTimePerDayViewModel GetWorkEventsByDay(DateTime date, int tolerance)
+        public RegisterTimePerDayViewModel GetWorkEventsByDay(DateTime date, int tolerance, bool findAllFinished = true)
         {
             List<WorkRegisterEventViewModel> workEvents = new List<WorkRegisterEventViewModel>();
-            var query = FindAllFinished().Where(e => e.DateGoIn.Date == date.Date);
+            var query = FindAllUnfinished();
+            if (findAllFinished)
+            {
+                query = FindAllFinished();
+            }
+            query = query.Where(e => e.DateGoIn.Date == date.Date);
             query.ToList().ForEach(e => workEvents.Add(EntityToViewModel(e)));
 
             List<RegisterTimePerDayEmployeeWrapperViewModel> workEventEmployeeList = new List<RegisterTimePerDayEmployeeWrapperViewModel>();
@@ -144,9 +149,19 @@ namespace TimeTrackingSystem.Common.Services
             return ans;
         }
 
+        public RegisterTimePerDayViewModel GetEmployeesInWork()
+        {
+            return GetWorkEventsByDay(DateTime.Now, 0, false);
+        }
+
         private IQueryable<WorkRegisterEvent> FindAllFinished()
         {
             return _workRegisterRepository.FindAll().Where(e => e.DateGoOut != DateTime.MinValue);
+        }
+
+        private IQueryable<WorkRegisterEvent> FindAllUnfinished()
+        {
+            return _workRegisterRepository.FindAll().Where(e => e.DateGoOut == DateTime.MinValue);
         }
 
         private void CalculateWorkTime(RegisterTimePerWrapper dayWrapper, WorkRegisterEventViewModel workEvent, int tolerance)

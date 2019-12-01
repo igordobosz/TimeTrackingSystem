@@ -25,58 +25,6 @@ export class AuthorizationService {
         this.baseUrl = baseUrl ? baseUrl : "https://localhost:44380";
     }
 
-    get(): Observable<User[]> {
-        let url_ = this.baseUrl + "/api/Login/Users";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGet(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGet(<any>response_);
-                } catch (e) {
-                    return <Observable<User[]>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<User[]>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGet(response: HttpResponseBase): Observable<User[]> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(User.fromJS(item));
-            }
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<User[]>(<any>null);
-    }
-
     login(loginDto: LoginDTO): Observable<LoginResponse> {
         let url_ = this.baseUrl + "/api/Login/Login";
         url_ = url_.replace(/[?&]$/, "");
@@ -1371,6 +1319,54 @@ export class WorkRegisterEventService {
         return _observableOf<RegisterTimePerDayViewModel>(<any>null);
     }
 
+    getEmployeesInWork(): Observable<RegisterTimePerDayViewModel> {
+        let url_ = this.baseUrl + "/api/WorkRegisterEvent/GetEmployeesInWork";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetEmployeesInWork(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetEmployeesInWork(<any>response_);
+                } catch (e) {
+                    return <Observable<RegisterTimePerDayViewModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<RegisterTimePerDayViewModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetEmployeesInWork(response: HttpResponseBase): Observable<RegisterTimePerDayViewModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = RegisterTimePerDayViewModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<RegisterTimePerDayViewModel>(<any>null);
+    }
+
     list(pageIndex: number | undefined, pageSize: number | undefined, searchExpression: string | null | undefined, sortColumn: string | null | undefined, sortOrder: string | null | undefined): Observable<FindByConditionResponseOfWorkRegisterEventViewModel> {
         let url_ = this.baseUrl + "/api/WorkRegisterEvent/List?";
         if (pageIndex === null)
@@ -1640,58 +1636,6 @@ export class WorkRegisterEventService {
         }
         return _observableOf<CrudResponse>(<any>null);
     }
-}
-
-export class User implements IUser {
-    id!: number;
-    userName?: string | null;
-    email?: string | null;
-    password?: string | null;
-    token?: string | null;
-
-    constructor(data?: IUser) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.id = data["id"] !== undefined ? data["id"] : <any>null;
-            this.userName = data["userName"] !== undefined ? data["userName"] : <any>null;
-            this.email = data["email"] !== undefined ? data["email"] : <any>null;
-            this.password = data["password"] !== undefined ? data["password"] : <any>null;
-            this.token = data["token"] !== undefined ? data["token"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): User {
-        data = typeof data === 'object' ? data : {};
-        let result = new User();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id !== undefined ? this.id : <any>null;
-        data["userName"] = this.userName !== undefined ? this.userName : <any>null;
-        data["email"] = this.email !== undefined ? this.email : <any>null;
-        data["password"] = this.password !== undefined ? this.password : <any>null;
-        data["token"] = this.token !== undefined ? this.token : <any>null;
-        return data; 
-    }
-}
-
-export interface IUser {
-    id: number;
-    userName?: string | null;
-    email?: string | null;
-    password?: string | null;
-    token?: string | null;
 }
 
 export class LoginResponse implements ILoginResponse {
