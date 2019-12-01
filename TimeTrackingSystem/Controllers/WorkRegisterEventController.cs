@@ -20,16 +20,16 @@ namespace TimeTrackingSystem.Controllers
 
         [HttpGet]
         [Route("GetWorkEventsByEmployeeAndDate")]
-        public RegisterTimePerEmployeeViewModel GetWorkEventsByEmployeeAndDate(int employeeID, DateTime date)
+        public RegisterTimePerEmployeeViewModel GetWorkEventsByEmployeeAndDate(int employeeID, DateTime date, bool IsSumOvertimes, int tolerance)
         {
-            return _baseService.GetWorkEventsByEmployeeAndDate(employeeID, date);
+            return _baseService.GetWorkEventsByEmployeeAndDate(employeeID, date, IsSumOvertimes, tolerance);
         }
 
         [HttpGet]
         [Route("GetWorkEventsByDay")]
-        public RegisterTimePerDayViewModel GetWorkEventsByDay(DateTime date)
+        public RegisterTimePerDayViewModel GetWorkEventsByDay(DateTime date, int tolerance)
         {
-            return _baseService.GetWorkEventsByDay(date);
+            return _baseService.GetWorkEventsByDay(date, tolerance);
         }
     }
 }

@@ -17,6 +17,7 @@ namespace TimeTrackingSystem.Common.Services
         private IRepository<WorkRegisterEvent> _workRegisterRepository;
         private IRepository<Employee> _employeeRepository;
         private IEmployeeService _employeeService;
+
         public WorkRegisterEventService(IRepositoryWrapper repositoryWrapper, IMapper mapper, IEmployeeService employeeService) : base(repositoryWrapper, mapper)
         {
             _workRegisterRepository = repositoryWrapper.GetRepository<WorkRegisterEvent>();
@@ -24,7 +25,7 @@ namespace TimeTrackingSystem.Common.Services
             _employeeService = employeeService;
         }
 
-        public RegisterTimePerEmployeeViewModel GetWorkEventsByEmployeeAndDate(int employeeId, DateTime date)
+        public RegisterTimePerEmployeeViewModel GetWorkEventsByEmployeeAndDate(int employeeId, DateTime date, bool isSumOvertimes, int tolerance)
         {
             List<WorkRegisterEventViewModel> workEvents = new List<WorkRegisterEventViewModel>();
             var query = FindAllFinished().Where(e =>
@@ -43,7 +44,7 @@ namespace TimeTrackingSystem.Common.Services
                         var dayWrapper = new RegisterTimePerEmployeeDayWrapperViewModel();
                         dayWrapper.Day = day;
                         dayWrapper.WorkRegisterEvent = workEvent;
-                        CalculateWorkTime(dayWrapper, workEvent);
+                        CalculateWorkTime(dayWrapper, workEvent, tolerance);
                         computedHoursSum += dayWrapper.ComputedTime;
                         overTimeHoursSum += dayWrapper.OverTime;
                         workEventDayList.Add(dayWrapper);
@@ -58,42 +59,57 @@ namespace TimeTrackingSystem.Common.Services
             }
 
             var empGroup = _employeeRepository.GetByID(employeeId).EmployeeGroup;
-            RegisterTimePerEmployeeViewModel ans = new RegisterTimePerEmployeeViewModel();
-            ans.WorkEventDayList = new FindByConditionResponse<RegisterTimePerEmployeeDayWrapperViewModel>(){CollectionSize = workEventDayList.Count(), ItemList = workEventDayList };
-            ans.DataMonthWorkDays = GetWorkingDaysOfMonth(date);
-            ans.DataMonthWorkHours = TimeSpan.FromHours(ans.DataMonthWorkDays * 8);
+            RegisterTimePerEmployeeComputingModel comput = new RegisterTimePerEmployeeComputingModel();
+            comput.DataMonthWorkDays = GetWorkingDaysOfMonth(date);
+            comput.DataMonthWorkHours = TimeSpan.FromHours(comput.DataMonthWorkDays * 8);
             if (empGroup != null)
             {
-                ans.StatNeededHours = TimeSpan.FromHours(empGroup.WorkingHoursPerWeek / 100 * ans.DataMonthWorkHours.TotalHours);
+                comput.StatNeededHours = TimeSpan.FromHours(empGroup.WorkingHoursPerWeek / 100 * comput.DataMonthWorkHours.TotalHours);
             }
             else
             {
-                ans.StatNeededHours = TimeSpan.FromHours(ans.DataMonthWorkHours.TotalHours);
+                comput.StatNeededHours = TimeSpan.FromHours(comput.DataMonthWorkHours.TotalHours);
             }
             
-            ans.StatWorkHours = computedHoursSum;
-            ans.StatOverTimes = overTimeHoursSum;
-            ans.SumWorkHours = ans.StatWorkHours;
-            ans.SumOverTimes = ans.StatOverTimes;
-            var diff = ans.StatNeededHours - ans.StatWorkHours;
-            if (diff > TimeSpan.Zero)
+            comput.StatWorkHours = computedHoursSum;
+            comput.StatOverTimes = overTimeHoursSum;
+            comput.SumWorkHours = comput.StatWorkHours;
+            comput.SumOverTimes = comput.StatOverTimes;
+            var diff = comput.StatNeededHours - comput.StatWorkHours;
+            if (isSumOvertimes)
             {
-                if (ans.SumOverTimes >= diff)
+                if (diff > TimeSpan.Zero)
                 {
-                    ans.SumWorkHours = ans.StatNeededHours;
-                    ans.SumOverTimes -= diff;
+                    if (comput.SumOverTimes >= diff)
+                    {
+                        comput.SumWorkHours = comput.StatNeededHours;
+                        comput.SumOverTimes -= diff;
+                    }
+                    else
+                    {
+                        comput.SumWorkHours += comput.StatOverTimes;
+                        comput.SumOverTimes = TimeSpan.Zero;
+                    }
                 }
                 else
                 {
-                    ans.SumWorkHours += ans.StatOverTimes;
-                    ans.SumOverTimes = TimeSpan.Zero;
+                    comput.SumOverTimes += (comput.StatNeededHours - comput.StatWorkHours);
+                    comput.SumWorkHours = comput.StatNeededHours;
                 }
             }
-            else
-            {
-                ans.SumOverTimes += (ans.StatNeededHours - ans.StatWorkHours);
-                ans.SumWorkHours = ans.StatNeededHours;
-            }
+
+
+
+            RegisterTimePerEmployeeViewModel ans = new RegisterTimePerEmployeeViewModel();
+            ans.WorkEventDayList = new FindByConditionResponse<RegisterTimePerEmployeeDayWrapperViewModel>() { CollectionSize = workEventDayList.Count(), ItemList = workEventDayList };
+            ans.DataMonthWorkDays = comput.DataMonthWorkDays;
+            ans.DataMonthWorkHours = comput.DataMonthWorkHours.TotalHours.ToString();
+            ans.StatWorkHours = comput.StatWorkHours.TotalHours.ToString();
+            ans.StatOverTimes = comput.StatOverTimes.TotalHours.ToString();
+            ans.StatNeededHours = comput.StatNeededHours.TotalHours.ToString();
+            ans.SumWorkHours = comput.SumWorkHours.TotalHours.ToString();
+            ans.SumOverTimes = comput.SumOverTimes.TotalHours.ToString();
+
             return ans;
         }
 
@@ -105,7 +121,7 @@ namespace TimeTrackingSystem.Common.Services
             return remainingDates.Count(e => !weekends.Contains(e.DayOfWeek));
         }
 
-        public RegisterTimePerDayViewModel GetWorkEventsByDay(DateTime date)
+        public RegisterTimePerDayViewModel GetWorkEventsByDay(DateTime date, int tolerance)
         {
             List<WorkRegisterEventViewModel> workEvents = new List<WorkRegisterEventViewModel>();
             var query = FindAllFinished().Where(e => e.DateGoIn.Date == date.Date);
@@ -119,7 +135,7 @@ namespace TimeTrackingSystem.Common.Services
                 var emp = _employeeService.GetByID(vm.EmployeeID);
                 newEmployeeWrapper.EmployeeFullName = $"{emp.Name} {emp.Surename}";
                 newEmployeeWrapper.EmployeeID = vm.EmployeeID;
-                CalculateWorkTime(newEmployeeWrapper, vm);
+                CalculateWorkTime(newEmployeeWrapper, vm, tolerance);
                 workEventEmployeeList.Add(newEmployeeWrapper);
             }
             
@@ -133,15 +149,13 @@ namespace TimeTrackingSystem.Common.Services
             return _workRegisterRepository.FindAll().Where(e => e.DateGoOut != DateTime.MinValue);
         }
 
-        private void CalculateWorkTime(RegisterTimePerWrapper dayWrapper, WorkRegisterEventViewModel workEvent)
+        private void CalculateWorkTime(RegisterTimePerWrapper dayWrapper, WorkRegisterEventViewModel workEvent, int tolerance)
         {
-            //TODO INSERT TOLERANCJE/EMPLOYEE GROUP USTAWIENIA
             var etatGodziny = 8;
-            var tolerancja = 15;
 
             var dateDiff = workEvent.DateGoOut - workEvent.DateGoIn;
             var computedHours = dateDiff.Hours;
-            if (dateDiff.Minutes > 60 - tolerancja)
+            if (dateDiff.Minutes > ( 60 - tolerance))
                 computedHours++;
 
             if (computedHours > etatGodziny)

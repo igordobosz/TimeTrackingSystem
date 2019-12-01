@@ -16,6 +16,11 @@
                                        [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
+            <mat-form-field>
+                <input matInput
+                       placeholder="Time tolerance"
+                       formControlName="tolerance">
+            </mat-form-field>
             <button mat-raised-button
                     disabled="{{ form.invalid }}"
                     (click)="onSubmit(form.value)"

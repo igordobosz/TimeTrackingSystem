@@ -22,6 +22,7 @@ export class PerDayComponent implements OnInit {
         'overTime',
     ];
     date: Date;
+    tolerance: number;
     constructor(private employeeService: EmployeeService,
         private workRegisterEventServce: WorkRegisterEventService,
         private formBuilder: FormBuilder, ) { }
@@ -29,13 +30,14 @@ export class PerDayComponent implements OnInit {
     ngOnInit() {
         this.form = this.formBuilder.group({
             dpDate: [new Date(), [Validators.required]],
+            tolerance: [10, [Validators.required, Validators.max(29)]],
         });
     }
     get f() {
         return this.form.controls;
     }
     subscribeList() {
-        this.workRegisterEventServce.getWorkEventsByDay(this.date).subscribe(e => {
+        this.workRegisterEventServce.getWorkEventsByDay(this.date, this.tolerance).subscribe(e => {
             this.viewModel = e;
         });
 
@@ -46,6 +48,7 @@ export class PerDayComponent implements OnInit {
             return;
         }
         this.date = this.f.dpDate.value;
+        this.tolerance = this.f.tolerance.value;
         this.subscribeList();
     }
 }

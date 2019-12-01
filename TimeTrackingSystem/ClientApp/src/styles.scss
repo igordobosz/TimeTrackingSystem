@@ -20,10 +20,10 @@ body{
   position: absolute;
 }
 
-:host /deep/ .mat-list {
+:host ::ng-deep .mat-list {
   margin-top: 65px;
 }
-:host /deep/ .mat-list-item .mat-list-item-content {
+:host ::ng-deep .mat-list-item .mat-list-item-content {
   padding: 0px;
 }
 

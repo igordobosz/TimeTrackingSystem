@@ -54,6 +54,8 @@ export class PerEmployeeComponent implements OnInit {
     employee: EmployeeViewModel;
     date: Date;
     chkAttended: boolean;
+    tolerance: number;
+    sumOvertimes: boolean;
     constructor(private employeeService: EmployeeService,
         private workRegisterEventServce: WorkRegisterEventService,
         private formBuilder: FormBuilder,
@@ -63,6 +65,8 @@ export class PerEmployeeComponent implements OnInit {
         this.form = this.formBuilder.group({
             slcEmployee: ['', Validators.required],
             dpDate: new FormControl(moment(), [Validators.required, DateValidator.dateVaidator]),
+            tolerance: [10, [Validators.required, Validators.max(29)]],
+            sumOvertimes: [true, []],
         });
         this.f.slcEmployee.valueChanges.subscribe(val => this.filterEmployees = this.employeeService.filterEmployeeAutoComplete(val));
         this.route.queryParams.subscribe(params => {
@@ -103,7 +107,7 @@ export class PerEmployeeComponent implements OnInit {
 
 
     subscribeList() {
-        this.workRegisterEventServce.getWorkEventsByEmployeeAndDate(this.employee.id, this.date).subscribe(e => {
+        this.workRegisterEventServce.getWorkEventsByEmployeeAndDate(this.employee.id, this.date, this.sumOvertimes, this.tolerance).subscribe(e => {
             this.viewModel = e;
         });
 
@@ -115,6 +119,8 @@ export class PerEmployeeComponent implements OnInit {
         }
         this.employee = this.f.slcEmployee.value as EmployeeViewModel;
         this.date = this.f.dpDate.value.toDate();
+        this.sumOvertimes = this.f.sumOvertimes.value;
+        this.tolerance = this.f.tolerance.value;
         this.subscribeList();
     }
 }
