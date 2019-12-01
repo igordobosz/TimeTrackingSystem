@@ -34,6 +34,14 @@
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
+            <mat-form-field>
+                <input matInput
+                       placeholder="Time tolerance"
+                       formControlName="tolerance">
+            </mat-form-field>
+            <mat-checkbox style="margin-right: 5px"
+                          matInput
+                          formControlName="sumOvertimes">Add overtimes to work hours</mat-checkbox>
             <button mat-raised-button
                     disabled="{{ form.invalid }}"
                     (click)="onSubmit(form.value)"

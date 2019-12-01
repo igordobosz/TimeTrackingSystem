@@ -42,8 +42,6 @@ export class EndpointComponent implements OnInit {
         this.form = this.formBuilder.group({
             identityCode: ['', Validators.required],
         });
-
-        this.f.identityCode.setValue('a');
     }
     get f() { return this.form.controls; }
 

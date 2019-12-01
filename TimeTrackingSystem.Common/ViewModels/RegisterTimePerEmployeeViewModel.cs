@@ -8,12 +8,12 @@ namespace TimeTrackingSystem.Common.ViewModels
     public class RegisterTimePerEmployeeViewModel
     {
         public int DataMonthWorkDays{ get; set; }
-        public TimeSpan DataMonthWorkHours { get; set; }
-        public TimeSpan StatWorkHours { get; set; }
-        public TimeSpan StatOverTimes { get; set; }
-        public TimeSpan StatNeededHours { get; set; }
-        public TimeSpan SumWorkHours { get; set; }
-        public TimeSpan SumOverTimes { get; set; }
+        public string DataMonthWorkHours { get; set; }
+        public string StatWorkHours { get; set; }
+        public string StatOverTimes { get; set; }
+        public string StatNeededHours { get; set; }
+        public string SumWorkHours { get; set; }
+        public string SumOverTimes { get; set; }
         public FindByConditionResponse<RegisterTimePerEmployeeDayWrapperViewModel> WorkEventDayList { get; set; }
     }
 

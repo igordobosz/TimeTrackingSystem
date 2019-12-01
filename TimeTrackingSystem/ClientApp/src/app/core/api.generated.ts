@@ -141,6 +141,60 @@ export class EmployeeService {
         this.baseUrl = baseUrl ? baseUrl : "https://localhost:44380";
     }
 
+    filterEmployeeAutoComplete(filter: string | null | undefined): Observable<EmployeeViewModel[]> {
+        let url_ = this.baseUrl + "/api/Employee/FilterEmployeeAutoComplete?";
+        if (filter !== undefined)
+            url_ += "filter=" + encodeURIComponent("" + filter) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processFilterEmployeeAutoComplete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processFilterEmployeeAutoComplete(<any>response_);
+                } catch (e) {
+                    return <Observable<EmployeeViewModel[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<EmployeeViewModel[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processFilterEmployeeAutoComplete(response: HttpResponseBase): Observable<EmployeeViewModel[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(EmployeeViewModel.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<EmployeeViewModel[]>(<any>null);
+    }
+
     list(pageIndex: number | undefined, pageSize: number | undefined, searchExpression: string | null | undefined, sortColumn: string | null | undefined, sortOrder: string | null | undefined): Observable<FindByConditionResponseOfEmployeeViewModel> {
         let url_ = this.baseUrl + "/api/Employee/List?";
         if (pageIndex === null)
@@ -201,60 +255,6 @@ export class EmployeeService {
             }));
         }
         return _observableOf<FindByConditionResponseOfEmployeeViewModel>(<any>null);
-    }
-
-    filterEmployeeAutoComplete(filter: string | null | undefined): Observable<EmployeeViewModel[]> {
-        let url_ = this.baseUrl + "/api/Employee/FilterEmployeeAutoComplete?";
-        if (filter !== undefined)
-            url_ += "filter=" + encodeURIComponent("" + filter) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processFilterEmployeeAutoComplete(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processFilterEmployeeAutoComplete(<any>response_);
-                } catch (e) {
-                    return <Observable<EmployeeViewModel[]>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<EmployeeViewModel[]>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processFilterEmployeeAutoComplete(response: HttpResponseBase): Observable<EmployeeViewModel[]> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(EmployeeViewModel.fromJS(item));
-            }
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<EmployeeViewModel[]>(<any>null);
     }
 
     getByID(id: number | undefined): Observable<EmployeeViewModel> {
@@ -1251,7 +1251,7 @@ export class WorkRegisterEventService {
         this.baseUrl = baseUrl ? baseUrl : "https://localhost:44380";
     }
 
-    getWorkEventsByEmployeeAndDate(employeeID: number | undefined, date: Date | undefined): Observable<RegisterTimePerEmployeeViewModel> {
+    getWorkEventsByEmployeeAndDate(employeeID: number | undefined, date: Date | undefined, isSumOvertimes: boolean | undefined, tolerance: number | undefined): Observable<RegisterTimePerEmployeeViewModel> {
         let url_ = this.baseUrl + "/api/WorkRegisterEvent/GetWorkEventsByEmployeeAndDate?";
         if (employeeID === null)
             throw new Error("The parameter 'employeeID' cannot be null.");
@@ -1261,6 +1261,14 @@ export class WorkRegisterEventService {
             throw new Error("The parameter 'date' cannot be null.");
         else if (date !== undefined)
             url_ += "date=" + encodeURIComponent(date ? "" + date.toJSON() : "") + "&"; 
+        if (isSumOvertimes === null)
+            throw new Error("The parameter 'isSumOvertimes' cannot be null.");
+        else if (isSumOvertimes !== undefined)
+            url_ += "IsSumOvertimes=" + encodeURIComponent("" + isSumOvertimes) + "&"; 
+        if (tolerance === null)
+            throw new Error("The parameter 'tolerance' cannot be null.");
+        else if (tolerance !== undefined)
+            url_ += "tolerance=" + encodeURIComponent("" + tolerance) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1307,12 +1315,16 @@ export class WorkRegisterEventService {
         return _observableOf<RegisterTimePerEmployeeViewModel>(<any>null);
     }
 
-    getWorkEventsByDay(date: Date | undefined): Observable<RegisterTimePerDayViewModel> {
+    getWorkEventsByDay(date: Date | undefined, tolerance: number | undefined): Observable<RegisterTimePerDayViewModel> {
         let url_ = this.baseUrl + "/api/WorkRegisterEvent/GetWorkEventsByDay?";
         if (date === null)
             throw new Error("The parameter 'date' cannot be null.");
         else if (date !== undefined)
             url_ += "date=" + encodeURIComponent(date ? "" + date.toJSON() : "") + "&"; 
+        if (tolerance === null)
+            throw new Error("The parameter 'tolerance' cannot be null.");
+        else if (tolerance !== undefined)
+            url_ += "tolerance=" + encodeURIComponent("" + tolerance) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1762,54 +1774,6 @@ export interface ILoginDTO {
     password: string;
 }
 
-export class FindByConditionResponseOfEmployeeViewModel implements IFindByConditionResponseOfEmployeeViewModel {
-    itemList?: EmployeeViewModel[] | null;
-    collectionSize!: number;
-
-    constructor(data?: IFindByConditionResponseOfEmployeeViewModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            if (Array.isArray(data["itemList"])) {
-                this.itemList = [] as any;
-                for (let item of data["itemList"])
-                    this.itemList!.push(EmployeeViewModel.fromJS(item));
-            }
-            this.collectionSize = data["collectionSize"] !== undefined ? data["collectionSize"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): FindByConditionResponseOfEmployeeViewModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new FindByConditionResponseOfEmployeeViewModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.itemList)) {
-            data["itemList"] = [];
-            for (let item of this.itemList)
-                data["itemList"].push(item.toJSON());
-        }
-        data["collectionSize"] = this.collectionSize !== undefined ? this.collectionSize : <any>null;
-        return data; 
-    }
-}
-
-export interface IFindByConditionResponseOfEmployeeViewModel {
-    itemList?: EmployeeViewModel[] | null;
-    collectionSize: number;
-}
-
 export abstract class ViewModel implements IViewModel {
     id!: number;
 
@@ -1891,6 +1855,54 @@ export interface IEmployeeViewModel extends IViewModel {
     surename: string;
     identityCode?: string | null;
     employeeGroupName?: string | null;
+}
+
+export class FindByConditionResponseOfEmployeeViewModel implements IFindByConditionResponseOfEmployeeViewModel {
+    itemList?: EmployeeViewModel[] | null;
+    collectionSize!: number;
+
+    constructor(data?: IFindByConditionResponseOfEmployeeViewModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (Array.isArray(data["itemList"])) {
+                this.itemList = [] as any;
+                for (let item of data["itemList"])
+                    this.itemList!.push(EmployeeViewModel.fromJS(item));
+            }
+            this.collectionSize = data["collectionSize"] !== undefined ? data["collectionSize"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): FindByConditionResponseOfEmployeeViewModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new FindByConditionResponseOfEmployeeViewModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.itemList)) {
+            data["itemList"] = [];
+            for (let item of this.itemList)
+                data["itemList"].push(item.toJSON());
+        }
+        data["collectionSize"] = this.collectionSize !== undefined ? this.collectionSize : <any>null;
+        return data; 
+    }
+}
+
+export interface IFindByConditionResponseOfEmployeeViewModel {
+    itemList?: EmployeeViewModel[] | null;
+    collectionSize: number;
 }
 
 export class CrudResponse implements ICrudResponse {
@@ -2194,12 +2206,12 @@ export enum EndpointType {
 
 export class RegisterTimePerEmployeeViewModel implements IRegisterTimePerEmployeeViewModel {
     dataMonthWorkDays!: number;
-    dataMonthWorkHours!: string;
-    statWorkHours!: string;
-    statOverTimes!: string;
-    statNeededHours!: string;
-    sumWorkHours!: string;
-    sumOverTimes!: string;
+    dataMonthWorkHours?: string | null;
+    statWorkHours?: string | null;
+    statOverTimes?: string | null;
+    statNeededHours?: string | null;
+    sumWorkHours?: string | null;
+    sumOverTimes?: string | null;
     workEventDayList?: FindByConditionResponseOfRegisterTimePerEmployeeDayWrapperViewModel | null;
 
     constructor(data?: IRegisterTimePerEmployeeViewModel) {
@@ -2247,12 +2259,12 @@ export class RegisterTimePerEmployeeViewModel implements IRegisterTimePerEmploye
 
 export interface IRegisterTimePerEmployeeViewModel {
     dataMonthWorkDays: number;
-    dataMonthWorkHours: string;
-    statWorkHours: string;
-    statOverTimes: string;
-    statNeededHours: string;
-    sumWorkHours: string;
-    sumOverTimes: string;
+    dataMonthWorkHours?: string | null;
+    statWorkHours?: string | null;
+    statOverTimes?: string | null;
+    statNeededHours?: string | null;
+    sumWorkHours?: string | null;
+    sumOverTimes?: string | null;
     workEventDayList?: FindByConditionResponseOfRegisterTimePerEmployeeDayWrapperViewModel | null;
 }
 

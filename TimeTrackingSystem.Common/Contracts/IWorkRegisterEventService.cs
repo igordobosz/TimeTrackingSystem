@@ -9,7 +9,7 @@ namespace TimeTrackingSystem.Common.Contracts
 {
     public interface IWorkRegisterEventService : IServiceBase<WorkRegisterEventViewModel>
     {
-        RegisterTimePerEmployeeViewModel GetWorkEventsByEmployeeAndDate(int employeeId, DateTime date);
-        RegisterTimePerDayViewModel GetWorkEventsByDay(DateTime date);
+        RegisterTimePerEmployeeViewModel GetWorkEventsByEmployeeAndDate(int employeeId, DateTime date, bool isSumOvertimes, int tolerance);
+        RegisterTimePerDayViewModel GetWorkEventsByDay(DateTime date, int tolerance);
     }
 }
