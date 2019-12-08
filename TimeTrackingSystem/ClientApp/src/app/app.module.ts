@@ -1,6 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
@@ -34,6 +35,7 @@ import { SharedModule } from './shared/shared.module';
         RouterModule.forRoot(AppRootRoutes),
     ],
     providers: [{ provide: API_BASE_URL, useValue: ' ' },
+    { provide: MAT_DATE_LOCALE, useValue: 'gb-GB' },
     ],
     bootstrap: [AppComponent],
 })
