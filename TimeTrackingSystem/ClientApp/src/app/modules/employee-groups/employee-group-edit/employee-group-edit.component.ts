@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
 import { EmployeeGroupService, EmployeeGroupViewModel } from '../../../core/api.generated';
 import { SnackbarHelper } from '../../../core/helpers/snackbar.helper';
 
@@ -24,7 +25,7 @@ export class EmployeeGroupEditComponent implements OnInit {
     ngOnInit() {
         this.form = this.formBuilder.group({
             name: ['', Validators.required],
-            workingHoursPerWeek: ['', Validators.required],
+            workingHoursPerWeek: ['', [Validators.required, Validators.pattern('^[0-9]*$'), Validators.min(1), Validators.max(100)]],
         });
         if (this.id != null) {
             this.editMode = true;

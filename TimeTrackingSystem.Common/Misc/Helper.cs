@@ -14,5 +14,10 @@ namespace TimeTrackingSystem.Common.Misc
             guidString = guidString.Replace("+", "");
             return guidString;
         }
+
+        public static string FormatTimeSpan(TimeSpan date)
+        {
+            return $"{(int) date.TotalHours} hours {date.Minutes} minutes";
+        }
     }
 }

@@ -20,6 +20,8 @@ namespace TimeTrackingSystem.Common.ViewModels
     public class RegisterTimePerEmployeeDayWrapperViewModel : RegisterTimePerWrapper
     {
         public int Day { get; set; }
+        public bool IsSaturday { get; set; }
+        public bool IsSunday { get; set; }
         public WorkRegisterEventViewModel WorkRegisterEvent { get; set; }
     }
 }

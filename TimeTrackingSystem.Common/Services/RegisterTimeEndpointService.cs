@@ -45,18 +45,24 @@ namespace TimeTrackingSystem.Common.Services
         {
             var endpoint = GetEntityByID(endpointID);
             var employee = _employeeService.GetEmployeeByIdentityCode(identityCode);
-            var check = false;
             if (endpoint != null && employee != null)
             {
                 if (endpoint.EndpointType.Equals(EndpointType.Entrance.ToString()))
                 {
                     if (!_employeeService.IsEmployeeInWork(employee.ID))
                     {
-                        check = _employeeService.RegisterEventIn(employee.ID, endpoint.ID);
+                        if (_employeeService.RegisterEventIn(employee.ID, endpoint.ID))
+                        {
+                            return new RegisterTimeResponse()
+                            {
+                                ResponseType = RegisterTimeResponseType.SuccessEntrance,
+                                EntranceTime = DateTime.Now.ToString()
+                            };
+                        }
                     }
                     else
                     {
-                        return new RegisterTimeResponse(){ResponseType = RegisterTimeResponseType.InWork};
+                        return new RegisterTimeResponse() {ResponseType = RegisterTimeResponseType.InWork};
                     }
 
                 }
@@ -64,18 +70,21 @@ namespace TimeTrackingSystem.Common.Services
                 {
                     if (_employeeService.IsEmployeeInWork(employee.ID))
                     {
-                        check =  _employeeService.RegisterEventOut(employee.ID, endpoint.ID);
+                        var responseFromService = _employeeService.RegisterEventOut(employee.ID, endpoint.ID);
+                        if (responseFromService.Success)
+                        {
+                            return new RegisterTimeResponse()
+                            {
+                                ResponseType = RegisterTimeResponseType.SuccessLeave,
+                                WorkTime = Helper.FormatTimeSpan(responseFromService.WorkTime),
+                                EntranceTime = DateTime.Now.ToString()
+                            };
+                        }
                     }
                     else
                     {
-                        return new RegisterTimeResponse() { ResponseType = RegisterTimeResponseType.OutWork };
+                        return new RegisterTimeResponse() {ResponseType = RegisterTimeResponseType.OutWork};
                     }
-                }
-
-                if (check)
-                {
-                    //TODO czas
-                    return new RegisterTimeResponse() { ResponseType = RegisterTimeResponseType.Success, WorkTime = new TimeSpan()};
                 }
             }
 

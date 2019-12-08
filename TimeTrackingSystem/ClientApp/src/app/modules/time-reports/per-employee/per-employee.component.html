@@ -1,7 +1,7 @@
 <div class="mat-elevation-z8">
     <mat-toolbar color="accent">
         <mat-toolbar-row>
-            <span>Report</span>
+            <span>Report per employee</span>
         </mat-toolbar-row>
     </mat-toolbar>
     <div class="m-padding">
@@ -113,14 +113,14 @@
                 <th mat-header-cell
                     *matHeaderCellDef> Date go in </th>
                 <td mat-cell
-                    *matCellDef="let element"> {{element.workRegisterEvent?.dateGoIn | date:'shortTime'}} </td>
+                    *matCellDef="let element"> {{element.workRegisterEvent?.dateGoIn | date:'HH:mm:ss'}} </td>
             </ng-container>
 
             <ng-container matColumnDef="dateGoOut">
                 <th mat-header-cell
                     *matHeaderCellDef> Date go out </th>
                 <td mat-cell
-                    *matCellDef="let element"> {{element.workRegisterEvent?.dateGoOut | date:'shortTime'}} </td>
+                    *matCellDef="let element"> {{element.workRegisterEvent?.dateGoOut | date:'HH:mm:ss'}} </td>
             </ng-container>
 
             <ng-container matColumnDef="nightWork">
@@ -150,7 +150,8 @@
             <tr mat-header-row
                 *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row
-                *matRowDef="let row; columns: displayedColumns;"></tr>
+                *matRowDef="let row; columns: displayedColumns;"
+                [ngClass]="{'grey-back': row.isSaturday, 'red-back': row.isSunday }"></tr>
         </table>
     </div>
 </div>

@@ -49,11 +49,13 @@ export class EndpointComponent implements OnInit {
         if (this.form.invalid) {
             return;
         }
-        console.log(this.endpointID);
         await this.endpointService.registerTime(this.endpointID, this.f.identityCode.value).toPromise().then(r => {
             switch (r.responseType) {
-                case RegisterTimeResponseType.Success:
-                    this.snackbarService.error("Udało się zarejestrować. Czas wejścia: " + r.workTime);
+                case RegisterTimeResponseType.SuccessEntrance:
+                    this.snackbarService.success("Udało się zarejestrować. Czas wejścia: " + r.entranceTime);
+                    break;
+                case RegisterTimeResponseType.SuccessLeave:
+                    this.snackbarService.success("Udało się zarejestrować. Czas pracy: " + r.workTime + ", Czas wyjścia: " + r.entranceTime);
                     break;
                 case RegisterTimeResponseType.InWork:
                     this.snackbarService.error("Jestes aktualnie w pracy.");

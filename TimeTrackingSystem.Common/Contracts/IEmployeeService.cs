@@ -14,7 +14,7 @@ namespace TimeTrackingSystem.Common.Contracts
         bool IsEmployeeInWork(int id);
         WorkRegisterEvent FindLastWorkRegister(int id);
         bool RegisterEventIn(int employeeId, int endpointId);
-        bool RegisterEventOut(int employeeId, int endpointId);
+        RegisterEventOutResponse RegisterEventOut(int employeeId, int endpointId);
         List<EmployeeViewModel> FilterEmployeeAutoComplete(string filter);
     }
 }

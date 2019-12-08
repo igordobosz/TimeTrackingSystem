@@ -7,12 +7,14 @@ namespace TimeTrackingSystem.Common.DTO
     public class RegisterTimeResponse
     {
         public RegisterTimeResponseType ResponseType { get; set; }
-        public TimeSpan WorkTime { get; set; }
+        public string WorkTime { get; set; }
+        public string EntranceTime { get; set; }
     }
 
     public enum RegisterTimeResponseType
     {
-        Success,
+        SuccessEntrance,
+        SuccessLeave,
         InWork,
         OutWork,
         Error

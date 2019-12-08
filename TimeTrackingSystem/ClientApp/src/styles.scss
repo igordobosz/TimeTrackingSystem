@@ -18,6 +18,8 @@ body{
   right: 0;
   bottom: 0;
   position: absolute;
+  display: flex;
+    flex-direction: column;
 }
 
 :host ::ng-deep .mat-list {

@@ -62,13 +62,20 @@ namespace TimeTrackingSystem.Common.Services
             return Update(employee) > 0;
         }
 
-        public bool RegisterEventOut(int employeeId, int endpointId)
+        public RegisterEventOutResponse RegisterEventOut(int employeeId, int endpointId)
         {
             var employee = GetEntityByID(employeeId);
             var workRegisterEvent = FindLastWorkRegister(employeeId);
             workRegisterEvent.DateGoOut = DateTime.Now;
             workRegisterEvent.EndpointOutID = endpointId;
-            return Update(employee) > 0;
+            if (Update(employee) > 0)
+            {
+                return new RegisterEventOutResponse(){Success = true, WorkTime = workRegisterEvent.DateGoOut-workRegisterEvent.DateGoIn};
+            }
+            else
+            {
+                return new RegisterEventOutResponse(){Success = false};
+            }
         }
 
         public List<EmployeeViewModel> FilterEmployeeAutoComplete(string filter)
@@ -81,5 +88,11 @@ namespace TimeTrackingSystem.Common.Services
             }
             return res;
         }
+    }
+
+    public class RegisterEventOutResponse
+    {
+        public bool Success { get; set; }
+        public TimeSpan WorkTime { get; set; }
     }
 }

@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Nager.Date;
 using TimeTrackingSystem.Common.Contracts;
 using TimeTrackingSystem.Common.DTO;
+using TimeTrackingSystem.Common.Misc;
 using TimeTrackingSystem.Common.ViewModels;
 using TimeTrackingSystem.Data.Models;
 using TimeTrackingSystem.Data.Repositories;
@@ -43,6 +45,8 @@ namespace TimeTrackingSystem.Common.Services
                     {
                         var dayWrapper = new RegisterTimePerEmployeeDayWrapperViewModel();
                         dayWrapper.Day = day;
+                        dayWrapper.IsSaturday = new DateTime(date.Year, date.Month, day).DayOfWeek == DayOfWeek.Saturday;
+                        dayWrapper.IsSunday = new DateTime(date.Year, date.Month, day).DayOfWeek == DayOfWeek.Sunday || DateSystem.IsPublicHoliday(new DateTime(date.Year, date.Month, day), CountryCode.PL);
                         dayWrapper.WorkRegisterEvent = workEvent;
                         CalculateWorkTime(dayWrapper, workEvent, tolerance);
                         computedHoursSum += dayWrapper.ComputedTime;
@@ -54,6 +58,8 @@ namespace TimeTrackingSystem.Common.Services
                 {
                     var dayWrapper = new RegisterTimePerEmployeeDayWrapperViewModel();
                     dayWrapper.Day = day;
+                    dayWrapper.IsSaturday = new DateTime(date.Year, date.Month, day).DayOfWeek == DayOfWeek.Saturday;
+                    dayWrapper.IsSunday = new DateTime(date.Year, date.Month, day).DayOfWeek == DayOfWeek.Sunday || DateSystem.IsPublicHoliday(new DateTime(date.Year, date.Month, day), CountryCode.PL);
                     workEventDayList.Add(dayWrapper);
                 }
             }
@@ -64,7 +70,7 @@ namespace TimeTrackingSystem.Common.Services
             comput.DataMonthWorkHours = TimeSpan.FromHours(comput.DataMonthWorkDays * 8);
             if (empGroup != null)
             {
-                comput.StatNeededHours = TimeSpan.FromHours(empGroup.WorkingHoursPerWeek / 100 * comput.DataMonthWorkHours.TotalHours);
+                comput.StatNeededHours = TimeSpan.FromHours(((double) empGroup.WorkingHoursPerWeek / 100) * comput.DataMonthWorkHours.TotalHours);
             }
             else
             {
@@ -76,10 +82,11 @@ namespace TimeTrackingSystem.Common.Services
             comput.SumWorkHours = comput.StatWorkHours;
             comput.SumOverTimes = comput.StatOverTimes;
             var diff = comput.StatNeededHours - comput.StatWorkHours;
-            if (isSumOvertimes)
+            if (diff > TimeSpan.Zero)
             {
-                if (diff > TimeSpan.Zero)
+                if (isSumOvertimes)
                 {
+
                     if (comput.SumOverTimes >= diff)
                     {
                         comput.SumWorkHours = comput.StatNeededHours;
@@ -91,11 +98,11 @@ namespace TimeTrackingSystem.Common.Services
                         comput.SumOverTimes = TimeSpan.Zero;
                     }
                 }
-                else
-                {
-                    comput.SumOverTimes += (comput.StatNeededHours - comput.StatWorkHours);
-                    comput.SumWorkHours = comput.StatNeededHours;
-                }
+            }
+            else
+            {
+                comput.SumOverTimes += (comput.StatWorkHours - comput.StatNeededHours);
+                comput.SumWorkHours = comput.StatNeededHours;
             }
 
 
@@ -103,12 +110,12 @@ namespace TimeTrackingSystem.Common.Services
             RegisterTimePerEmployeeViewModel ans = new RegisterTimePerEmployeeViewModel();
             ans.WorkEventDayList = new FindByConditionResponse<RegisterTimePerEmployeeDayWrapperViewModel>() { CollectionSize = workEventDayList.Count(), ItemList = workEventDayList };
             ans.DataMonthWorkDays = comput.DataMonthWorkDays;
-            ans.DataMonthWorkHours = comput.DataMonthWorkHours.TotalHours.ToString();
-            ans.StatWorkHours = comput.StatWorkHours.TotalHours.ToString();
-            ans.StatOverTimes = comput.StatOverTimes.TotalHours.ToString();
-            ans.StatNeededHours = comput.StatNeededHours.TotalHours.ToString();
-            ans.SumWorkHours = comput.SumWorkHours.TotalHours.ToString();
-            ans.SumOverTimes = comput.SumOverTimes.TotalHours.ToString();
+            ans.DataMonthWorkHours = Helper.FormatTimeSpan(comput.DataMonthWorkHours);
+            ans.StatWorkHours = Helper.FormatTimeSpan(comput.StatWorkHours);
+            ans.StatOverTimes = Helper.FormatTimeSpan(comput.StatOverTimes);
+            ans.StatNeededHours = Helper.FormatTimeSpan(comput.StatNeededHours);
+            ans.SumWorkHours = Helper.FormatTimeSpan(comput.SumWorkHours);
+            ans.SumOverTimes = Helper.FormatTimeSpan(comput.SumOverTimes);
 
             return ans;
         }
@@ -118,7 +125,7 @@ namespace TimeTrackingSystem.Common.Services
             DayOfWeek[] weekends = { DayOfWeek.Saturday, DayOfWeek.Sunday };
             var remainingDates = Enumerable.Range(1, DateTime.DaysInMonth(date.Year, date.Month))
                 .Select(day => new DateTime(date.Year, date.Month, day));
-            return remainingDates.Count(e => !weekends.Contains(e.DayOfWeek));
+            return remainingDates.Count(e => !weekends.Contains(e.DayOfWeek) && !DateSystem.IsPublicHoliday(e, CountryCode.PL));
         }
 
         public RegisterTimePerDayViewModel GetWorkEventsByDay(DateTime date, int tolerance, bool findAllFinished = true)

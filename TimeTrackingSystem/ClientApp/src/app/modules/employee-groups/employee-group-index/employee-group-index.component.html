@@ -30,9 +30,9 @@
         <ng-container matColumnDef="workingHoursPerWeek">
             <th mat-header-cell
                 *matHeaderCellDef
-                mat-sort-header> Working Hours Per Week </th>
+                mat-sort-header> Percentage of work time </th>
             <td mat-cell
-                *matCellDef="let element"> {{element.workingHoursPerWeek}} </td>
+                *matCellDef="let element"> {{element.workingHoursPerWeek}} % </td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
@@ -40,12 +40,6 @@
                 *matHeaderCellDef> Actions </th>
             <td mat-cell
                 *matCellDef="let element">
-                <a mat-button
-                   (click)="create()">
-                    <mat-icon class="example-icon"
-                              aria-hidden="false"
-                              aria-label="Example user verified icon">info</mat-icon>
-                </a>
                 <a mat-button
                    (click)="edit(element.id)">
                     <mat-icon class="example-icon"

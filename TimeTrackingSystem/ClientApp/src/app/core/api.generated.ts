@@ -2009,7 +2009,8 @@ export interface IEmployeeGroupViewModel extends IViewModel {
 
 export class RegisterTimeResponse implements IRegisterTimeResponse {
     responseType!: RegisterTimeResponseType;
-    workTime!: string;
+    workTime?: string | null;
+    entranceTime?: string | null;
 
     constructor(data?: IRegisterTimeResponse) {
         if (data) {
@@ -2024,6 +2025,7 @@ export class RegisterTimeResponse implements IRegisterTimeResponse {
         if (data) {
             this.responseType = data["responseType"] !== undefined ? data["responseType"] : <any>null;
             this.workTime = data["workTime"] !== undefined ? data["workTime"] : <any>null;
+            this.entranceTime = data["entranceTime"] !== undefined ? data["entranceTime"] : <any>null;
         }
     }
 
@@ -2038,20 +2040,23 @@ export class RegisterTimeResponse implements IRegisterTimeResponse {
         data = typeof data === 'object' ? data : {};
         data["responseType"] = this.responseType !== undefined ? this.responseType : <any>null;
         data["workTime"] = this.workTime !== undefined ? this.workTime : <any>null;
+        data["entranceTime"] = this.entranceTime !== undefined ? this.entranceTime : <any>null;
         return data; 
     }
 }
 
 export interface IRegisterTimeResponse {
     responseType: RegisterTimeResponseType;
-    workTime: string;
+    workTime?: string | null;
+    entranceTime?: string | null;
 }
 
 export enum RegisterTimeResponseType {
-    Success = 0,
-    InWork = 1,
-    OutWork = 2,
-    Error = 3,
+    SuccessEntrance = 0,
+    SuccessLeave = 1,
+    InWork = 2,
+    OutWork = 3,
+    Error = 4,
 }
 
 export class FindByConditionResponseOfRegisterTimeEndpointViewModel implements IFindByConditionResponseOfRegisterTimeEndpointViewModel {
@@ -2304,6 +2309,8 @@ export interface IRegisterTimePerWrapper {
 
 export class RegisterTimePerEmployeeDayWrapperViewModel extends RegisterTimePerWrapper implements IRegisterTimePerEmployeeDayWrapperViewModel {
     day!: number;
+    isSaturday!: boolean;
+    isSunday!: boolean;
     workRegisterEvent?: WorkRegisterEventViewModel | null;
 
     constructor(data?: IRegisterTimePerEmployeeDayWrapperViewModel) {
@@ -2314,6 +2321,8 @@ export class RegisterTimePerEmployeeDayWrapperViewModel extends RegisterTimePerW
         super.init(data);
         if (data) {
             this.day = data["day"] !== undefined ? data["day"] : <any>null;
+            this.isSaturday = data["isSaturday"] !== undefined ? data["isSaturday"] : <any>null;
+            this.isSunday = data["isSunday"] !== undefined ? data["isSunday"] : <any>null;
             this.workRegisterEvent = data["workRegisterEvent"] ? WorkRegisterEventViewModel.fromJS(data["workRegisterEvent"]) : <any>null;
         }
     }
@@ -2328,6 +2337,8 @@ export class RegisterTimePerEmployeeDayWrapperViewModel extends RegisterTimePerW
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["day"] = this.day !== undefined ? this.day : <any>null;
+        data["isSaturday"] = this.isSaturday !== undefined ? this.isSaturday : <any>null;
+        data["isSunday"] = this.isSunday !== undefined ? this.isSunday : <any>null;
         data["workRegisterEvent"] = this.workRegisterEvent ? this.workRegisterEvent.toJSON() : <any>null;
         super.toJSON(data);
         return data; 
@@ -2336,6 +2347,8 @@ export class RegisterTimePerEmployeeDayWrapperViewModel extends RegisterTimePerW
 
 export interface IRegisterTimePerEmployeeDayWrapperViewModel extends IRegisterTimePerWrapper {
     day: number;
+    isSaturday: boolean;
+    isSunday: boolean;
     workRegisterEvent?: WorkRegisterEventViewModel | null;
 }
 

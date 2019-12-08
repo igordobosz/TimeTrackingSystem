@@ -31,6 +31,7 @@ namespace TimeTrackingSystem.Data
                 .HasForeignKey(m => m.EndpointOutID).OnDelete(DeleteBehavior.ClientSetNull);
             builder.Entity<RegisterTimeEndpoint>().HasIndex(p => new { p.Name })
                 .IsUnique(true);
+            builder.Entity<Employee>().HasIndex(e => e.IdentityCode).IsUnique();
         }
     }
 }

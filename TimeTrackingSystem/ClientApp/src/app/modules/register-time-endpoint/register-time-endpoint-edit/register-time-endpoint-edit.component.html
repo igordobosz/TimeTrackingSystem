@@ -21,7 +21,8 @@
                 <td>
                     <mat-form-field>
                         <mat-label>Endpoint Type</mat-label>
-                        <mat-select formControlName="endpointType">
+                        <mat-select formControlName="endpointType"
+                                    [disabled]="editMode">
                             <mat-option *ngFor="let enum of endpointTypeKeys()"
                                         [value]="EndpointType[enum]">
                                 {{enum}}
