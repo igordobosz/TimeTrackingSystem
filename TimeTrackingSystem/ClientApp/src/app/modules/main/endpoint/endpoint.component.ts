@@ -52,16 +52,16 @@ export class EndpointComponent implements OnInit {
         await this.endpointService.registerTime(this.endpointID, this.f.identityCode.value).toPromise().then(r => {
             switch (r.responseType) {
                 case RegisterTimeResponseType.SuccessEntrance:
-                    this.snackbarService.success("Udało się zarejestrować. Czas wejścia: " + r.entranceTime);
+                    this.snackbarService.success("Success. Enter time: " + r.entranceTime);
                     break;
                 case RegisterTimeResponseType.SuccessLeave:
-                    this.snackbarService.success("Udało się zarejestrować. Czas pracy: " + r.workTime + ", Czas wyjścia: " + r.entranceTime);
+                    this.snackbarService.success("Success. Work time: " + r.workTime + ", Leave time: " + r.entranceTime);
                     break;
                 case RegisterTimeResponseType.InWork:
-                    this.snackbarService.error("Jestes aktualnie w pracy.");
+                    this.snackbarService.error("You are in work now.");
                     break;
                 case RegisterTimeResponseType.OutWork:
-                    this.snackbarService.error("Jestes aktualnie poza praca.");
+                    this.snackbarService.error("You are out of work now.");
                     break;
                 case RegisterTimeResponseType.Error:
                     this.snackbarService.defaultErorr();
@@ -70,7 +70,7 @@ export class EndpointComponent implements OnInit {
     }
 
     returnError() {
-        this.snackbarService.error('Błąd autoryzacji. Brak tokena lub niepoprawny.');
+        this.snackbarService.error('Authorization error. Token is bad or empty.');
         this.router.navigate(['/RegisterTimeEndpoint']);
     }
 }

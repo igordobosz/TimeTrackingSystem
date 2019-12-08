@@ -1,34 +1,35 @@
-import { SnackbarService } from '../services/snackbar.service';
 import { Injectable } from '@angular/core';
 
+import { SnackbarService } from '../services/snackbar.service';
+
 @Injectable({
-  providedIn: "root",
+    providedIn: 'root',
 })
-export class SnackbarHelper{
+export class SnackbarHelper {
 
-  constructor(private snackbarService: SnackbarService){}
+    constructor(private snackbarService: SnackbarService) { }
 
-  deleteSuccess(){
-    this.snackbarService.success("Pomyślnie usunięto");
-  }
+    deleteSuccess() {
+        this.snackbarService.success('Successfully deleted');
+    }
 
-  deleteFail(){
-    this.snackbarService.success("Usuwanie nie powiodło się");
-  }
+    deleteFail() {
+        this.snackbarService.error('Deleting failed');
+    }
 
-  insertSuccess(){
-    this.snackbarService.success("Pomyślnie dodano");
-  }
+    insertSuccess() {
+        this.snackbarService.success('Successfully inserted');
+    }
 
-  insertFail(){
-    this.snackbarService.success("Dodawanie nie powiodło się");
-  }
+    insertFail() {
+        this.snackbarService.success('Inserting failed');
+    }
 
-  updateSuccess(){
-    this.snackbarService.success("Pomyślnie zeedytowano");
-  }
+    updateSuccess() {
+        this.snackbarService.success('Successfully edited.');
+    }
 
-  updateFail(){
-    this.snackbarService.success("Edycja nie powiodła się");
-  }
+    updateFail() {
+        this.snackbarService.success('Editing failed.');
+    }
 }
